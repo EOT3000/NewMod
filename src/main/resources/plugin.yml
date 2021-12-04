@@ -1,0 +1,8 @@
+name: Mods
+main: fly.newmod.NewMod
+version: 1.0.0
+api-version: 1.13
+commands:
+  nm:
+    description: nothing
+depend: [ProtocolLib]
