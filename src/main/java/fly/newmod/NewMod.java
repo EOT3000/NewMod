@@ -1,22 +1,13 @@
 package fly.newmod;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLib;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.*;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
-import fly.newmod.impl.items.Camera;
-import fly.newmod.impl.machines.DatingMachine;
 import fly.newmod.impl.vehicles.Plane;
 import fly.newmod.setup.BlockStorage;
 import fly.newmod.setup.Setup;
-import fly.newmod.utils.ColorUtils;
-import fly.newmod.utils.GeometryUtils;
-import fly.newmod.utils.PlayerIntMapWrapper;
-import fly.newmod.utils.PlayerTimeDataType;
 import net.coreprotect.CoreProtect;
-import net.coreprotect.CoreProtectAPI;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -26,26 +17,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
-import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -118,22 +96,10 @@ public class NewMod extends JavaPlugin implements Listener {
                 }
             }
         });
+    }
 
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            for(Player player : Bukkit.getOnlinePlayers()) {
-                ItemStack helmet = player.getInventory().getHelmet();
-                ItemStack chestplate = player.getInventory().getChestplate();
-                ItemStack leggings = player.getInventory().getLeggings();
-                ItemStack boots = player.getInventory().getBoots();
-
-                updateArmor(player, helmet);
-                updateArmor(player, chestplate);
-                updateArmor(player, leggings);
-                updateArmor(player, boots);
-
-                count++;
-            }
-        }, 200, 2);
+    private void tick(int ticks) {
+        //todo add
     }
 
     @EventHandler
@@ -146,24 +112,6 @@ public class NewMod extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         save();
-    }
-
-    private void updateArmor(Player player, ItemStack stack) {
-        if(stack == null) {
-            return;
-        }
-
-        ItemMeta meta = stack.getItemMeta();
-
-        if(count % 100 == 0) {
-            PlayerIntMapWrapper wrapper = meta.getPersistentDataContainer().getOrDefault(DatingMachine.PLAYERS_NAMESPACE, PlayerTimeDataType.PLAYER_TIME_TYPE, new PlayerIntMapWrapper(new HashMap<>()));
-
-            wrapper.add(player);
-
-            meta.getPersistentDataContainer().set(DatingMachine.PLAYERS_NAMESPACE, PlayerTimeDataType.PLAYER_TIME_TYPE, wrapper);
-        }
-
-        stack.setItemMeta(meta);
     }
 
     private void save() {
@@ -183,6 +131,15 @@ public class NewMod extends JavaPlugin implements Listener {
             configuration.save(saveFile);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @EventHandler
+    public void onTick(ServerTickStartEvent event) {
+        tick(event.getTickNumber());
+
+        for(ModExtension extension : extensions) {
+            extension.tick(event.getTickNumber());
         }
     }
 
@@ -631,5 +588,9 @@ public class NewMod extends JavaPlugin implements Listener {
         }
 
         public abstract void load();
+
+        public void tick(int count) {
+
+        }
     }
 }
