@@ -24,6 +24,7 @@ import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
 
 public class NewMod extends JavaPlugin implements Listener {
     private static NewMod instance;
@@ -50,15 +51,16 @@ public class NewMod extends JavaPlugin implements Listener {
         storage.init();
 
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(storage, this);
 
-        for(ModExtension extension : extensions) {
-            extension.load();
+        List<ModExtension> toLoad = new ArrayList<>(extensions);
+
+        for (ModExtension extension : toLoad) {
+            attemptLoad(extension);
         }
 
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveFile);
 
-        for(String location : configuration.getKeys(false)) {
+        for (String location : configuration.getKeys(false)) {
             String[] split = location.split(",");
 
             int x = Integer.parseInt(split[0]);
@@ -69,7 +71,7 @@ public class NewMod extends JavaPlugin implements Listener {
 
             ConfigurationSection section = configuration.getConfigurationSection(location);
 
-            for(String key : section.getKeys(false)) {
+            for (String key : section.getKeys(false)) {
                 storage.changeData(new Location(world, x, y, z), key, section.getString(key));
             }
         }
@@ -90,15 +92,26 @@ public class NewMod extends JavaPlugin implements Listener {
         });
     }
 
-    private void tick(int ticks) {
-        //todo add
+    private void attemptLoad(ModExtension extension) {
+        if(extension.loaded()) {
+            return;
+        }
+
+        getLogger().log(Level.ALL, "[NewMod] Attempting to load: " + extension.getName());
+
+        List<ModExtension> requirements = extension.requirements();
+
+        for(ModExtension requirement : requirements) {
+            attemptLoad(requirement);
+        }
+
+        extension.load();
+
+        extension.loaded = true;
     }
 
-    @EventHandler
-    public void pluginLoad(PluginEnableEvent event) {
-        if(event.getPlugin().getName().contains("protocol")) {
-
-        }
+    private void tick(int ticks) {
+        //todo add
     }
 
     @Override
@@ -471,14 +484,24 @@ public class NewMod extends JavaPlugin implements Listener {
     }
 
     public static abstract class ModExtension extends JavaPlugin {
+        private boolean loaded;
+
         public ModExtension() {
             instance.extensions.add(this);
         }
 
         public abstract void load();
 
+        public final boolean loaded() {
+            return loaded;
+        }
+
         public void tick(int count) {
 
+        }
+
+        public List<ModExtension> requirements() {
+            return new ArrayList<>();
         }
     }
 }

@@ -36,62 +36,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.*;
 
-public class BlockStorage implements Listener {
+public class BlockStorage {
     private Map<String, ModItem> items = new LinkedHashMap<>();
     private Map<Location, Map<String, String>> blocks = new HashMap<>();
 
-    private int bn;
-    public Map<Material, Map<ItemStack, Double>> oreMap = new LinkedHashMap<>();
-    private Map<ItemStack, Double> otherPercentages = new HashMap<>();
-
     public void init() {
-        File file = new File("plugins\\NewMod\\config.yml");
 
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-
-                FileOutputStream outputStream = new FileOutputStream(file);
-                
-                InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.yml");
-                
-                byte[] bytes = new byte[inputStream.available()];
-                
-                inputStream.read(bytes);
-                
-                outputStream.write(bytes);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        
-        bn = configuration.getInt("block-nuggets");
-
-        ConfigurationSection ores = configuration.getConfigurationSection("ores");
-
-        for(String oreKey : ores.getKeys(false)) {
-            ConfigurationSection oreData = ores.getConfigurationSection(oreKey);
-
-            oreMap.put(Material.valueOf(oreKey), new HashMap<>());
-
-            double d = 0;
-
-            for(String metalKey : oreData.getKeys(false)) {
-                double metalData = oreData.getDouble(metalKey);
-
-                System.out.println(oreKey + ", " + metalKey + ", " + metalData);
-
-                d += metalData;
-
-                oreMap.get(Material.valueOf(oreKey)).put(getTypeE(metalKey), metalData);
-            }
-
-            if(d != 1) {
-                System.err.println("Error on init of " + oreKey + ", values do not equal 1, equals " + d);
-            }
-        }
     }
 
     public static boolean isSimilar(ItemStack stack, ItemStack stack2) {
@@ -150,91 +100,5 @@ public class BlockStorage implements Listener {
 
     public List<Location> getAllLocations() {
         return new ArrayList<>(blocks.keySet());
-    }
-
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        PersistentDataContainer cont = event.getItemInHand().getItemMeta().getPersistentDataContainer();
-
-        if(cont.has(ModItem.ITEM_ID, PersistentDataType.STRING)) {
-            String id = cont.get(ModItem.ITEM_ID, PersistentDataType.STRING);
-
-            if(getItems().get(id).getValidMaterials().contains(event.getBlock().getType())) {
-                changeData(event.getBlock().getLocation(), "id", id);
-
-                ((ModItem) getType(id)).onPlace(event);
-            } else {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onConsume(PlayerItemConsumeEvent event) {
-        if(event.getItem().getItemMeta().getPersistentDataContainer().getOrDefault(ModItem.ITEM_ID, PersistentDataType.STRING, "a").equalsIgnoreCase("drug_potato")) {
-            event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 15000, 2));
-        }
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        String id = getData(event.getBlock().getLocation(), "id");
-
-        if(!id.isEmpty()) {
-            if(((ModItem) getType(id)).shouldBeGone(event.getBlock().getLocation())) {
-                ((ModItem) getType(id)).onBreak(event);
-
-                event.setDropItems(false);
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), items.get(getData(event.getBlock().getLocation(), "id")));
-
-                removeData(event.getBlock().getLocation());
-            } else {
-                ((ModItem) getType(id)).onBreak(event);
-
-                event.setCancelled(true);
-                return;
-            }
-
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void potionItemPlacer(final InventoryClickEvent e) {
-        if (e.getClickedInventory() == null)
-            return;
-        if (e.getClickedInventory().getType() != InventoryType.BREWING)
-            return;
-        if(e.getSlot() != 3)
-            return;
-
-        System.out.println(e.getResult());
-    }
-
-    @EventHandler
-    public void onTick(ServerTickStartEvent event) {
-        if(event.getTickNumber() % 5 == 0) {
-            for (Location location : blocks.keySet()) {
-                ModItem item = items.get(blocks.get(location).get("id"));
-
-                if (!item.getValidMaterials().contains(location.getBlock().getType())) {
-                    removeData(location);
-                    location.getBlock().setType(Material.AIR);
-                    continue;
-                }
-
-                item.tick(location.clone(), event.getTickNumber());
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        if(event.getClickedBlock() == null || blocks.get(event.getClickedBlock().getLocation()) == null || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            return;
-        }
-
-        ModItem item = items.get(blocks.get(event.getClickedBlock().getLocation()).get("id"));
-
-        item.onInteract(event);
     }
 }
