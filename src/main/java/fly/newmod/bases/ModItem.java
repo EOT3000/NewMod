@@ -5,6 +5,9 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -73,15 +76,19 @@ public class ModItem extends ItemStack {
         Bukkit.addRecipe(recipe);
     }
 
-    public void tick(Location location) {
+    public void tick(Location location, int count) {
 
     }
 
-    public void onPlace(Location location) {
+    public void onPlace(BlockPlaceEvent event) {
 
     }
 
-    public void onBreak(Location location) {
+    public void onBreak(BlockBreakEvent event) {
+
+    }
+
+    public void onInteract(PlayerInteractEvent event) {
 
     }
 
@@ -89,9 +96,6 @@ public class ModItem extends ItemStack {
         return true;
     }
 
-    public boolean click(Location location, Action type, Player player, ItemStack stack) {
-        return true;
-    }
 
     public List<Material> getValidMaterials() {
         return Collections.singletonList(getType());

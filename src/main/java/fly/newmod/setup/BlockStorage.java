@@ -162,7 +162,7 @@ public class BlockStorage implements Listener {
             if(getItems().get(id).getValidMaterials().contains(event.getBlock().getType())) {
                 changeData(event.getBlock().getLocation(), "id", id);
 
-                ((ModItem) getType(id)).onPlace(event.getBlock().getLocation());
+                ((ModItem) getType(id)).onPlace(event);
             } else {
                 event.setCancelled(true);
             }
@@ -182,14 +182,14 @@ public class BlockStorage implements Listener {
 
         if(!id.isEmpty()) {
             if(((ModItem) getType(id)).shouldBeGone(event.getBlock().getLocation())) {
-                ((ModItem) getType(id)).onBreak(event.getBlock().getLocation());
+                ((ModItem) getType(id)).onBreak(event);
 
                 event.setDropItems(false);
                 event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), items.get(getData(event.getBlock().getLocation(), "id")));
 
                 removeData(event.getBlock().getLocation());
             } else {
-                ((ModItem) getType(id)).onBreak(event.getBlock().getLocation());
+                ((ModItem) getType(id)).onBreak(event);
 
                 event.setCancelled(true);
                 return;
@@ -222,7 +222,7 @@ public class BlockStorage implements Listener {
                     continue;
                 }
 
-                item.tick(location.clone());
+                item.tick(location.clone(), event.getTickNumber());
             }
         }
     }
@@ -235,10 +235,6 @@ public class BlockStorage implements Listener {
 
         ModItem item = items.get(blocks.get(event.getClickedBlock().getLocation()).get("id"));
 
-        event.setCancelled(!item.click(event.getClickedBlock().getLocation(), event.getAction(), event.getPlayer(), event.getItem()));
-
-        if(item instanceof ItemButtonBlock) {
-            event.setUseInteractedBlock(Event.Result.DENY);
-        }
+        item.onInteract(event);
     }
 }

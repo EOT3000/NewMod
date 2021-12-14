@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -91,15 +92,6 @@ public class ItemButtonBlock extends ModItem implements Listener {
         }
 
         player.openInventory(inventory);
-    }
-
-    @Override
-    public boolean click(Location location, Action type, Player player, ItemStack stack) {
-        if(type.equals(Action.RIGHT_CLICK_BLOCK)) {
-            open(player);
-        }
-
-        return true;
     }
 
     public InventorySlot getInventorySlot(int x) {
