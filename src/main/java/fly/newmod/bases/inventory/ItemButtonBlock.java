@@ -81,7 +81,7 @@ public class ItemButtonBlock extends ModItem implements Listener {
     }
 
     public final void open(Player player) {
-        Inventory inventory = Bukkit.createInventory(player, 54, getName());
+        Inventory inventory = Bukkit.createInventory(player, 54, getComponentName());
 
         for(int x = 0; x < 54; x++) {
             if(x != 0) {
