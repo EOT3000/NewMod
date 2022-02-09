@@ -3,6 +3,10 @@ package fly.newmod.bases;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import fly.newmod.NewMod;
 import fly.newmod.setup.BlockStorage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,14 +30,18 @@ public class ModItem extends ItemStack {
     private BlockStorage blockStorage = NewMod.get().getBlockStorage();
 
     private String id;
-    private String name;
+    private Component name;
 
     public ModItem(Material material, String name, String id) {
+        this(material, Component.text(name), id);
+    }
+
+    public ModItem(Material material, Component name, String id) {
         super(material);
 
         ItemMeta meta = this.getItemMeta();
 
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+        meta.displayName(name);
 
         meta.getPersistentDataContainer().set(ITEM_ID, PersistentDataType.STRING, id);
 
@@ -74,6 +82,10 @@ public class ModItem extends ItemStack {
     }
 
     public String getName() {
+        return PlainTextComponentSerializer.plainText().serialize(name);
+    }
+
+    public Component getComponentName() {
         return name;
     }
 
