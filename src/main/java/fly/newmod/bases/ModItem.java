@@ -2,6 +2,7 @@ package fly.newmod.bases;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import fly.newmod.NewMod;
+import fly.newmod.bases.textures.TexturedModItem;
 import fly.newmod.setup.BlockStorage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -54,6 +56,14 @@ public class ModItem extends ItemStack {
             Bukkit.getPluginManager().registerEvents((Listener) this, NewMod.get());
         }
 
+        if(this instanceof TexturedModItem) {
+            SkullMeta skullMeta = (SkullMeta) this.getItemMeta();
+
+            skullMeta.setPlayerProfile(((TexturedModItem) this).getTexture().getRawTexture());
+
+            this.setItemMeta(skullMeta);
+        }
+
         NewMod.get().getBlockStorage().registerItem(this);
     }
 
@@ -68,10 +78,10 @@ public class ModItem extends ItemStack {
 
         r.setAmount(count);
 
-        Recipe recipe = new ShapelessRecipe(new NamespacedKey(NewMod.get(), getId()), r);
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(NewMod.get(), getId()), r);
 
         for(ItemStack stack : recipeItems) {
-            ((ShapelessRecipe) recipe).addIngredient(stack);
+            recipe.addIngredient(stack);
         }
 
         addRecipe(recipe);
