@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.*;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import fly.newmod.setup.BlockStorage;
+import fly.newmod.utils.ColorUtils;
 import net.coreprotect.CoreProtect;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -44,13 +45,17 @@ public class NewMod extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        getLogger().info("[NewMod] THIS PLUGIN USES COPYRIGHTED MATERIAL");
+        getLogger().info(ColorUtils.disclaimer);
+
         saveFile = new File("plugins\\NewMod\\save.yml");
 
-        System.out.println(saveFile.getAbsolutePath());
+        //System.out.println(saveFile.getAbsolutePath());
 
         storage.init();
 
         Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(storage, this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
@@ -97,7 +102,7 @@ public class NewMod extends JavaPlugin implements Listener {
             return;
         }
 
-        getLogger().log(Level.ALL, "[NewMod] Attempting to load: " + extension.getName());
+        getLogger().log(Level.INFO, "[NewMod] Attempting to load: " + extension.getName());
 
         List<ModExtension> requirements = extension.requirements();
 
@@ -341,7 +346,13 @@ public class NewMod extends JavaPlugin implements Listener {
                 if(args[0].equalsIgnoreCase("data")) {
                     Location location = new Location(((Player) sender).getWorld(), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
 
-                    sender.sendMessage(ChatColor.YELLOW + storage.getData(location).toString());
+                    for(String key : storage.getData(location)) {
+                        sender.sendMessage(ChatColor.YELLOW + key + " : " + storage.getData(location, key));
+                    }
+
+                    if(args.length == 6) {
+                        storage.changeData(location, args[4], args[5]);
+                    }
 
                     return true;
                 }

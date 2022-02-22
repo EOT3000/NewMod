@@ -1,4 +1,4 @@
-package fly.newmod.bases.inventory;
+/*package fly.newmod.bases.inventory;
 
 import fly.newmod.NewMod;
 import fly.newmod.bases.ModItem;
@@ -126,4 +126,4 @@ public class ItemButtonBlock extends ModItem implements Listener {
     public static abstract class ButtonSlot implements InventorySlot {
         public abstract void run(Map<Integer, ItemStack> items, ClickType type, Inventory context);
     }
-}
+}*/

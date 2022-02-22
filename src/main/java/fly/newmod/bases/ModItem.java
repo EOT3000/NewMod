@@ -7,6 +7,9 @@ import fly.newmod.setup.BlockStorage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -34,9 +37,59 @@ public class ModItem extends ItemStack {
     private String id;
     private Component name;
 
+    @Deprecated
     public ModItem(Material material, String name, String id) {
         this(material, Component.text(name), id);
     }
+
+    @Deprecated
+    public ModItem(Material material, String name, String id, ItemStack... recipeItems) {
+        this(material, name, id, 1, recipeItems);
+    }
+
+    @Deprecated
+    public ModItem(Material material, String name, String id, int count, ItemStack... recipeItems) {
+        this(material, name, id);
+
+        ItemStack r = new ItemStack(this);
+
+        r.setAmount(count);
+
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(NewMod.get(), getId()), r);
+
+        for(ItemStack stack : recipeItems) {
+            recipe.addIngredient(stack);
+        }
+
+        addRecipe(recipe);
+    }
+
+
+    public ModItem(Material material, String name, int color, String id) {
+        this(material, name, TextColor.color(color), id);
+    }
+
+    public ModItem(Material material, String name, int color, String id, ItemStack... recipeItems) {
+        this(material, name, TextColor.color(color), id, recipeItems);
+    }
+
+    public ModItem(Material material, String name, int color, String id, int count, ItemStack... recipeItems) {
+        this(material, name, TextColor.color(color), id, count, recipeItems);
+    }
+
+
+    public ModItem(Material material, String name, TextColor color, String id) {
+        this(material, Component.text(name, Style.style(color).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)), id);
+    }
+
+    public ModItem(Material material, String name, TextColor color, String id, ItemStack... recipeItems) {
+        this(material, Component.text(name, Style.style(color).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)), id, recipeItems);
+    }
+
+    public ModItem(Material material, String name, TextColor color, String id, int count, ItemStack... recipeItems) {
+        this(material, Component.text(name, Style.style(color).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)), id, count, recipeItems);
+    }
+
 
     public ModItem(Material material, Component name, String id) {
         super(material);
@@ -67,11 +120,11 @@ public class ModItem extends ItemStack {
         NewMod.get().getBlockStorage().registerItem(this);
     }
 
-    public ModItem(Material material, String name, String id, ItemStack... recipeItems) {
+    public ModItem(Material material, Component name, String id, ItemStack... recipeItems) {
         this(material, name, id, 1, recipeItems);
     }
 
-    public ModItem(Material material, String name, String id, int count, ItemStack... recipeItems) {
+    public ModItem(Material material, Component name, String id, int count, ItemStack... recipeItems) {
         this(material, name, id);
 
         ItemStack r = new ItemStack(this);
@@ -119,6 +172,10 @@ public class ModItem extends ItemStack {
 
     }
 
+    public void onUse(PlayerInteractEvent event) {
+
+    }
+
     public boolean shouldBeGone(Location location) {
         return true;
     }
@@ -152,73 +209,5 @@ public class ModItem extends ItemStack {
         String bid = b.getItemMeta().getPersistentDataContainer().getOrDefault(ITEM_ID, PersistentDataType.STRING, "none");
 
         return aid.equalsIgnoreCase("none") ? a.isSimilar(b) : aid.equalsIgnoreCase(bid);
-    }
-
-    //EVENTS
-
-    @EventHandler
-    public void onBlockPlaceE(BlockPlaceEvent event) {
-        PersistentDataContainer cont = event.getItemInHand().getItemMeta().getPersistentDataContainer();
-
-        if(cont.has(ModItem.ITEM_ID, PersistentDataType.STRING)) {
-            String id = cont.get(ModItem.ITEM_ID, PersistentDataType.STRING);
-
-            if(blockStorage.getItems().get(id).getValidMaterials().contains(event.getBlock().getType())) {
-                blockStorage.changeData(event.getBlock().getLocation(), "id", id);
-
-                ((ModItem) blockStorage.getType(id)).onPlace(event);
-            } else {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onBlockBreakE(BlockBreakEvent event) {
-        String id = blockStorage.getData(event.getBlock().getLocation(), "id");
-
-        if(!id.isEmpty()) {
-            if(((ModItem) blockStorage.getType(id)).shouldBeGone(event.getBlock().getLocation())) {
-                ((ModItem) blockStorage.getType(id)).onBreak(event);
-
-                event.setDropItems(false);
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), blockStorage.getType(blockStorage.getData(event.getBlock().getLocation(), "id")));
-
-                blockStorage.removeData(event.getBlock().getLocation());
-            } else {
-                ((ModItem) blockStorage.getType(id)).onBreak(event);
-
-                event.setCancelled(true);
-            }
-
-        }
-    }
-
-    @EventHandler
-    public void onTickE(ServerTickStartEvent event) {
-        if(event.getTickNumber() % 5 == 0) {
-            for (Location location : blockStorage.getAllLocations()) {
-                ModItem item = (ModItem) blockStorage.getType(blockStorage.getData(location, "id"));
-
-                if (!item.getValidMaterials().contains(location.getBlock().getType())) {
-                    blockStorage.removeData(location);
-                    location.getBlock().setType(Material.AIR);
-                    continue;
-                }
-
-                item.tick(location.clone(), event.getTickNumber());
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInteractE(PlayerInteractEvent event) {
-        if(event.getClickedBlock() == null || blockStorage.getData(event.getClickedBlock().getLocation()).isEmpty() || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            return;
-        }
-
-        ModItem item = (ModItem) blockStorage.getType(blockStorage.getData(event.getClickedBlock().getLocation(), "id"));
-
-        item.onInteract(event);
     }
 }
