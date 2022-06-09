@@ -30,8 +30,6 @@ package fly.newmod.utils;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.awt.color.ColorSpace;
-
 /**
  * Implementation of the CIE 2000 colour difference equation
  *

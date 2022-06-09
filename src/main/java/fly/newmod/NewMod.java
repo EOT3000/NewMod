@@ -4,11 +4,13 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.*;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
-import fly.newmod.setup.BlockStorage;
+import fly.newmod.api.block.BlockManager;
+import fly.newmod.api.item.ModItemStack;
+import fly.newmod.api.item.type.ModItemType;
+import fly.newmod.api.item.ItemManager;
+import fly.newmod.listeners.VanillaReplacementListener;
 import fly.newmod.utils.ColorUtils;
-import net.coreprotect.CoreProtect;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -17,11 +19,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.*;
@@ -29,9 +28,10 @@ import java.util.logging.Level;
 
 public class NewMod extends JavaPlugin implements Listener {
     private static NewMod instance;
-    private BlockStorage storage;
+    private BlockManager blockManager;
+    private ItemManager itemManager;
     private Random random = new Random();
-    private List<ModExtension> extensions = new ArrayList<>();
+    private final List<ModExtension> extensions = new ArrayList<>();
 
     private File saveFile;
 
@@ -40,22 +40,25 @@ public class NewMod extends JavaPlugin implements Listener {
     public NewMod() {
         instance = this;
 
-        storage = new BlockStorage();
+        blockManager = new BlockManager();
+        itemManager = new ItemManager();
     }
 
     @Override
     public void onEnable() {
         getLogger().info("[NewMod] THIS PLUGIN USES COPYRIGHTED MATERIAL");
         getLogger().info(ColorUtils.disclaimer);
+        getLogger().info("[NewMod] NewMod is not affiliated with The University of Southampton, nor with the authors of any used code");
 
         saveFile = new File("plugins\\NewMod\\save.yml");
 
         //System.out.println(saveFile.getAbsolutePath());
 
-        storage.init();
+        blockManager.init();
 
         Bukkit.getPluginManager().registerEvents(this, this);
-        Bukkit.getPluginManager().registerEvents(storage, this);
+        Bukkit.getPluginManager().registerEvents(new VanillaReplacementListener(), this);
+        //Bukkit.getPluginManager().registerEvents(new ItemsListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
@@ -63,23 +66,25 @@ public class NewMod extends JavaPlugin implements Listener {
             attemptLoad(extension);
         }
 
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveFile);
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveFile);
 
-        for (String location : configuration.getKeys(false)) {
-            String[] split = location.split(",");
+            for (String location : configuration.getKeys(false)) {
+                String[] split = location.split(",");
 
-            int x = Integer.parseInt(split[0]);
-            int y = Integer.parseInt(split[1]);
-            int z = Integer.parseInt(split[2]);
+                int x = Integer.parseInt(split[0]);
+                int y = Integer.parseInt(split[1]);
+                int z = Integer.parseInt(split[2]);
 
-            World world = Bukkit.getWorld(split[3]);
+                World world = Bukkit.getWorld(split[3]);
 
-            ConfigurationSection section = configuration.getConfigurationSection(location);
+                ConfigurationSection section = configuration.getConfigurationSection(location);
 
-            for (String key : section.getKeys(false)) {
-                storage.changeData(new Location(world, x, y, z), key, section.getString(key));
+                for (String key : section.getKeys(false)) {
+                    blockManager.changeData(new Location(world, x, y, z), key, section.getString(key));
+                }
             }
-        }
+        }, 1);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 500, 500);
 
@@ -108,11 +113,24 @@ public class NewMod extends JavaPlugin implements Listener {
 
         for(ModExtension requirement : requirements) {
             attemptLoad(requirement);
+
+            if(requirement.errored) {
+                getLogger().log(Level.SEVERE, "Plugin: " + extension.getName() + " failed to load (plugin " + requirement.getName() + " errored)");
+                return;
+            }
         }
 
-        extension.load();
+        try {
+            extension.load();
 
-        extension.loaded = true;
+            extension.loaded = true;
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Plugin: " + extension.getName() + " failed to load");
+
+            e.printStackTrace();
+
+            extension.errored = true;
+        }
     }
 
     private void tick(int ticks) {
@@ -127,11 +145,11 @@ public class NewMod extends JavaPlugin implements Listener {
     private void save() {
         YamlConfiguration configuration = new YamlConfiguration();
 
-        for(Location location : storage.getAllLocations()) {
+        for(Location location : blockManager.getAllLocations()) {
             Map<String, String> section = new HashMap<>();
 
-            for(String key : storage.getData(location)) {
-                section.put(key, storage.getData(location, key));
+            for(String key : blockManager.getAllData(location)) {
+                section.put(key, blockManager.getData(location, key));
             }
 
             configuration.set(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "," + location.getWorld().getName(), section);
@@ -346,12 +364,12 @@ public class NewMod extends JavaPlugin implements Listener {
                 if(args[0].equalsIgnoreCase("data")) {
                     Location location = new Location(((Player) sender).getWorld(), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
 
-                    for(String key : storage.getData(location)) {
-                        sender.sendMessage(ChatColor.YELLOW + key + " : " + storage.getData(location, key));
+                    for(String key : blockManager.getAllData(location)) {
+                        sender.sendMessage(ChatColor.YELLOW + key + " : " + blockManager.getData(location, key));
                     }
 
                     if(args.length == 6) {
-                        storage.changeData(location, args[4], args[5]);
+                        blockManager.changeData(location, args[4], args[5]);
                     }
 
                     return true;
@@ -372,14 +390,14 @@ public class NewMod extends JavaPlugin implements Listener {
                 }
 
                 int page = Integer.parseInt(args[0]) - 1;
-                ArrayList<ItemStack> list = new ArrayList<>(storage.getItems().values());
+                ArrayList<ModItemType> list = new ArrayList<>(itemManager.getItems());
                 Inventory inventory = Bukkit.createInventory((Player) sender, 54, ChatColor.RED + "FlyFun Menu " + (page + 1));
 
                 for (int x = 0; x < 54; x++) {
                     int index = x + (page * 54);
 
                     if (index < list.size()) {
-                        inventory.addItem(list.get(index));
+                        inventory.addItem(new ModItemStack(list.get(index)).create());
                     }
                 }
 
@@ -490,12 +508,23 @@ public class NewMod extends JavaPlugin implements Listener {
         return instance;
     }
 
-    public BlockStorage getBlockStorage() {
-        return storage;
+    public List<ModExtension> getExtensions() {
+        return new ArrayList<>(extensions);
+    }
+
+    public BlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    public ItemManager getItemManager() {
+        return null;
     }
 
     public static abstract class ModExtension extends JavaPlugin {
         private boolean loaded;
+        private boolean errored;
+
+        private Map<String, ModItemType> moduleItems = new HashMap<>();
 
         public ModExtension() {
             instance.extensions.add(this);
@@ -507,8 +536,22 @@ public class NewMod extends JavaPlugin implements Listener {
             return loaded;
         }
 
+        public final boolean errored() {
+            return errored;
+        }
+
         public void tick(int count) {
 
+        }
+
+        public void registerItem(String string, ModItemType item) {
+            moduleItems.put(string, item);
+
+            NewMod.get().getItemManager().registerItem(item);
+        }
+
+        public Map<String, ModItemType> getItems() {
+            return new HashMap<>(moduleItems);
         }
 
         public List<ModExtension> requirements() {
