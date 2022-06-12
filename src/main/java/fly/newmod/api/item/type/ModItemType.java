@@ -1,17 +1,23 @@
 package fly.newmod.api.item.type;
 
+import fly.newmod.NewMod;
 import fly.newmod.api.block.type.ModBlockType;
 import fly.newmod.api.event.BlockEventsListener;
 import fly.newmod.api.event.ItemEventsListener;
+import fly.newmod.api.item.ItemManager;
+import fly.newmod.api.item.ModItemStack;
 import fly.newmod.api.item.meta.DefaultModItemMeta;
 import fly.newmod.api.item.meta.ModItemMeta;
 import fly.newmod.api.item.texture.MetaModifier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +38,15 @@ public class ModItemType {
     protected final boolean craftable;
 
     private ModBlockType block;
+
+    public static ModItemType createAndRegister(Material material, Plugin plugin, String id, String name, int color) {
+        ItemManager manager = NewMod.get().getItemManager();
+        ModItemType item = new ModItemType(material, new NamespacedKey(plugin, id)).name(name, color);
+
+        manager.registerItem(item);
+
+        return item;
+    }
 
     public ModItemType(Material defaultMaterial, NamespacedKey id) {
         this(defaultMaterial, id, DefaultModItemMeta.class);
@@ -117,6 +132,22 @@ public class ModItemType {
 
     public ModItemType name(String string, TextColor color) {
         return addModifier(new MetaModifier<>(Component.text().color(TextColor.color(0x6F857E)).build(), NAME_MODIFIER));
+    }
+
+    public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {
+        ItemStack result = new ModItemStack(this).create();
+
+        result.setAmount(count);
+
+        ShapelessRecipe recipe = new ShapelessRecipe(id, result);
+
+        for(ItemStack ingredient : ingredients) {
+            recipe.addIngredient(ingredient);
+        }
+
+        Bukkit.addRecipe(recipe);
+
+        return this;
     }
 
     // Getter

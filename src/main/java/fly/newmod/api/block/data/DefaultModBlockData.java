@@ -8,6 +8,10 @@ import org.bukkit.block.Block;
 import java.util.Map;
 
 public class DefaultModBlockData extends ModBlockData.AbstractModBlockData {
+    static{
+        new DefaultModBlockDataSerializer();
+    }
+
     protected DefaultModBlockData(ModBlockType type) {
         super(type);
     }
@@ -17,19 +21,21 @@ public class DefaultModBlockData extends ModBlockData.AbstractModBlockData {
         return new DefaultModBlockData(getType());
     }
 
-    public static class DefaultModItemMetaSerializer extends ModBlockDataSerializer<DefaultModBlockData> {
-        public DefaultModItemMetaSerializer() {
+    public static class DefaultModBlockDataSerializer extends ModBlockDataSerializer<DefaultModBlockData> {
+        public DefaultModBlockDataSerializer() {
             super(DefaultModBlockData.class);
         }
 
         @Override
         public DefaultModBlockData getBlockData(Map<String, String> container) {
-            return null;
+            BlockManager manager = NewMod.get().getBlockManager();
+
+            return new DefaultModBlockData(manager.getType(container));
         }
 
         @Override
-        public DefaultModBlockData defaultMeta() {
-            return null;
+        public DefaultModBlockData defaultMeta(ModBlockType type) {
+            return new DefaultModBlockData(type);
         }
 
         @Override

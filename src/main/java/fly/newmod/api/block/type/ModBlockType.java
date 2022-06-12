@@ -1,5 +1,6 @@
 package fly.newmod.api.block.type;
 
+import fly.newmod.api.block.data.DefaultModBlockData;
 import fly.newmod.api.block.data.ModBlockData;
 import fly.newmod.api.event.BlockEventsListener;
 import fly.newmod.api.item.type.ModItemType;
@@ -16,7 +17,7 @@ public class ModBlockType {
     protected final Class<? extends ModBlockData> data;
 
     public ModBlockType(Material defaultMaterial, NamespacedKey id) {
-        this(defaultMaterial, id, ModBlockData.class);
+        this(defaultMaterial, id, DefaultModBlockData.class);
     }
 
     public ModBlockType(Material defaultMaterial, NamespacedKey id, Class<? extends ModBlockData> data) {

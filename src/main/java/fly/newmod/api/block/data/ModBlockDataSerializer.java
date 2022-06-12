@@ -2,6 +2,7 @@ package fly.newmod.api.block.data;
 
 import fly.newmod.api.block.BlockManager;
 import fly.newmod.NewMod;
+import fly.newmod.api.block.type.ModBlockType;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,7 +18,7 @@ public abstract class ModBlockDataSerializer<T extends ModBlockData> {
 
     public abstract T getBlockData(Map<String, String> container);
 
-    public abstract T defaultMeta();
+    public abstract T defaultMeta(ModBlockType type);
 
     public abstract boolean applyData(Block block, T t);
 }

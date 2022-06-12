@@ -38,17 +38,23 @@ public class ItemManager {
     }
 
     public ModItemType getType(ItemStack stack) {
-        PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
+        return getType(stack.getItemMeta().getPersistentDataContainer());
+    }
 
+    public ModItemType getType(PersistentDataContainer container) {
         if(container.has(ID, PersistentDataUtils.NAMESPACED_KEY)) {
-            return items.get(container.get(ID, PersistentDataUtils.NAMESPACED_KEY));
+            return getType(container.get(ID, PersistentDataUtils.NAMESPACED_KEY));
         }
 
         return null;
     }
 
+    public ModItemType getType(NamespacedKey key) {
+        return items.get(key);
+    }
+
     public ModItemMeta createDefaultMeta(ModItemType type) {
-        return serializers.get(type.getMetaType()).defaultMeta();
+        return serializers.get(type.getMetaType()).defaultMeta(type);
     }
 
     public <T extends ModItemMeta> void registerSerializer(Class<T> clazz, ModItemMetaSerializer<T> serializer) {
@@ -57,10 +63,6 @@ public class ItemManager {
 
     public void registerItem(ModItemType type) {
         items.put(type.getId(), type);
-    }
-
-    public ModItemType getItem(NamespacedKey key) {
-        return items.get(key);
     }
 
     public List<ModItemType> getItems() {

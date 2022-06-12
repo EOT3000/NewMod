@@ -46,11 +46,19 @@ public class BlockManager {
     }
 
     public ModBlockType getType(Block block) {
-        return blocks.get(PersistentDataUtils.namespacedKeyFromPrimitive(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()).getOrDefault("id", null)));
+        return getType(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
+    }
+
+    public ModBlockType getType(Map<String, String> container) {
+        return getType(PersistentDataUtils.namespacedKeyFromPrimitive(container.getOrDefault("id", null)));
+    }
+
+    public ModBlockType getType(NamespacedKey key) {
+        return blocks.get(key);
     }
 
     public ModBlockData createDefaultMeta(ModBlockType type) {
-        return serializers.get(type.getDataType()).defaultMeta();
+        return serializers.get(type.getDataType()).defaultMeta(type);
     }
 
     public <T extends ModBlockData> void registerSerializer(Class<T> clazz, ModBlockDataSerializer<T> serializer) {

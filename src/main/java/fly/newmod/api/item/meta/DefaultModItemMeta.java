@@ -7,15 +7,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 public class DefaultModItemMeta extends ModItemMeta.AbstractModItemMeta {
+    static {
+        new DefaultModItemMetaSerializer();
+    }
+
     protected DefaultModItemMeta(ModItemType type) {
         super(type);
     }
 
     @Override
     public DefaultModItemMeta cloneItem() {
-        DefaultModItemMeta meta = new DefaultModItemMeta(getType());
-
-        return meta;
+        return new DefaultModItemMeta(getType());
     }
 
     public static class DefaultModItemMetaSerializer extends ModItemMetaSerializer<DefaultModItemMeta> {
@@ -25,12 +27,14 @@ public class DefaultModItemMeta extends ModItemMeta.AbstractModItemMeta {
 
         @Override
         public DefaultModItemMeta getItemMeta(PersistentDataContainer container) {
-            return null;
+            ItemManager manager = NewMod.get().getItemManager();
+
+            return new DefaultModItemMeta(manager.getType(container));
         }
 
         @Override
-        public DefaultModItemMeta defaultMeta() {
-            return null;
+        public DefaultModItemMeta defaultMeta(ModItemType type) {
+            return new DefaultModItemMeta(type);
         }
 
         @Override
