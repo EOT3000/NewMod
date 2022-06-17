@@ -5,9 +5,12 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.*;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import fly.newmod.api.block.BlockManager;
+import fly.newmod.api.block.data.DefaultModBlockData;
 import fly.newmod.api.item.ModItemStack;
+import fly.newmod.api.item.meta.DefaultModItemMeta;
 import fly.newmod.api.item.type.ModItemType;
 import fly.newmod.api.item.ItemManager;
+import fly.newmod.listeners.BlockListener;
 import fly.newmod.listeners.VanillaReplacementListener;
 import fly.newmod.utils.ColorUtils;
 import org.bukkit.*;
@@ -56,9 +59,12 @@ public class NewMod extends JavaPlugin implements Listener {
 
         blockManager.init();
 
+        new DefaultModItemMeta.DefaultModItemMetaSerializer();
+        new DefaultModBlockData.DefaultModBlockDataSerializer();
+
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new VanillaReplacementListener(), this);
-        //Bukkit.getPluginManager().registerEvents(new ItemsListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
@@ -517,7 +523,7 @@ public class NewMod extends JavaPlugin implements Listener {
     }
 
     public ItemManager getItemManager() {
-        return null;
+        return itemManager;
     }
 
     public static abstract class ModExtension extends JavaPlugin {

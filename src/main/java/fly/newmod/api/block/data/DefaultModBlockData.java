@@ -3,15 +3,11 @@ package fly.newmod.api.block.data;
 import fly.newmod.NewMod;
 import fly.newmod.api.block.BlockManager;
 import fly.newmod.api.block.type.ModBlockType;
-import org.bukkit.block.Block;
+import fly.newmod.utils.PersistentDataUtils;
 
 import java.util.Map;
 
 public class DefaultModBlockData extends ModBlockData.AbstractModBlockData {
-    static{
-        new DefaultModBlockDataSerializer();
-    }
-
     protected DefaultModBlockData(ModBlockType type) {
         super(type);
     }
@@ -39,10 +35,10 @@ public class DefaultModBlockData extends ModBlockData.AbstractModBlockData {
         }
 
         @Override
-        public boolean applyData(Block block, DefaultModBlockData defaultModBlockData) {
-            BlockManager manager = NewMod.get().getBlockManager();
+        public boolean applyData(Map<String, String> map, DefaultModBlockData defaultModBlockData) {
+            map.put("id", PersistentDataUtils.NAMESPACED_KEY.toPrimitive(defaultModBlockData.getType().getId(), null));
 
-            return defaultModBlockData.getType().equals(manager.getType(block));
+            return true;
         }
     }
 }

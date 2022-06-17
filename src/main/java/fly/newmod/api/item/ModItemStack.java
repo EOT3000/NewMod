@@ -3,7 +3,9 @@ package fly.newmod.api.item;
 import fly.newmod.NewMod;
 import fly.newmod.api.item.meta.ModItemMeta;
 import fly.newmod.api.item.type.ModItemType;
+import fly.newmod.utils.PersistentDataUtils;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Represents an item stack with mod properties.
@@ -71,6 +73,11 @@ public final class ModItemStack {
         if(representation == null) {
             ItemManager manager = NewMod.get().getItemManager();
             ItemStack stack = new ItemStack(type.getDefaultMaterial(), amount);
+            ItemMeta itemMeta = stack.getItemMeta();
+
+            itemMeta.getPersistentDataContainer().set(ItemManager.ID, PersistentDataUtils.NAMESPACED_KEY, type.getId());
+
+            stack.setItemMeta(itemMeta);
 
             manager.applyMeta(stack, meta);
 

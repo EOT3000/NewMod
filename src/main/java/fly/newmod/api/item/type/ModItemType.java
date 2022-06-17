@@ -131,7 +131,7 @@ public class ModItemType {
     }
 
     public ModItemType name(String string, TextColor color) {
-        return addModifier(new MetaModifier<>(Component.text().color(TextColor.color(0x6F857E)).build(), NAME_MODIFIER));
+        return addModifier(new MetaModifier<>(Component.text(string, color).color(color), NAME_MODIFIER));
     }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {

@@ -2,6 +2,7 @@ package fly.newmod.api.item.texture;
 
 import fly.newmod.utils.Pair;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -35,7 +36,7 @@ public class DefaultMetaFlags {
     };
 
     public static final MetaModifier.MetaModifierType<Component> NAME_MODIFIER = (name, meta) -> {
-        meta.displayName(name);
+        meta.displayName(name.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
 
         return meta;
     };

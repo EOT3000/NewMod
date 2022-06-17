@@ -10,6 +10,7 @@ import fly.newmod.api.event.block.ModBlockPlaceEvent;
 import fly.newmod.api.event.block.ModBlockTickEvent;
 import fly.newmod.api.item.ItemManager;
 import fly.newmod.api.item.ModItemStack;
+import fly.newmod.api.item.type.ModItemType;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -91,8 +92,10 @@ public class BlockListener implements Listener {
         event.setDropItems(ne.isDropModItem());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreakMonitor(BlockBreakEvent event) {
+
+
         BlockManager manager = NewMod.get().getBlockManager();
 
         ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
@@ -118,17 +121,20 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlaceLowest(BlockPlaceEvent event) {
-        BlockManager manager = NewMod.get().getBlockManager();
+        ItemManager manager = NewMod.get().getItemManager();
+        BlockManager bmanager = NewMod.get().getBlockManager();
+        ModItemType itemType = manager.getType(event.getItemInHand());
 
-        ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
-
-        if(modBlock == null) {
+        if(itemType.getBlock() == null) {
             return;
         }
 
-        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, modBlock);
+        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, new ModBlock(itemType.getBlock()));
 
-        modBlock.getType().getListener().onBlockPlaceLowest(ne);
+        itemType.getBlock().getListener().onBlockPlaceLowest(ne);
+
+        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
         event.setBuild(ne.canBuild());
@@ -136,17 +142,20 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockPlaceNormal(BlockPlaceEvent event) {
-        BlockManager manager = NewMod.get().getBlockManager();
+        ItemManager manager = NewMod.get().getItemManager();
+        BlockManager bmanager = NewMod.get().getBlockManager();
+        ModItemType itemType = manager.getType(event.getItemInHand());
 
-        ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
-
-        if(modBlock == null) {
+        if(itemType.getBlock() == null) {
             return;
         }
 
-        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, modBlock);
+        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, new ModBlock(itemType.getBlock()));
 
-        modBlock.getType().getListener().onBlockPlaceNormal(ne);
+        itemType.getBlock().getListener().onBlockPlaceNormal(ne);
+
+        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
         event.setBuild(ne.canBuild());
@@ -154,17 +163,20 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlaceHighest(BlockPlaceEvent event) {
-        BlockManager manager = NewMod.get().getBlockManager();
+        ItemManager manager = NewMod.get().getItemManager();
+        BlockManager bmanager = NewMod.get().getBlockManager();
+        ModItemType itemType = manager.getType(event.getItemInHand());
 
-        ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
-
-        if(modBlock == null) {
+        if(itemType.getBlock() == null) {
             return;
         }
 
-        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, modBlock);
+        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, new ModBlock(itemType.getBlock()));
 
-        modBlock.getType().getListener().onBlockPlaceHighest(ne);
+        itemType.getBlock().getListener().onBlockPlaceHighest(ne);
+
+        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
         event.setBuild(ne.canBuild());
@@ -172,18 +184,20 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlaceMonitor(BlockPlaceEvent event) {
-        BlockManager manager = NewMod.get().getBlockManager();
+        ItemManager manager = NewMod.get().getItemManager();
+        BlockManager bmanager = NewMod.get().getBlockManager();
+        ModItemType itemType = manager.getType(event.getItemInHand());
 
-        ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
-
-        if(modBlock == null) {
+        if(itemType.getBlock() == null) {
             return;
         }
 
-        modBlock.update();
+        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, new ModBlock(itemType.getBlock()));
 
-        ModBlockPlaceEvent ne = new ModBlockPlaceEvent(event, modBlock);
+        itemType.getBlock().getListener().onBlockPlaceMonitor(ne);
 
-        modBlock.getType().getListener().onBlockPlaceMonitor(ne);
+        new ModBlock(itemType.getBlock()).create(event.getBlock().getLocation());
+
+        bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "0");
     }
 }

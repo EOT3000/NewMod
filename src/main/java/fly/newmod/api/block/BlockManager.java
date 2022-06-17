@@ -40,9 +40,18 @@ public class BlockManager {
 
     @SuppressWarnings("unchecked")
     public Block applyData(Block block, ModBlockData modStack) {
-        ((ModBlockDataSerializer<ModBlockData>) serializers.get(modStack.getClass())).applyData(block, modStack);
+        dataStorage.putIfAbsent(block.getLocation(), new HashMap<>());
+
+        ((ModBlockDataSerializer<ModBlockData>) serializers.get(modStack.getClass())).applyData(dataStorage.get(block.getLocation()), modStack);
 
         return block;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, String> applyData(Map<String, String> map, ModBlockData modStack) {
+        ((ModBlockDataSerializer<ModBlockData>) serializers.get(modStack.getClass())).applyData(map, modStack);
+
+        return map;
     }
 
     public ModBlockType getType(Block block) {
@@ -57,7 +66,7 @@ public class BlockManager {
         return blocks.get(key);
     }
 
-    public ModBlockData createDefaultMeta(ModBlockType type) {
+    public ModBlockData createDefaultData(ModBlockType type) {
         return serializers.get(type.getDataType()).defaultMeta(type);
     }
 
@@ -70,7 +79,9 @@ public class BlockManager {
     }
 
     public void changeData(Location location, String key, String value) {
-        dataStorage.putIfAbsent(location, new HashMap<>()).put(key, value);
+        dataStorage.putIfAbsent(location, new HashMap<>());
+
+        dataStorage.get(location).put(key, value);
     }
 
     public void purgeData(Location location) {
@@ -78,12 +89,16 @@ public class BlockManager {
     }
 
     public List<String> getAllData(Location location) {
-        return new ArrayList<>(dataStorage.putIfAbsent(location, new HashMap<>()).values());
+        dataStorage.putIfAbsent(location, new HashMap<>());
+
+        return new ArrayList<>(dataStorage.get(location).keySet());
     }
 
 
     public String getData(Location location, String key) {
-        return dataStorage.putIfAbsent(location, new HashMap<>()).get(key);
+        dataStorage.putIfAbsent(location, new HashMap<>());
+
+        return dataStorage.get(location).get(key);
     }
 
     public List<Location> getAllBlocksOfType(String id) {

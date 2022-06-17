@@ -34,7 +34,7 @@ public final class ModBlock {
         this.representation = null;
 
         this.type = type;
-        this.data = manager.createDefaultMeta(type);
+        this.data = manager.createDefaultData(type);
     }
 
     public ModBlock(ModBlockType type, ModBlockData data, Block representation) {
@@ -57,6 +57,15 @@ public final class ModBlock {
         } else {
             return representation;
         }
+    }
+
+    public Block createInStorage(Location location) {
+        BlockManager manager = NewMod.get().getBlockManager();
+        Block block = location.getBlock();
+
+        manager.applyData(block, data);
+
+        return block;
     }
 
     public void update() {

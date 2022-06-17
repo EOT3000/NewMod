@@ -7,10 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
 public class DefaultModItemMeta extends ModItemMeta.AbstractModItemMeta {
-    static {
-        new DefaultModItemMetaSerializer();
-    }
-
     protected DefaultModItemMeta(ModItemType type) {
         super(type);
     }
@@ -18,6 +14,11 @@ public class DefaultModItemMeta extends ModItemMeta.AbstractModItemMeta {
     @Override
     public DefaultModItemMeta cloneItem() {
         return new DefaultModItemMeta(getType());
+    }
+
+    @Override
+    public boolean isAcceptable(ModItemMeta meta) {
+        return meta.getType() == getType() || getType().equals(meta.getType());
     }
 
     public static class DefaultModItemMetaSerializer extends ModItemMetaSerializer<DefaultModItemMeta> {
