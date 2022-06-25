@@ -3,6 +3,7 @@ package fly.newmod.api.event.block;
 import fly.newmod.api.block.ModBlock;
 import fly.newmod.api.event.ModEventWrapper;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -17,7 +18,8 @@ public class ModBlockInteractEvent extends ModEventWrapper implements Cancellabl
     }
 
     private final ItemStack item;
-    private final ModBlock clickedBlock;
+    private final ModBlock modBlock;
+    private final Block block;
 
     private final Location interactionPoint;
     private final BlockFace blockFace;
@@ -29,9 +31,10 @@ public class ModBlockInteractEvent extends ModEventWrapper implements Cancellabl
     private Event.Result useInteractedBlock;
     private Event.Result useItemInHand;
 
-    public ModBlockInteractEvent(PlayerInteractEvent event, ModBlock block) {
+    public ModBlockInteractEvent(PlayerInteractEvent event, ModBlock modBlock) {
         this.item = event.getItem();
-        this.clickedBlock = block;
+        this.modBlock = modBlock;
+        this.block = event.getClickedBlock();
 
         this.interactionPoint = event.getInteractionPoint();
         this.blockFace = event.getBlockFace();
@@ -48,8 +51,13 @@ public class ModBlockInteractEvent extends ModEventWrapper implements Cancellabl
         return item;
     }
 
-    public ModBlock getBlock() {
-        return clickedBlock;
+    public ModBlock getModBlock() {
+        return modBlock;
+    }
+
+    @Override
+    public Block getBlock() {
+        return block;
     }
 
     public Location getInteractionPoint() {
@@ -83,6 +91,8 @@ public class ModBlockInteractEvent extends ModEventWrapper implements Cancellabl
     public void setUseItemInHand(Event.Result useItemInHand) {
         this.useItemInHand = useItemInHand;
     }
+
+    //TODO: add
 
     @Override
     public boolean isCancelled() {

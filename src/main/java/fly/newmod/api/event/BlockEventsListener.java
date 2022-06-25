@@ -1,9 +1,6 @@
 package fly.newmod.api.event;
 
-import fly.newmod.api.event.block.ModBlockBreakEvent;
-import fly.newmod.api.event.block.ModBlockInteractEvent;
-import fly.newmod.api.event.block.ModBlockPlaceEvent;
-import fly.newmod.api.event.block.ModBlockTickEvent;
+import fly.newmod.api.event.block.*;
 
 public interface BlockEventsListener {
 
@@ -39,4 +36,23 @@ public interface BlockEventsListener {
 
     default void onBlockPlaceMonitor(ModBlockPlaceEvent event) {}
 
+
+
+    default void onBlockGrowLowest(ModBlockGrowEvent event) {}
+
+    default void onBlockGrowNormal(ModBlockGrowEvent event) {}
+
+    default void onBlockGrowHighest(ModBlockGrowEvent event) {}
+
+    default void onBlockGrowMonitor(ModBlockGrowEvent event) {}
+
+
+
+    default void onStructureGrowLowest(ModStructureGrowEvent event) {}
+
+    default void onStructureGrowNormal(ModStructureGrowEvent event) {}
+
+    default void onStructureGrowHighest(ModStructureGrowEvent event) {}
+
+    default void onStructureGrowMonitor(ModStructureGrowEvent event) {}
 }

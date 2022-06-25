@@ -1,6 +1,9 @@
-package fly.newmod.api.event.item;
+package fly.newmod.api.event.both;
 
+import fly.newmod.api.block.ModBlock;
 import fly.newmod.api.event.ModEventWrapper;
+import fly.newmod.api.event.block.ModBlockEvent;
+import fly.newmod.api.event.item.ModItemEvent;
 import fly.newmod.api.item.ModItemStack;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -10,14 +13,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
-public class ModItemUseEvent extends ModEventWrapper implements Cancellable, ModItemEvent {
-    static {
-        new ModItemUseEventListener();
-    }
-
+public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEvent, ModItemEvent, Cancellable {
     private final ModItemStack item;
+    private final ModBlock modBlock;
+
     private final Block clickedBlock;
+    private final ItemStack usedStack;
 
     private final Location interactionPoint;
     private final BlockFace blockFace;
@@ -29,9 +32,12 @@ public class ModItemUseEvent extends ModEventWrapper implements Cancellable, Mod
     private Event.Result useInteractedBlock;
     private Event.Result useItemInHand;
 
-    public ModItemUseEvent(PlayerInteractEvent event, ModItemStack item) {
+    public ModBlockItemUseEvent(PlayerInteractEvent event, ModItemStack item, ModBlock block) {
         this.item = item;
+        this.modBlock = block;
+
         this.clickedBlock = event.getClickedBlock();
+        this.usedStack = event.getItem();
 
         this.interactionPoint = event.getInteractionPoint();
         this.blockFace = event.getBlockFace();
@@ -44,25 +50,43 @@ public class ModItemUseEvent extends ModEventWrapper implements Cancellable, Mod
         this.useItemInHand = event.useItemInHand();
     }
 
+    @Override
     public Block getBlock() {
         return clickedBlock;
     }
+
+
+
+    @Override
+    public ModBlock getModBlock() {
+        return modBlock;
+    }
+
+
 
     public Location getInteractionPoint() {
         return interactionPoint.clone();
     }
 
+
+
     public BlockFace getBlockFace() {
         return blockFace;
     }
+
+
 
     public Player getPlayer() {
         return player;
     }
 
+
+
     public EquipmentSlot getHand() {
         return hand;
     }
+
+
 
     public Event.Result getUseInteractedBlock() {
         return useInteractedBlock;
@@ -72,6 +96,8 @@ public class ModItemUseEvent extends ModEventWrapper implements Cancellable, Mod
         this.useInteractedBlock = useInteractedBlock;
     }
 
+
+
     public Event.Result getUseItemInHand() {
         return useItemInHand;
     }
@@ -80,10 +106,21 @@ public class ModItemUseEvent extends ModEventWrapper implements Cancellable, Mod
         this.useItemInHand = useItemInHand;
     }
 
+
+
     @Override
-    public ModItemStack getItem() {
+    public ModItemStack getModItem() {
         return item;
     }
+
+
+
+    @Override
+    public ItemStack getItem() {
+        return usedStack;
+    }
+
+
 
     @Override
     public boolean isCancelled() {
@@ -93,17 +130,5 @@ public class ModItemUseEvent extends ModEventWrapper implements Cancellable, Mod
     @Override
     public void setCancelled(boolean b) {
 
-    }
-
-    private static class ModItemUseEventListener extends ModEventListener {
-        private static ModItemUseEventListener INSTANCE;
-
-        private ModItemUseEventListener() {
-            if(INSTANCE != null) {
-                throw new RuntimeException("ModItemUseEventListener already initialized");
-            }
-
-            INSTANCE = this;
-        }
     }
 }

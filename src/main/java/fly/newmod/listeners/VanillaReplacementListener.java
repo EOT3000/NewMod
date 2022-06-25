@@ -29,6 +29,7 @@ public class VanillaReplacementListener implements Listener {
 
         if(event.getRecipe() instanceof ShapedRecipe) {
             if(!event.getInventory().getType().equals(InventoryType.WORKBENCH)) {
+                checkForAny(event);
                 return;
             }
 
@@ -41,16 +42,8 @@ public class VanillaReplacementListener implements Listener {
                 ModItemType rtype = manager.getType(event.getInventory().getMatrix()[i]);
                 ModItemType stype = manager.getType(stack);
 
-                System.out.println(rtype);
-                System.out.println(stype);
-
-                System.out.println("aaaaaaaaa");
-
-                System.out.println(stack);
-                System.out.println(event.getInventory().getMatrix()[i]);
-
                 if(rtype == null) {
-                    if(stype != null) {
+                    if(stype != null && !stype.isCraftable()) {
                         event.getInventory().setResult(new ItemStack(Material.AIR));
                         return;
                     }
@@ -70,8 +63,21 @@ public class VanillaReplacementListener implements Listener {
                 }
 
             }
-        } else if(event.getRecipe() instanceof ShapelessRecipe) {
-            //ShapelessRecipe recipe = event.getRecipe();
+        } else {
+            checkForAny(event);
+        }
+    }
+
+    private void checkForAny(PrepareItemCraftEvent event) {
+        ItemManager manager = NewMod.get().getItemManager();
+
+        for(ItemStack stack : event.getInventory().getMatrix()) {
+            ModItemType type = manager.getType(stack);
+
+            if(type != null && !type.isCraftable()) {
+                event.getInventory().setResult(new ItemStack(Material.AIR));
+                return;
+            }
         }
     }
 

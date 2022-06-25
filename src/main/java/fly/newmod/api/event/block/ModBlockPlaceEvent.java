@@ -13,7 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ModBlockPlaceEvent extends ModEventWrapper implements Cancellable, ModBlockEvent {
     private final ItemStack item;
-    private final ModBlock clickedBlock;
+    private final ModBlock modBlock;
+    private final Block block;
 
     private final Player player;
 
@@ -25,9 +26,13 @@ public class ModBlockPlaceEvent extends ModEventWrapper implements Cancellable, 
     private boolean cancelled;
     protected boolean canBuild;
 
-    public ModBlockPlaceEvent(BlockPlaceEvent event, ModBlock block) {
+    private boolean defaultPlace;
+
+    public ModBlockPlaceEvent(BlockPlaceEvent event, ModBlock modBlock) {
         this.item = event.getItemInHand();
-        this.clickedBlock = block;
+        this.modBlock = modBlock;
+
+        this.block = event.getBlock();
 
         this.player = event.getPlayer();
 
@@ -37,14 +42,21 @@ public class ModBlockPlaceEvent extends ModEventWrapper implements Cancellable, 
 
         this.cancelled = event.isCancelled();
         this.canBuild = event.canBuild();
+
+        this.defaultPlace = true;
     }
 
     public ItemStack getItem() {
         return item;
     }
 
-    public ModBlock getBlock() {
-        return clickedBlock;
+    @Override
+    public ModBlock getModBlock() {
+        return modBlock;
+    }
+
+    public Block getBlock() {
+        return block;
     }
 
     public Player getPlayer() {
@@ -69,6 +81,14 @@ public class ModBlockPlaceEvent extends ModEventWrapper implements Cancellable, 
 
     public void setBuild(boolean canBuild) {
         this.canBuild = canBuild;
+    }
+
+    public boolean isDefaultPlace() {
+        return defaultPlace;
+    }
+
+    public void setDefaultPlace(boolean defaultPlace) {
+        this.defaultPlace = defaultPlace;
     }
 
     @Override

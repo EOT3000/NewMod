@@ -17,9 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.function.Consumer;
 
 public class BlockListener implements Listener {
     @EventHandler
@@ -31,12 +30,14 @@ public class BlockListener implements Listener {
             ModBlockType type = manager.getType(b);
 
             if(type.getDefaultMaterial().equals(b.getType())) {
-                type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b)));
+                type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
             } else {
                 manager.purgeData(location);
             }
         }
     }
+
+
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreakLowest(BlockBreakEvent event) {
@@ -94,8 +95,6 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreakMonitor(BlockBreakEvent event) {
-
-
         BlockManager manager = NewMod.get().getBlockManager();
 
         ModBlock modBlock = manager.deserializeModBlock(event.getBlock());
@@ -125,7 +124,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ModItemType itemType = manager.getType(event.getItemInHand());
 
+        if(itemType == null) {
+            return;
+        }
+
         if(itemType.getBlock() == null) {
+            event.setCancelled(true);
             return;
         }
 
@@ -133,7 +137,7 @@ public class BlockListener implements Listener {
 
         itemType.getBlock().getListener().onBlockPlaceLowest(ne);
 
-        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        ne.getModBlock().createInStorage(event.getBlock().getLocation());
         bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
@@ -146,7 +150,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ModItemType itemType = manager.getType(event.getItemInHand());
 
+        if(itemType == null) {
+            return;
+        }
+
         if(itemType.getBlock() == null) {
+            event.setCancelled(true);
             return;
         }
 
@@ -154,7 +163,7 @@ public class BlockListener implements Listener {
 
         itemType.getBlock().getListener().onBlockPlaceNormal(ne);
 
-        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        ne.getModBlock().createInStorage(event.getBlock().getLocation());
         bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
@@ -167,7 +176,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ModItemType itemType = manager.getType(event.getItemInHand());
 
+        if(itemType == null) {
+            return;
+        }
+
         if(itemType.getBlock() == null) {
+            event.setCancelled(true);
             return;
         }
 
@@ -175,7 +189,7 @@ public class BlockListener implements Listener {
 
         itemType.getBlock().getListener().onBlockPlaceHighest(ne);
 
-        ne.getBlock().createInStorage(event.getBlock().getLocation());
+        ne.getModBlock().createInStorage(event.getBlock().getLocation());
         bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "1");
 
         event.setCancelled(ne.isCancelled());
@@ -188,7 +202,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ModItemType itemType = manager.getType(event.getItemInHand());
 
+        if(itemType == null) {
+            return;
+        }
+
         if(itemType.getBlock() == null) {
+            event.setCancelled(true);
             return;
         }
 
@@ -196,8 +215,23 @@ public class BlockListener implements Listener {
 
         itemType.getBlock().getListener().onBlockPlaceMonitor(ne);
 
-        new ModBlock(itemType.getBlock()).create(event.getBlock().getLocation());
+        new ModBlock(itemType.getBlock()).createInStorage(event.getBlock().getLocation());
+
+        if(ne.isDefaultPlace()) {
+            Block block = event.getBlock();
+
+            if(!block.getType().equals(itemType.getBlock().getDefaultMaterial())) {
+                block.setType(itemType.getBlock().getDefaultMaterial());
+            }
+        }
 
         bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "0");
+    }
+
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockGrowLowest(BlockGrowEvent event) {
+
     }
 }

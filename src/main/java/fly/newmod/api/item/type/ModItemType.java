@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -139,10 +140,24 @@ public class ModItemType {
 
         result.setAmount(count);
 
-        ShapelessRecipe recipe = new ShapelessRecipe(id, result);
+        ShapedRecipe recipe = new ShapedRecipe(id, result);
 
-        for(ItemStack ingredient : ingredients) {
-            recipe.addIngredient(ingredient);
+        if(ingredients.length > 9) {
+            System.err.println("Error on adding recipe, more than 9 items defined " + getId());
+        }
+
+        StringBuilder shape = new StringBuilder("         ");
+
+        for(int i = 0; i < ingredients.length; i++) {
+            shape.setCharAt(i, (char) (65+i));
+        }
+
+        recipe.shape(shape.substring(0,3), shape.substring(3,6), shape.substring(6,9));
+
+        for(int i = 0; i < ingredients.length; i++) {
+            System.out.println((char) (65+i));
+
+            recipe.setIngredient((char) (65+i), ingredients[i]);
         }
 
         Bukkit.addRecipe(recipe);
