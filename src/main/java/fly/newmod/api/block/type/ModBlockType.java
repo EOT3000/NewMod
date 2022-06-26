@@ -58,4 +58,15 @@ public class ModBlockType {
     public Class<? extends ModBlockData> getDataType() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "ModBlockType{" +
+                "listener=" + listener +
+                ", defaultMaterial=" + defaultMaterial +
+                ", id=" + id +
+                ", item=" + item +
+                ", data=" + data +
+                '}';
+    }
 }

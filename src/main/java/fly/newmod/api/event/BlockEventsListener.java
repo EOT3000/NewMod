@@ -1,6 +1,7 @@
 package fly.newmod.api.event;
 
 import fly.newmod.api.event.block.*;
+import fly.newmod.api.event.both.ModBlockItemUseEvent;
 
 public interface BlockEventsListener {
 
@@ -8,13 +9,13 @@ public interface BlockEventsListener {
 
 
 
-    default void onBlockInteractLowest(ModBlockInteractEvent event) {}
+    default void onBlockInteractLowest(ModBlockItemUseEvent event) {}
 
-    default void onBlockInteractNormal(ModBlockInteractEvent event) {}
+    default void onBlockInteractNormal(ModBlockItemUseEvent event) {}
 
-    default void onBlockInteractHighest(ModBlockInteractEvent event) {}
+    default void onBlockInteractHighest(ModBlockItemUseEvent event) {}
 
-    default void onBlockInteractMonitor(ModBlockInteractEvent event) {}
+    default void onBlockInteractMonitor(ModBlockItemUseEvent event) {}
 
 
 

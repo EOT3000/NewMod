@@ -91,4 +91,13 @@ public final class ModBlock {
     public ModBlockData getData() {
         return data.cloneBlock();
     }
+
+    @Override
+    public String toString() {
+        return "ModBlock{" +
+                "representation=" + representation +
+                ", type=" + type +
+                ", data=" + data +
+                '}';
+    }
 }

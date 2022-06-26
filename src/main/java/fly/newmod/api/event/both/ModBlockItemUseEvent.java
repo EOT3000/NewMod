@@ -16,7 +16,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEvent, ModItemEvent, Cancellable {
-    private final ModItemStack item;
+    private final ModItemStack modItemStack;
     private final ModBlock modBlock;
 
     private final Block clickedBlock;
@@ -33,7 +33,7 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
     private Event.Result useItemInHand;
 
     public ModBlockItemUseEvent(PlayerInteractEvent event, ModItemStack item, ModBlock block) {
-        this.item = item;
+        this.modItemStack = item;
         this.modBlock = block;
 
         this.clickedBlock = event.getClickedBlock();
@@ -110,7 +110,7 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
 
     @Override
     public ModItemStack getModItem() {
-        return item;
+        return modItemStack;
     }
 
 
@@ -121,14 +121,14 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
     }
 
 
-
     @Override
     public boolean isCancelled() {
-        return false;
+        return this.useInteractedBlock == Event.Result.DENY;
     }
 
     @Override
-    public void setCancelled(boolean b) {
-
+    public void setCancelled(boolean cancel) {
+        this.setUseInteractedBlock(cancel ? Event.Result.DENY : (this.useInteractedBlock == Event.Result.DENY ? Event.Result.DEFAULT : this.useInteractedBlock));
+        this.setUseItemInHand(cancel ? Event.Result.DENY : (this.useItemInHand == Event.Result.DENY ? Event.Result.DEFAULT : this.useItemInHand));
     }
 }
