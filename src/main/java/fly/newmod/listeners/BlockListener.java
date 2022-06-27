@@ -248,12 +248,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ItemManager imanager = NewMod.get().getItemManager();
 
-        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
-        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
-
-        if(modBlock == null && modItem == null) {
+        if(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null) {
             return;
         }
+
+        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
+        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
 
         ModBlockItemUseEvent me = new ModBlockItemUseEvent(event, modItem, modBlock);
 
@@ -274,12 +274,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ItemManager imanager = NewMod.get().getItemManager();
 
-        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
-        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
-
-        if(modBlock == null && modItem == null) {
+        if(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null) {
             return;
         }
+
+        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
+        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
 
         ModBlockItemUseEvent me = new ModBlockItemUseEvent(event, modItem, modBlock);
 
@@ -300,12 +300,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ItemManager imanager = NewMod.get().getItemManager();
 
-        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
-        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
-
-        if(modBlock == null && modItem == null) {
+        if(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null) {
             return;
         }
+
+        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
+        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
 
         ModBlockItemUseEvent me = new ModBlockItemUseEvent(event, modItem, modBlock);
 
@@ -326,12 +326,12 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ItemManager imanager = NewMod.get().getItemManager();
 
-        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
-        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
-
-        if(modBlock == null && modItem == null) {
+        if(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null) {
             return;
         }
+
+        ModBlock modBlock = bmanager.deserializeModBlock(event.getClickedBlock());
+        ModItemStack modItem = imanager.deserializeModItemStack(event.getItem());
 
         ModBlockItemUseEvent me = new ModBlockItemUseEvent(event, modItem, modBlock);
 

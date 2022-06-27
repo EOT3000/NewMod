@@ -4,6 +4,7 @@ import fly.newmod.NewMod;
 import fly.newmod.api.block.type.ModBlockType;
 import fly.newmod.api.event.BlockEventsListener;
 import fly.newmod.api.event.ItemEventsListener;
+import fly.newmod.api.event.both.ModBlockItemUseEvent;
 import fly.newmod.api.item.ItemManager;
 import fly.newmod.api.item.ModItemStack;
 import fly.newmod.api.item.meta.DefaultModItemMeta;
@@ -40,6 +41,8 @@ public class ModItemType {
 
     private ModBlockType block;
 
+    private Component customName = null;
+
     public static ModItemType createAndRegister(Material material, Plugin plugin, String id, String name, int color) {
         ItemManager manager = NewMod.get().getItemManager();
         ModItemType item = new ModItemType(material, new NamespacedKey(plugin, id)).name(name, color);
@@ -54,12 +57,7 @@ public class ModItemType {
     }
 
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta) {
-        this.defaultMaterial = defaultMaterial;
-        this.id = id;
-
-        this.meta = meta;
-
-        this.craftable = false;
+        this(defaultMaterial, id, meta, false);
     }
 
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable) {
@@ -69,6 +67,8 @@ public class ModItemType {
         this.meta = meta;
 
         this.craftable = craftable;
+
+        this.listener = new ItemEventsListener() {};
     }
 
     public final Material getDefaultMaterial() {
@@ -105,6 +105,14 @@ public class ModItemType {
         return block;
     }
 
+    public Component getCustomName() {
+        return customName;
+    }
+
+    public ItemStack create() {
+        return new ModItemStack(this).create();
+    }
+
     //
 
     public ItemStack applyModifiers(ItemStack stack) {
@@ -132,7 +140,9 @@ public class ModItemType {
     }
 
     public ModItemType name(String string, TextColor color) {
-        return addModifier(new MetaModifier<>(Component.text(string, color).color(color), NAME_MODIFIER));
+        customName = Component.text(string, color).color(color);
+
+        return addModifier(new MetaModifier<>(customName, NAME_MODIFIER));
     }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {

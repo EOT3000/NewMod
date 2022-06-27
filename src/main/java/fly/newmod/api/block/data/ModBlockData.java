@@ -1,7 +1,6 @@
 package fly.newmod.api.block.data;
 
 import fly.newmod.api.block.type.ModBlockType;
-import fly.newmod.api.item.type.ModItemType;
 
 public interface ModBlockData {
     ModBlockType getType();

@@ -55,7 +55,7 @@ public class BlockManager {
     }
 
     public ModBlockType getType(Block block) {
-        return getType(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
+        return block == null ? null : getType(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
     }
 
     public ModBlockType getType(Map<String, String> container) {
