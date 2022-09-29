@@ -94,7 +94,7 @@ public class NewMod extends JavaPlugin implements Listener {
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 500, 500);
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.VEHICLE_MOVE, PacketType.Play.Client.BOAT_MOVE) {
+        /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.VEHICLE_MOVE, PacketType.Play.Client.BOAT_MOVE) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 try {
@@ -105,7 +105,7 @@ public class NewMod extends JavaPlugin implements Listener {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
     }
 
     private void attemptLoad(ModExtension extension) {
@@ -149,6 +149,8 @@ public class NewMod extends JavaPlugin implements Listener {
     }
 
     private void save() {
+        blockManager.printData();
+
         YamlConfiguration configuration = new YamlConfiguration();
 
         for(Location location : blockManager.getAllLocations()) {
@@ -533,6 +535,8 @@ public class NewMod extends JavaPlugin implements Listener {
         private Map<String, ModItemType> moduleItems = new HashMap<>();
 
         public ModExtension() {
+            new RuntimeException().printStackTrace();
+
             instance.extensions.add(this);
         }
 

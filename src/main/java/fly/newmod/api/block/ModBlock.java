@@ -3,8 +3,11 @@ package fly.newmod.api.block;
 import fly.newmod.NewMod;
 import fly.newmod.api.block.data.ModBlockData;
 import fly.newmod.api.block.type.ModBlockType;
+import fly.newmod.api.event.block.ModBlockBreakEvent;
+import fly.newmod.api.item.type.ModItemType;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents an item stack with mod properties.
@@ -74,6 +77,10 @@ public final class ModBlock {
 
             manager.applyData(representation, data);
         }
+    }
+
+    public ItemStack getDropStack(ModBlockBreakEvent ne) {
+        return type.getDropStack(ne);
     }
 
     public ModBlockType getType() {

@@ -15,9 +15,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -150,7 +148,7 @@ public class ModItemType {
 
         result.setAmount(count);
 
-        ShapedRecipe recipe = new ShapedRecipe(id, result);
+        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_furnace"), result);
 
         if(ingredients.length > 9) {
             System.err.println("Error on adding recipe, more than 9 items defined " + getId());
@@ -169,6 +167,30 @@ public class ModItemType {
 
             recipe.setIngredient((char) (65+i), ingredients[i]);
         }
+
+        Bukkit.addRecipe(recipe);
+
+        return this;
+    }
+
+    public ModItemType furnaceRecipe(ItemStack source, float xp, int time) {
+        FurnaceRecipe recipe = new FurnaceRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_furnace"), create(), new RecipeChoice.ExactChoice(source), xp, time);
+
+        Bukkit.addRecipe(recipe);
+
+        return this;
+    }
+
+    public ModItemType smokerRecipe(ItemStack source, float xp, int time) {
+        SmokingRecipe recipe = new SmokingRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_smoking"), create(), new RecipeChoice.ExactChoice(source), xp, time);
+
+        Bukkit.addRecipe(recipe);
+
+        return this;
+    }
+
+    public ModItemType blastingRecipe(ItemStack source, float xp, int time) {
+        BlastingRecipe recipe = new BlastingRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_blasting"), create(), new RecipeChoice.ExactChoice(source), xp, time);
 
         Bukkit.addRecipe(recipe);
 

@@ -14,7 +14,7 @@ public class ModBlockBreakEvent extends ModEventWrapper implements Cancellable, 
     private final Player player;
 
     private boolean cancelled;
-    private boolean dropModItem = true;
+    private boolean vanillaDrop;
 
     public ModBlockBreakEvent(BlockBreakEvent event, ModBlock modBlock) {
         this.modBlock = modBlock;
@@ -24,6 +24,8 @@ public class ModBlockBreakEvent extends ModEventWrapper implements Cancellable, 
         this.player = event.getPlayer();
 
         this.cancelled = event.isCancelled();
+
+        this.vanillaDrop = event.isDropItems();
     }
 
     public ModBlock getModBlock() {
@@ -39,12 +41,12 @@ public class ModBlockBreakEvent extends ModEventWrapper implements Cancellable, 
         return player;
     }
 
-    public boolean isDropModItem() {
-        return dropModItem;
+    public boolean vanillaDrop() {
+        return vanillaDrop;
     }
 
-    public void setDropModItem(boolean dropModItem) {
-        this.dropModItem = dropModItem;
+    public void setVanillaDrop(boolean vanillaDrop) {
+        this.vanillaDrop = vanillaDrop;
     }
 
     @Override

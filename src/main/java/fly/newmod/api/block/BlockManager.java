@@ -113,7 +113,15 @@ public class BlockManager {
         return r;
     }
 
+    public List<ModBlockType> getBlocks() {
+        return new ArrayList<>(blocks.values());
+    }
+
     public List<Location> getAllLocations() {
         return new ArrayList<>(dataStorage.keySet());
+    }
+
+    public void printData() {
+        //System.out.println(dataStorage);
     }
 }

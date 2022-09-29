@@ -5,9 +5,7 @@ import fly.newmod.NewMod;
 import fly.newmod.api.block.BlockManager;
 import fly.newmod.api.block.ModBlock;
 import fly.newmod.api.block.type.ModBlockType;
-import fly.newmod.api.event.block.ModBlockBreakEvent;
-import fly.newmod.api.event.block.ModBlockPlaceEvent;
-import fly.newmod.api.event.block.ModBlockTickEvent;
+import fly.newmod.api.event.block.*;
 import fly.newmod.api.event.both.ModBlockItemUseEvent;
 import fly.newmod.api.item.ItemManager;
 import fly.newmod.api.item.ModItemStack;
@@ -18,9 +16,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.StructureGrowEvent;
 
 public class BlockListener implements Listener {
     @EventHandler
@@ -33,8 +33,14 @@ public class BlockListener implements Listener {
             Block b = location.getBlock();
             ModBlockType type = manager.getType(b);
 
-            if(type.getDefaultMaterial().equals(b.getType())) {
-                type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
+            if(type != null && type.getDefaultMaterial().equals(b.getType())) {
+                try {
+                    type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
+                } catch (Exception e) {
+                    NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") error:");
+
+                    e.printStackTrace();
+                }
             } else {
                 manager.purgeData(location);
             }
@@ -58,7 +64,7 @@ public class BlockListener implements Listener {
         modBlock.getType().getListener().onBlockBreakLowest(ne);
 
         event.setCancelled(ne.isCancelled());
-        event.setDropItems(ne.isDropModItem());
+        event.setDropItems(ne.vanillaDrop());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -76,7 +82,7 @@ public class BlockListener implements Listener {
         modBlock.getType().getListener().onBlockBreakNormal(ne);
 
         event.setCancelled(ne.isCancelled());
-        event.setDropItems(ne.isDropModItem());
+        event.setDropItems(ne.vanillaDrop());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -94,7 +100,7 @@ public class BlockListener implements Listener {
         modBlock.getType().getListener().onBlockBreakHighest(ne);
 
         event.setCancelled(ne.isCancelled());
-        event.setDropItems(ne.isDropModItem());
+        event.setDropItems(ne.vanillaDrop());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -107,15 +113,13 @@ public class BlockListener implements Listener {
             return;
         }
 
-        if(event.isDropItems() && modBlock.getType().getItem() != null) {
-            ItemManager itemManager = NewMod.get().getItemManager();
+        ModBlockBreakEvent ne = new ModBlockBreakEvent(event, modBlock);
 
+        if(event.isDropItems() && modBlock.getDropStack(ne) != null) {
             Location l = event.getBlock().getLocation();
 
-            l.getWorld().dropItem(l, new ModItemStack(modBlock.getType().getItem()).create());
+            l.getWorld().dropItem(l, modBlock.getDropStack(ne));
         }
-
-        ModBlockBreakEvent ne = new ModBlockBreakEvent(event, modBlock);
 
         modBlock.getType().getListener().onBlockBreakMonitor(ne);
 
@@ -238,7 +242,112 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockGrowLowest(BlockGrowEvent event) {
+        Block b = event.getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
 
+        if(manager.getType(b) != null) {
+            ModBlockGrowEvent ne = new ModBlockGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onBlockGrowLowest(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockGrowNormal(BlockGrowEvent event) {
+        Block b = event.getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModBlockGrowEvent ne = new ModBlockGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onBlockGrowNormal(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockGrowHighest(BlockGrowEvent event) {
+        Block b = event.getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModBlockGrowEvent ne = new ModBlockGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onBlockGrowHighest(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockGrowMonitor(BlockGrowEvent event) {
+        Block b = event.getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModBlockGrowEvent ne = new ModBlockGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onBlockGrowMonitor(ne);
+        }
+    }
+
+
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onStructureGrowLowest(StructureGrowEvent event) {
+        Block b = event.getLocation().getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModStructureGrowEvent ne = new ModStructureGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onStructureGrowLowest(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onStructureGrowNormal(StructureGrowEvent event) {
+        Block b = event.getLocation().getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModStructureGrowEvent ne = new ModStructureGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onStructureGrowNormal(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onStructureGrowHighest(StructureGrowEvent event) {
+        Block b = event.getLocation().getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModStructureGrowEvent ne = new ModStructureGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onStructureGrowHighest(ne);
+
+            event.setCancelled(ne.isCancelled());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onStructureGrowMonitor(StructureGrowEvent event) {
+        Block b = event.getLocation().getBlock();
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(b) != null) {
+            ModStructureGrowEvent ne = new ModStructureGrowEvent(event, manager.deserializeModBlock(b));
+
+            manager.getType(b).getListener().onStructureGrowMonitor(ne);
+        }
     }
 
 
@@ -343,4 +452,17 @@ public class BlockListener implements Listener {
             modItem.getType().getListener().onItemUseMonitor(me);
         }
     }
+
+
+
+    @EventHandler
+    public void onDispense(BlockDispenseEvent event) {
+        BlockManager manager = NewMod.get().getBlockManager();
+
+        if(manager.getType(event.getBlock()) != null) {
+            manager.getType(event.getBlock()).getListener().onDispenseTemp(event);
+        }
+    }
+    
+
 }

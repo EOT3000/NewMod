@@ -3,9 +3,11 @@ package fly.newmod.api.block.type;
 import fly.newmod.api.block.data.DefaultModBlockData;
 import fly.newmod.api.block.data.ModBlockData;
 import fly.newmod.api.event.BlockEventsListener;
+import fly.newmod.api.event.block.ModBlockBreakEvent;
 import fly.newmod.api.item.type.ModItemType;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 
 public class ModBlockType {
     private BlockEventsListener listener;
@@ -57,6 +59,16 @@ public class ModBlockType {
 
     public Class<? extends ModBlockData> getDataType() {
         return data;
+    }
+
+    public ItemStack getDropStack(ModBlockBreakEvent ne) {
+        ModItemType item = ne.getModBlock().getType().getItem();
+
+        if(item == null) {
+            return null;
+        } else {
+            return item.create();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package fly.newmod.api.event;
 
 import fly.newmod.api.event.block.*;
 import fly.newmod.api.event.both.ModBlockItemUseEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 
 public interface BlockEventsListener {
 
@@ -56,4 +57,9 @@ public interface BlockEventsListener {
     default void onStructureGrowHighest(ModStructureGrowEvent event) {}
 
     default void onStructureGrowMonitor(ModStructureGrowEvent event) {}
+
+
+
+    @Deprecated
+    default void onDispenseTemp(BlockDispenseEvent event) {}
 }

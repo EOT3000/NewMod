@@ -21,7 +21,9 @@ public class ItemManager {
     private final Map<NamespacedKey, ModItemType> items = new HashMap<>();
 
     public ModItemStack deserializeModItemStack(ItemStack stack) {
-        return new ModItemStack(getType(stack), deserializeMeta(stack), stack);
+        ModItemType type = getType(stack);
+
+        return type == null ? null : new ModItemStack(type, deserializeMeta(stack), stack);
     }
 
     public ModItemMeta deserializeMeta(ItemStack stack) {
