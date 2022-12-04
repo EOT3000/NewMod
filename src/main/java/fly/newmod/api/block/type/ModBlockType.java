@@ -1,5 +1,6 @@
 package fly.newmod.api.block.type;
 
+import fly.newmod.api.block.ModBlock;
 import fly.newmod.api.block.data.DefaultModBlockData;
 import fly.newmod.api.block.data.ModBlockData;
 import fly.newmod.api.event.BlockEventsListener;
@@ -7,6 +8,7 @@ import fly.newmod.api.event.block.ModBlockBreakEvent;
 import fly.newmod.api.item.type.ModItemType;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 public class ModBlockType {
@@ -51,6 +53,14 @@ public class ModBlockType {
 
     public final Material getDefaultMaterial() {
         return defaultMaterial;
+    }
+
+    public boolean isRightState(Block block, ModBlock modBlock) {
+        return block.getType().equals(defaultMaterial);
+    }
+
+    public void place(Block block, ModBlock modBlock) {
+        block.setType(getDefaultMaterial());
     }
 
     public final NamespacedKey getId() {

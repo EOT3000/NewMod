@@ -29,6 +29,12 @@ public class DefaultMetaFlags {
         return meta;
     };
 
+    public static final MetaModifier.MetaModifierType<Boolean> UNBREAKABLE_MODIFIER = (flag, meta) -> {
+        meta.setUnbreakable(flag);
+
+        return meta;
+    };
+
     public static final MetaModifier.MetaModifierType<Pair<Enchantment, Integer>> ENCHANTMENT_MODIFIER = (enchantment, meta) -> {
         meta.addEnchant(enchantment.getKey(), enchantment.getValue(), true);
 

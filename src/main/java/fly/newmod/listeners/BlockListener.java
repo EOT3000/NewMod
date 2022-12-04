@@ -33,7 +33,7 @@ public class BlockListener implements Listener {
             Block b = location.getBlock();
             ModBlockType type = manager.getType(b);
 
-            if(type != null && type.getDefaultMaterial().equals(b.getType())) {
+            if(type != null && type.isRightState(b, manager.deserializeModBlock(b))) {
                 try {
                     type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
                 } catch (Exception e) {
@@ -43,6 +43,8 @@ public class BlockListener implements Listener {
                 }
             } else {
                 manager.purgeData(location);
+
+                NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") has been purged for block mismatch");
             }
         }
     }
@@ -228,11 +230,7 @@ public class BlockListener implements Listener {
         new ModBlock(itemType.getBlock()).createInStorage(event.getBlock().getLocation());
 
         if(ne.isDefaultPlace()) {
-            Block block = event.getBlock();
-
-            if(!block.getType().equals(itemType.getBlock().getDefaultMaterial())) {
-                block.setType(itemType.getBlock().getDefaultMaterial());
-            }
+            itemType.getBlock().place(ne.getBlock(), ne.getModBlock());
         }
 
         bmanager.changeData(event.getBlock().getLocation(), "doNotBreak", "0");

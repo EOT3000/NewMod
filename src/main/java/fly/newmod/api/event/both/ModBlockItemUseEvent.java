@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -29,6 +30,8 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
 
     private final EquipmentSlot hand;
 
+    private final Action action;
+
     private Event.Result useInteractedBlock;
     private Event.Result useItemInHand;
 
@@ -45,6 +48,8 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
         this.player = event.getPlayer();
 
         this.hand = event.getHand();
+
+        this.action = event.getAction();
 
         this.useInteractedBlock = event.useInteractedBlock();
         this.useItemInHand = event.useItemInHand();
@@ -106,7 +111,9 @@ public class ModBlockItemUseEvent extends ModEventWrapper implements ModBlockEve
         this.useItemInHand = useItemInHand;
     }
 
-
+    public Action getAction() {
+        return action;
+    }
 
     @Override
     public ModItemStack getModItem() {

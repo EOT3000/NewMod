@@ -52,7 +52,7 @@ public final class ModBlock {
             BlockManager manager = NewMod.get().getBlockManager();
             Block block = location.getBlock();
 
-            block.setType(type.getDefaultMaterial());
+            type.place(block, this);
 
             manager.applyData(block, data);
 
