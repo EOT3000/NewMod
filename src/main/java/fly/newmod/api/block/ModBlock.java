@@ -4,7 +4,6 @@ import fly.newmod.NewMod;
 import fly.newmod.api.block.data.ModBlockData;
 import fly.newmod.api.block.type.ModBlockType;
 import fly.newmod.api.event.block.ModBlockBreakEvent;
-import fly.newmod.api.item.type.ModItemType;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
