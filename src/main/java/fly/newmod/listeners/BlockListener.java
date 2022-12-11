@@ -105,7 +105,7 @@ public class BlockListener implements Listener {
         event.setDropItems(ne.vanillaDrop());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreakMonitor(BlockBreakEvent event) {
         BlockManager manager = NewMod.get().getBlockManager();
 
