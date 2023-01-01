@@ -12,6 +12,7 @@ import fly.newmod.api.item.type.ModItemType;
 import fly.newmod.api.item.ItemManager;
 import fly.newmod.listeners.BlockListener;
 import fly.newmod.listeners.VanillaReplacementListener;
+import fly.newmod.time.TimeManager;
 import fly.newmod.utils.ColorUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -65,6 +66,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new VanillaReplacementListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+        Bukkit.getPluginManager().registerEvents(new TimeManager(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
