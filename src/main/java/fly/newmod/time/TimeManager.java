@@ -1,4 +1,4 @@
-package fly.newmod.parent.time;
+package fly.newmod.time;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.Bukkit;

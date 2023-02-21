@@ -1,4 +1,4 @@
-package fly.newmod.parent.time;
+package fly.newmod.time;
 
 public final class TimeValues {
     public static final int SUN_RADIUS = 80;

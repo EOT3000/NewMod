@@ -22,7 +22,7 @@ public class DamageChecker {
     //1.8125 helm
 
 
-    //ratios for fly.newmod.armor height, taken from player values and scaled such that it runs from 0-1 instead of 0-1.8125 as for a player
+    //ratios for armor height, taken from player values and scaled such that it runs from 0-1 instead of 0-1.8125 as for a player
     public static final double SCALE_FACTOR = 1.0/1.8125;
 
     public static final double BOOT_LOW = 0;

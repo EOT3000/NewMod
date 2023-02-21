@@ -1,4 +1,4 @@
-package fly.newmod.parent.time;
+package fly.newmod.time;
 
 public class TimeUtils {
     public static int timeMorning(int brightness) {
