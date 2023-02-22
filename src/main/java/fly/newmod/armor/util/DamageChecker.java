@@ -1,6 +1,6 @@
 package fly.newmod.armor.util;
 
-import fly.newmod.armor.type.armor.ArmorSection;
+import fly.newmod.armor.armor.ArmorSection;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AxisAlignedBB;
@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlock;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
@@ -79,38 +80,6 @@ public class DamageChecker {
         return sections;
     }
 
-    /*public static List<Material> blocksIn(BoundingBox box, World world) {
-        List<Material> blocks = new ArrayList<>();
-
-        int startX = (int)Math.floor(box.getMinX())-1;
-        int startY = (int)Math.floor(box.getMinY())-1;
-        int startZ = (int)Math.floor(box.getMinZ())-1;
-
-        int endX = (int)Math.ceil(box.getMaxX())+1;
-        int endY = (int)Math.ceil(box.getMaxY())+1;
-        int endZ = (int)Math.ceil(box.getMaxZ())+1;
-
-        System.out.println("main: " + box);
-
-        for(int x = startX; x <= endX; x++) {
-            for(int y = startY; y <= endY; y++) {
-                for(int z = startZ; z <= endZ; z++) {
-                    Block block = world.getBlockAt(x,y,z);
-
-                    System.out.println("block: " + block.getCollisionShape().getBoundingBoxes() + " , " + block.getType() + " , " + block.getLocation());
-
-                    if(block.getCollisionShape().overlaps(box)) {
-                        blocks.add(block.getType());
-                    }
-                }
-            }
-        }
-
-        System.out.println();
-
-        return blocks;
-    }*/
-
     public static boolean inLava(BoundingBox box, World world) {
         int startX = (int)Math.floor(box.getMinX())-1;
         int startY = (int)Math.floor(box.getMinY())-1;
@@ -149,6 +118,40 @@ public class DamageChecker {
         }
 
         return false;
+    }
+
+    public static List<ArmorSection> affectsProjectile(Entity entity, Entity projectile) {
+        BoundingBox bb = entity.getBoundingBox();
+
+        double bottom = bb.getMinY();
+        double scale = (bb.getMaxY()-bb.getMinY());
+
+        BoundingBox boots = newAdjusted(bb, bottom, scale, BOOT_LOW, BOOT_HIGH);
+        BoundingBox legs = newAdjusted(bb, bottom, scale, LEGS_LOW, LEGS_HIGH);
+        BoundingBox chest = newAdjusted(bb, bottom, scale, CHEST_LOW, CHEST_HIGH);
+        BoundingBox helm = newAdjusted(bb, bottom, scale, HELM_LOW, HELM_HIGH);
+
+        List<ArmorSection> sections = new ArrayList<>();
+
+        if(boots.overlaps(projectile.getBoundingBox())) {
+            sections.add(ArmorSection.FEET);
+        }
+
+        if(legs.overlaps(projectile.getBoundingBox())) {
+            sections.add(ArmorSection.LEGS);
+        }
+
+        if(chest.overlaps(projectile.getBoundingBox())) {
+            sections.add(ArmorSection.CHEST);
+        }
+
+        if(helm.overlaps(projectile.getBoundingBox())) {
+            sections.add(ArmorSection.HEAD);
+        }
+
+        System.out.println(sections);
+
+        return sections;
     }
 
     private static BoundingBox newAdjusted(BoundingBox old, double bottom, double scale, double low, double high) {

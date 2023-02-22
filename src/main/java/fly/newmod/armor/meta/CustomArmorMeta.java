@@ -1,7 +1,7 @@
 package fly.newmod.armor.meta;
 
 import fly.newmod.parent.api.item.meta.ModItemMeta;
-import fly.newmod.armor.type.damage.DamageType;
+import fly.newmod.armor.damage.DamageType;
 
 import java.util.List;
 

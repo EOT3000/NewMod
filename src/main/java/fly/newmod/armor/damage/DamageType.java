@@ -1,4 +1,4 @@
-package fly.newmod.armor.type.damage;
+package fly.newmod.armor.damage;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.entity.EntityDamageEvent;

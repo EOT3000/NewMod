@@ -1,8 +1,8 @@
 package fly.newmod.armor.util;
 
 import com.google.common.collect.ImmutableMap;
-import fly.newmod.armor.type.armor.ArmorSection;
-import fly.newmod.armor.type.armor.VanillaArmorType;
+import fly.newmod.armor.armor.ArmorSection;
+import fly.newmod.armor.armor.VanillaArmorType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;

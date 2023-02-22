@@ -1,6 +1,6 @@
-package fly.newmod.armor.type.armor;
+package fly.newmod.armor.armor;
 
-import fly.newmod.armor.type.damage.DamageType;
+import fly.newmod.armor.damage.DamageType;
 import org.bukkit.Material;
 
 import java.util.ArrayList;

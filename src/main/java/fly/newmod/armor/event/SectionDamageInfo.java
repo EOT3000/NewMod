@@ -1,6 +1,6 @@
 package fly.newmod.armor.event;
 
-import fly.newmod.armor.type.armor.ArmorSection;
+import fly.newmod.armor.armor.ArmorSection;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package fly.newmod.armor.type.armor;
+package fly.newmod.armor.armor;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;

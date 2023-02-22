@@ -1,7 +1,7 @@
 package fly.newmod.armor.util;
 
-import fly.newmod.armor.type.damage.DamageType;
-import fly.newmod.armor.type.damage.DefaultDamageType;
+import fly.newmod.armor.damage.DamageType;
+import fly.newmod.armor.damage.DefaultDamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,22 +23,32 @@ public class ReductionUtils {
             DefaultDamageType.PROJECTILE_BLUNT, DefaultDamageType.PROJECTILE_SHARP);
 
 
-    public static double totalReduction(double damage, ArmorPiece piece, DamageType type) {
-        double o = damage;
-
+    public static double armorModifier(double damage, ArmorPiece piece, DamageType type) {
         double general = reductionArmor(damage, piece.defense, piece.toughness);
 
         if(piece.piece.getType().isNoDefense(type)) {
             general = 0;
         }
 
-        damage = damage-general;
+        return Math.min(general, damage);
+    }
+
+    public static double magicModifier(double damage, double armor, ArmorPiece piece, DamageType type) {
+        damage = damage-armor;
 
         double protection = reductionProtection(damage, piece.enchantments.getOrDefault(Enchantment.PROTECTION_ENVIRONMENTAL, 0));
         double protectionFire = reductionBodySpecialProtection(damage, piece.enchantments.getOrDefault(Enchantment.PROTECTION_FIRE, 0));
         double protectionProj = reductionBodySpecialProtection(damage, piece.enchantments.getOrDefault(Enchantment.PROTECTION_PROJECTILE, 0));
         double protectionBlas = reductionBodySpecialProtection(damage, piece.enchantments.getOrDefault(Enchantment.PROTECTION_EXPLOSIONS, 0));
         double protectionFall = reductionFeatherFalling(damage, piece.enchantments.getOrDefault(Enchantment.PROTECTION_FALL, 0));
+
+        if(resistanceImmune.contains(type)) {
+            protection = 0;
+        }
+
+        if(!fire.contains(type)) {
+            protectionFire = 0;
+        }
 
         if(!blast.contains(type)) {
             protectionBlas = 0;
@@ -52,27 +62,23 @@ public class ReductionUtils {
             protectionFall = 0;
         }
 
-        damage = damage-protection-protectionFire-protectionProj-protectionBlas-protectionFall;
+        return Math.min(protection+protectionFire+protectionProj+protectionBlas+protectionFall, damage);
+    }
+
+    public static double resistanceModifier(double damage, double armor, double magic, ArmorPiece piece, DamageType type) {
+        damage = damage-armor-magic;
 
         double resistance = reductionResistance(damage, piece.entity.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)
                 ? piece.entity.getPotionEffect(PotionEffectType.DAMAGE_RESISTANCE).getAmplifier()
                 : 0);
-        double fireResistance = reductionFireResistance(damage, piece.entity.hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)
-                ? piece.entity.getPotionEffect(PotionEffectType.FIRE_RESISTANCE).getAmplifier()
-                : 0);
 
         if(resistanceImmune.contains(type)) {
             resistance = 0;
-            protection = 0;
         }
 
-        if(!fire.contains(type)) {
-            fireResistance = 0;
-            protectionFire = 0;
-        }
-
-        return Math.min(general+resistance+fireResistance+protection+protectionFire+protectionProj+protectionBlas+protectionFall, o);
+        return Math.min(resistance, damage);
     }
+
 
     public static double reductionArmor(double damage, int defense, int toughness) {
         double secondCalc = defense - (4*damage)/(toughness+8);
@@ -84,9 +90,9 @@ public class ReductionUtils {
         return damage*(0.2*level);
     }
 
-    public static double reductionFireResistance(double damage, int level) {
+    /*public static double reductionFireResistance(double damage, int level) {
         return damage * (level > 0 ? 1.0 : 0.0);
-    }
+    }*/
 
     public static double reductionProtection(double damage, int level) {
         return damage*(0.04*level);
