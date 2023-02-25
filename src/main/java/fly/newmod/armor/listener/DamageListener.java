@@ -1,6 +1,7 @@
 package fly.newmod.armor.listener;
 
 import fly.newmod.armor.armor.ArmorSection;
+import fly.newmod.armor.damage.DamageType;
 import fly.newmod.armor.damage.DefaultDamageType;
 import fly.newmod.armor.util.ArmorPiece;
 import fly.newmod.armor.util.DamageChecker;
@@ -22,7 +23,7 @@ public class DamageListener implements Listener {
         //System.out.println(event.getEntity());
     }
 
-    //TODO: Make this not hacky
+    /*//TODO: Make this not hacky
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityDamageBlock(EntityDamageByBlockEvent event) {
@@ -43,23 +44,32 @@ public class DamageListener implements Listener {
 
                 }
             }
-        }*/
-    }
+        }*
+    }*/
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onEntityDamageEntity(EntityDamageEvent event) {
-        //System.out.println(event.getDamage() + ", " + event.getCause());
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event instanceof EntityDamageByEntityEvent) {
+            System.out.println(((EntityDamageByEntityEvent) event).getDamager().getType());
+            System.out.println(((EntityDamageByEntityEvent) event).getDamager().getLocation());
+        }
 
-        /*if(event.getCause().equals(EntityDamageEvent.DamageCause.LAVA)) {
-            List<ArmorSection> sections = DamageChecker.affectsLava(event.getEntity());
+        if(event instanceof EntityDamageByBlockEvent) {
+            try {
+                System.out.println(((EntityDamageByBlockEvent) event).getDamager().getType());
+                System.out.println(((EntityDamageByBlockEvent) event).getDamager().getLocation());
+            } catch (Exception e) {
 
-            if(!sections.isEmpty()) {
-                event.setCancelled(true);
-
-                for(ArmorSection section : sections) {
-
-                }
             }
-        }*/
+        }
+
+
+        for(DamageType type : DefaultDamageType.values()) {
+            if(type.applies(event)) {
+                type.apply(event);
+
+                return;
+            }
+        }
     }
 }
