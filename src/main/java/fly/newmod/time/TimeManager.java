@@ -15,15 +15,16 @@ public class TimeManager implements Listener {
 
     @EventHandler
     public void onTick(ServerTickStartEvent event) {
-        coordinate+=TimeValues.ALIGNMENT.direction;
+        if(event.getTickNumber() % 7 == 0) {
+            coordinate += TimeValues.ALIGNMENT.direction;
 
-        if(TimeValues.ALIGNMENT.direction*coordinate > TimeValues.END_COORDINATE) {
-            coordinate = TimeValues.START_COORDINATE;
-        }
+            if(TimeValues.ALIGNMENT.direction*coordinate > TimeValues.ALIGNMENT.direction*TimeValues.LOOP_BACK_COORDINATE) {
+                coordinate = TimeValues.LOOP_START_COORDINATE;
+            }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.setPlayerTime(TimeUtils.time(getBrightness(player.getLocation()), morning(player.getLocation())), true);
-            //player.sendMessage(coordinate + ": " + getBrightness(player.getLocation()) + ": " + TimeUtils.time(getBrightness(player.getLocation()), morning(player.getLocation())));
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.setPlayerTime(TimeUtils.time(getSkyBrightness(player.getLocation()), morning(player.getLocation())), true);
+            }
         }
     }
 
@@ -37,12 +38,35 @@ public class TimeManager implements Listener {
             return;
         }
 
-        if(getBrightness(event.getLocation()) > 50) {
+        if(getSkyBrightness(event.getLocation()) > 50) {
             event.setCancelled(true);
         }
     }
 
-    public int getBrightness(Location location) {
+    public int getSkyBrightness(Location location) {
+        if(!location.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+            return -1;
+        }
+
+        int brightness = 0;
+
+        int ds = Math.abs(coordinate-TimeValues.END_COORDINATE);
+
+        if(ds < TimeValues.EFFECT_RADIUS) {
+            brightness = getBrightness0(location, TimeValues.START_COORDINATE + TimeValues.ALIGNMENT.direction*ds*-1);
+        }
+
+        int de = Math.abs(coordinate-TimeValues.START_COORDINATE);
+
+        if(de < TimeValues.EFFECT_RADIUS) {
+            brightness = getBrightness0(location, TimeValues.END_COORDINATE + TimeValues.ALIGNMENT.direction*de);
+        }
+
+
+        return Math.max(getBrightness0(location, coordinate), brightness);
+    }
+
+    private int getBrightness0(Location location, int coordinate) {
         int locX = coordinate;
         int locZ = TimeValues.AXIS_COORDINATE;
 

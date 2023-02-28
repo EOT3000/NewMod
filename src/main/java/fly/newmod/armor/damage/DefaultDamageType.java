@@ -21,7 +21,7 @@ import java.util.Random;
 
 public enum DefaultDamageType implements DamageType {
     //All damage reduction applies
-    GENERAL(null, (a,b) -> {}),
+    GENERAL(null, new DamageCalculator() {}),
 
     PROJECTILE_SHARP(EntityDamageEvent.DamageCause.PROJECTILE, new ProjectileDamageCalculator()) {
         @Override
@@ -43,7 +43,7 @@ public enum DefaultDamageType implements DamageType {
             return !(((EntityDamageByEntityEvent) event).getDamager() instanceof AbstractArrow);
         }
     },
-    MELEE_SHARPS(EntityDamageEvent.DamageCause.ENTITY_ATTACK, (a,b) -> {}) {
+    MELEE_SHARPS(EntityDamageEvent.DamageCause.ENTITY_ATTACK, new DamageCalculator() {}) {
         @Override
         public boolean applies0(EntityDamageEvent event) {
             if(!(event instanceof EntityDamageByEntityEvent)) {
@@ -61,7 +61,7 @@ public enum DefaultDamageType implements DamageType {
             return false;
         }
     },
-    MELEE_BLUNT(EntityDamageEvent.DamageCause.ENTITY_ATTACK, (a,b) -> {}) {
+    MELEE_BLUNT(EntityDamageEvent.DamageCause.ENTITY_ATTACK, new DamageCalculator() {}) {
         @Override
         public boolean applies0(EntityDamageEvent event) {
             if(!(event instanceof EntityDamageByEntityEvent)) {
@@ -79,42 +79,42 @@ public enum DefaultDamageType implements DamageType {
             return false;
         }
     },
-    SWEEPING_EDGE(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, (a,b) -> {}),
+    SWEEPING_EDGE(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK, new DamageCalculator() {}),
 
-    FIRE_DIRECT(EntityDamageEvent.DamageCause.FIRE, (a,b) -> {}),
-    FIRE_TICK(EntityDamageEvent.DamageCause.FIRE_TICK, (a,b) -> {}),
+    FIRE_DIRECT(EntityDamageEvent.DamageCause.FIRE, new DamageCalculator() {}),
+    FIRE_TICK(EntityDamageEvent.DamageCause.FIRE_TICK, new DamageCalculator() {}),
     HOT_FLOOR(EntityDamageEvent.DamageCause.HOT_FLOOR, new FloorDamageCalculator()),
     LAVA_DIRECT(EntityDamageEvent.DamageCause.LAVA, new LavaDamageCalculator()),
-    FREEZE(EntityDamageEvent.DamageCause.FREEZE, (a,b) -> {}),
+    FREEZE(EntityDamageEvent.DamageCause.FREEZE, new DamageCalculator() {}),
 
-    BLOCK_EXPLOSION(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, (a,b) -> {}),
-    ENTITY_EXPLOSION(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, (a,b) -> {}),
+    BLOCK_EXPLOSION(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, new DamageCalculator() {}),
+    ENTITY_EXPLOSION(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, new DamageCalculator() {}),
 
-    POISON(EntityDamageEvent.DamageCause.POISON, (a,b) -> {}),
-    WITHER(EntityDamageEvent.DamageCause.WITHER, (a,b) -> {}),
-    MAGIC(EntityDamageEvent.DamageCause.MAGIC, (a,b) -> {}),
-    STARVATION(EntityDamageEvent.DamageCause.STARVATION, (a,b) -> {}),
+    POISON(EntityDamageEvent.DamageCause.POISON, new DamageCalculator() {}),
+    WITHER(EntityDamageEvent.DamageCause.WITHER, new DamageCalculator() {}),
+    MAGIC(EntityDamageEvent.DamageCause.MAGIC, new DamageCalculator() {}),
+    STARVATION(EntityDamageEvent.DamageCause.STARVATION, new DamageCalculator() {}),
 
-    SUFFOCATION(EntityDamageEvent.DamageCause.SUFFOCATION, (a,b) -> {}),
-    DROWNING(EntityDamageEvent.DamageCause.DROWNING, (a,b) -> {}),
-    DRYOUT(EntityDamageEvent.DamageCause.DRYOUT, (a,b) -> {}),
+    SUFFOCATION(EntityDamageEvent.DamageCause.SUFFOCATION, new DamageCalculator() {}),
+    DROWNING(EntityDamageEvent.DamageCause.DROWNING, new DamageCalculator() {}),
+    DRYOUT(EntityDamageEvent.DamageCause.DRYOUT, new DamageCalculator() {}),
 
-    DRAGON_BREATH(EntityDamageEvent.DamageCause.DRAGON_BREATH, (a,b) -> {}),
-    LIGHTNING(EntityDamageEvent.DamageCause.LIGHTNING, (a,b) -> {}),
-    SONIC_BOOM(EntityDamageEvent.DamageCause.SONIC_BOOM, (a,b) -> {}),
+    DRAGON_BREATH(EntityDamageEvent.DamageCause.DRAGON_BREATH, new DamageCalculator() {}),
+    LIGHTNING(EntityDamageEvent.DamageCause.LIGHTNING, new DamageCalculator() {}),
+    SONIC_BOOM(EntityDamageEvent.DamageCause.SONIC_BOOM, new DamageCalculator() {}),
 
-    CRAMMING(EntityDamageEvent.DamageCause.CRAMMING, (a,b) -> {}),
-    CONTACT(EntityDamageEvent.DamageCause.CONTACT, (a,b) -> {}),
-    THORNS(EntityDamageEvent.DamageCause.THORNS, (a,b) -> {}),
-    MELTING(EntityDamageEvent.DamageCause.MELTING, (a,b) -> {}),
+    CRAMMING(EntityDamageEvent.DamageCause.CRAMMING, new DamageCalculator() {}),
+    CONTACT(EntityDamageEvent.DamageCause.CONTACT, new DamageCalculator() {}),
+    THORNS(EntityDamageEvent.DamageCause.THORNS, new DamageCalculator() {}),
+    MELTING(EntityDamageEvent.DamageCause.MELTING, new DamageCalculator() {}),
 
-    FALLING_BLOCK(EntityDamageEvent.DamageCause.FALLING_BLOCK, (a,b) -> {}),
+    FALLING_BLOCK(EntityDamageEvent.DamageCause.FALLING_BLOCK, new DamageCalculator() {}),
     FALL(EntityDamageEvent.DamageCause.FALL, new FloorDamageCalculator()),
-    FLY_INTO_WALL(EntityDamageEvent.DamageCause.FLY_INTO_WALL, (a,b) -> {}),
+    FLY_INTO_WALL(EntityDamageEvent.DamageCause.FLY_INTO_WALL, new DamageCalculator() {}),
 
-    VOID(EntityDamageEvent.DamageCause.VOID, (a,b) -> {}),
-    SUICIDE(EntityDamageEvent.DamageCause.SUICIDE, (a,b) -> {}),
-    CUSTOM(EntityDamageEvent.DamageCause.CUSTOM, (a,b) -> {})
+    VOID(EntityDamageEvent.DamageCause.VOID, new DamageCalculator() {}),
+    SUICIDE(EntityDamageEvent.DamageCause.SUICIDE, new DamageCalculator() {}),
+    CUSTOM(EntityDamageEvent.DamageCause.CUSTOM, new DamageCalculator() {})
     ;
 
     protected List<Material> sharps = Arrays.asList(

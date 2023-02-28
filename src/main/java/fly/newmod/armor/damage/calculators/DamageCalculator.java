@@ -10,10 +10,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface DamageCalculator {
-    void calculateNewDamage(EntityDamageEvent event, DamageType type);
+    default void calculateNewDamage(EntityDamageEvent event, DamageType type) {
+        applyDefault(event, type, Arrays.asList(ArmorSection.values()));
+    }
 
     default void applyDefault(EntityDamageEvent event, DamageType type, List<ArmorSection> sections) {
         if(!sections.isEmpty()) {

@@ -49,6 +49,8 @@ public class DamageListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
+        System.out.println(event.getCause());
+
         if(event instanceof EntityDamageByEntityEvent) {
             System.out.println(((EntityDamageByEntityEvent) event).getDamager().getType());
             System.out.println(((EntityDamageByEntityEvent) event).getDamager().getLocation());

@@ -1,6 +1,12 @@
 package fly.newmod.time;
 
 public class TimeUtils {
+    /*public static void main(String[] args) {
+        for(int i = 0; i <= 12000; i+=10) {
+            System.out.println(i + ": " + timeMorning(i) + "," + timeNight(i));
+        }
+    }*/
+
     public static int timeMorning(int brightness) {
         if(brightness < 6000) {
             return 18000+brightness;

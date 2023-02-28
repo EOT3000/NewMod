@@ -34,6 +34,7 @@ public class NewMod extends JavaPlugin implements Listener {
     private ItemManager itemManager;
     private Random random = new Random();
     private final List<ModExtension> extensions = new ArrayList<>();
+    private TimeManager timeManager;
 
     private File saveFile;
 
@@ -61,10 +62,12 @@ public class NewMod extends JavaPlugin implements Listener {
         new DefaultModItemMeta.DefaultModItemMetaSerializer();
         new DefaultModBlockData.DefaultModBlockDataSerializer();
 
+        timeManager = new TimeManager();
+
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new VanillaReplacementListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
-        Bukkit.getPluginManager().registerEvents(new TimeManager(), this);
+        Bukkit.getPluginManager().registerEvents(timeManager, this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
@@ -527,6 +530,10 @@ public class NewMod extends JavaPlugin implements Listener {
 
     public ItemManager getItemManager() {
         return itemManager;
+    }
+
+    public TimeManager getTimeManager() {
+        return timeManager;
     }
 
     public static abstract class ModExtension extends JavaPlugin {
