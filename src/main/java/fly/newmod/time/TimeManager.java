@@ -1,11 +1,11 @@
 package fly.newmod.time;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
+import fly.newmod.time.behaviour.RestrictSunGoal;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -38,8 +38,10 @@ public class TimeManager implements Listener {
             return;
         }
 
-        if(getSkyBrightness(event.getLocation()) > 50) {
+        if(getSkyBrightness(event.getLocation()) >= 4810) {
             event.setCancelled(true);
+        } else if(event.getEntity().getCategory().equals(EntityCategory.UNDEAD)) {
+            Bukkit.getMobGoals().addGoal((Mob) event.getEntity(), 1, new RestrictSunGoal((Mob) event.getEntity()));
         }
     }
 
