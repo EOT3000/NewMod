@@ -2,6 +2,7 @@ package fly.newmod.parent;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import fly.newmod.armor.listener.DamageListener;
+import fly.newmod.horns.GoatHornsManager;
 import fly.newmod.parent.api.block.BlockManager;
 import fly.newmod.parent.api.block.data.DefaultModBlockData;
 import fly.newmod.parent.api.item.ModItemStack;
@@ -69,6 +70,8 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(timeManager, this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+
+        new GoatHornsManager().enable(this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
