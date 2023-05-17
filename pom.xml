@@ -6,6 +6,8 @@
     <artifactId>newmod</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
@@ -126,10 +128,9 @@
 
         <dependency>
             <groupId>io.papermc.paper</groupId>
-            <artifactId>paper-nms</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dep/mojang.jar</systemPath>
+            <artifactId>paper-mojangapi</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
