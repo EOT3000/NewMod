@@ -1,6 +1,6 @@
 package me.fly.newmod.armor.damage.calculators;
 
-import me.fly.newmod.armor.vanilla.ArmorSection;
+import me.fly.newmod.armor.model.ArmorSection;
 import me.fly.newmod.armor.damage.DamageType;
 import me.fly.newmod.armor.util.DamageChecker;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;

@@ -1,8 +1,11 @@
 package me.fly.newmod.armor.util;
 
 import com.google.common.collect.ImmutableMap;
-import me.fly.newmod.armor.vanilla.ArmorSection;
-import me.fly.newmod.armor.vanilla.VanillaArmorMaterial;
+import me.fly.newmod.api.NewModAPI;
+import me.fly.newmod.armor.ArmorManager;
+import me.fly.newmod.armor.model.ArmorItemType;
+import me.fly.newmod.armor.model.ArmorSection;
+import me.fly.newmod.armor.model.VanillaArmorMaterial;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -21,17 +24,17 @@ public class ArmorPiece {
     //For easy potion effect access
     public final LivingEntity entity;
 
-    public final VanillaArmorMaterial.VanillaArmorPiece piece;
+    public final ArmorItemType piece;
 
     public ArmorPiece(LivingEntity entity, ArmorSection section) {
         this.entity = entity;
         ItemStack stack = section.getItem(entity);
 
-        VanillaArmorMaterial.VanillaArmorPiece piece = VanillaArmorMaterial.get(stack == null ? null : stack.getType());
+        ArmorItemType piece = new ArmorManager().getArmorItem(stack);
 
         this.piece = piece;
 
-        if(piece.getType() == VanillaArmorMaterial.NONE) {
+        if(piece.getMaterial() == VanillaArmorMaterial.NONE) {
             defense = 0;
             toughness = 0;
 

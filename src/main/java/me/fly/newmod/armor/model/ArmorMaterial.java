@@ -1,24 +1,23 @@
-package me.fly.newmod.armor.vanilla;
+package me.fly.newmod.armor.model;
 
 import org.bukkit.inventory.ItemStack;
 
 public interface ArmorMaterial {
-
     ItemStack material();
 
-    ItemStack feet();
+    ArmorItemType boots();
 
-    ItemStack legs();
+    ArmorItemType legs();
 
-    ItemStack chest();
+    ArmorItemType chest();
 
-    ItemStack head();
+    ArmorItemType head();
 
-    default ItemStack item(ArmorSection section) {
+    default ArmorItemType item(ArmorSection section) {
         if (section == null) return null;
 
         return switch (section) {
-            case FEET -> feet();
+            case BOOTS -> boots();
             case LEGS -> legs();
             case CHEST -> chest();
             case HEAD -> head();

@@ -24,11 +24,7 @@ public class ReductionUtils {
 
 
     public static double armorModifier(double damage, ArmorPiece piece, DamageType type) {
-        double general = reductionArmor(damage, piece.defense, piece.toughness);
-
-        if(piece.piece.getType().isNoDefense(type)) {
-            general = 0;
-        }
+        double general = reductionArmor(damage, piece.defense+piece.piece.getDefenseBoost(type), piece.toughness+piece.piece.getToughnessBoost(type));
 
         return Math.min(general, damage);
     }

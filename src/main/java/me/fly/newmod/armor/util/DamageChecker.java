@@ -1,6 +1,6 @@
 package me.fly.newmod.armor.util;
 
-import me.fly.newmod.armor.vanilla.ArmorSection;
+import me.fly.newmod.armor.model.ArmorSection;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AxisAlignedBB;
@@ -56,7 +56,7 @@ public class DamageChecker {
         //List<Material> bhl = blocksIn(helm, entity.getWorld());
 
         if(inLava(boots, entity.getWorld())) {
-            sections.add(ArmorSection.FEET);
+            sections.add(ArmorSection.BOOTS);
         }
 
         if(inLava(legs, entity.getWorld())) {
@@ -133,7 +133,7 @@ public class DamageChecker {
         List<ArmorSection> sections = new ArrayList<>();
 
         if(boots.overlaps(projectile.getBoundingBox())) {
-            sections.add(ArmorSection.FEET);
+            sections.add(ArmorSection.BOOTS);
         }
 
         if(legs.overlaps(projectile.getBoundingBox())) {

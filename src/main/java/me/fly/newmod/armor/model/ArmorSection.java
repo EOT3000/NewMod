@@ -1,4 +1,4 @@
-package me.fly.newmod.armor.vanilla;
+package me.fly.newmod.armor.model;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
@@ -10,7 +10,7 @@ public enum ArmorSection {
     HEAD(1.4, EntityEquipment::getHelmet),
     CHEST(1.2, EntityEquipment::getChestplate),
     LEGS(0.8, EntityEquipment::getLeggings),
-    FEET(0.6, EntityEquipment::getBoots);
+    BOOTS(0.6, EntityEquipment::getBoots);
 
     public final double modifier;
     private final Function<EntityEquipment, ItemStack> function;
@@ -23,6 +23,4 @@ public enum ArmorSection {
     public ItemStack getItem(LivingEntity entity) {
         return function.apply(entity.getEquipment());
     }
-
-
 }
