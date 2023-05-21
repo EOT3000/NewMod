@@ -1,5 +1,5 @@
 name: Mods
-main: fly.newmod.NewMod
+main: me.fly.newmod.NewMod
 version: Beta-1.0
 api-version: 1.13
 commands:
