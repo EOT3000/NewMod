@@ -37,6 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -59,27 +60,6 @@ public class NewMod extends JavaPlugin implements Listener {
         blockManager = new BlockManager();
         itemManager = new ItemManager();
         craftingChangesManager = new CraftingChangesManager();
-    }
-
-    public void reflect() throws Exception {
-        reflect(BuiltInRegistries.al.a(Instruments.c));
-        reflect(BuiltInRegistries.al.a(Instruments.d));
-        reflect(BuiltInRegistries.al.a(Instruments.e));
-        reflect(BuiltInRegistries.al.a(Instruments.f));
-        reflect(BuiltInRegistries.al.a(Instruments.g));
-        reflect(BuiltInRegistries.al.a(Instruments.h));
-        reflect(BuiltInRegistries.al.a(Instruments.i));
-        reflect(BuiltInRegistries.al.a(Instruments.j));
-
-        System.out.println("finsihed");
-    }
-
-    public void reflect(Instrument instrument) throws Exception {
-        Field field = instrument.getClass().getDeclaredField("d");
-
-        field.setAccessible(true);
-
-        field.set(instrument, 1024);
     }
 
     @Override
@@ -149,11 +129,6 @@ public class NewMod extends JavaPlugin implements Listener {
             }
         });*/
 
-        try {
-            reflect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void attemptLoad(ModExtension extension) {

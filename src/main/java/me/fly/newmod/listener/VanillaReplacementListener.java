@@ -4,12 +4,14 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import org.bukkit.GameEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
@@ -89,5 +91,19 @@ public class VanillaReplacementListener implements Listener {
     @EventHandler
     public void onPreSmeltE(FurnaceStartSmeltEvent event) {
 
+    }
+
+    @EventHandler
+    public void onGameEvent(GenericGameEvent event) {
+        if(event.getEvent().equals(GameEvent.INSTRUMENT_PLAY)) {
+            System.out.println(event.getEvent());
+            System.out.println(event.getLocation());
+            System.out.println(event.getRadius());
+            System.out.println(event.getEntity());
+
+            System.out.println();
+
+            event.setRadius(1500);
+        }
     }
 }
