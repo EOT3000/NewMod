@@ -2,6 +2,7 @@ package me.fly.newmod;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.fly.newmod.armor.listener.DamageListener;
+import me.fly.newmod.crafting.CraftingChangesManager;
 import me.fly.newmod.horns.GoatHornsManager;
 import me.fly.newmod.api.block.BlockManager;
 import me.fly.newmod.api.block.data.DefaultModBlockData;
@@ -10,9 +11,17 @@ import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.listener.BlockListener;
+import me.fly.newmod.listener.CraftingListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.EnumHand;
+import net.minecraft.world.entity.player.EntityHuman;
+import net.minecraft.world.item.Instrument;
+import net.minecraft.world.item.InstrumentItem;
+import net.minecraft.world.item.Instruments;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +35,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -33,6 +44,7 @@ public class NewMod extends JavaPlugin implements Listener {
     private static NewMod instance;
     private BlockManager blockManager;
     private ItemManager itemManager;
+    private CraftingChangesManager craftingChangesManager;
     private Random random = new Random();
     private final List<ModExtension> extensions = new ArrayList<>();
     private TimeManager timeManager;
@@ -46,6 +58,28 @@ public class NewMod extends JavaPlugin implements Listener {
 
         blockManager = new BlockManager();
         itemManager = new ItemManager();
+        craftingChangesManager = new CraftingChangesManager();
+    }
+
+    public void reflect() throws Exception {
+        reflect(BuiltInRegistries.al.a(Instruments.c));
+        reflect(BuiltInRegistries.al.a(Instruments.d));
+        reflect(BuiltInRegistries.al.a(Instruments.e));
+        reflect(BuiltInRegistries.al.a(Instruments.f));
+        reflect(BuiltInRegistries.al.a(Instruments.g));
+        reflect(BuiltInRegistries.al.a(Instruments.h));
+        reflect(BuiltInRegistries.al.a(Instruments.i));
+        reflect(BuiltInRegistries.al.a(Instruments.j));
+
+        System.out.println("finsihed");
+    }
+
+    public void reflect(Instrument instrument) throws Exception {
+        Field field = instrument.getClass().getDeclaredField("d");
+
+        field.setAccessible(true);
+
+        field.set(instrument, 1024);
     }
 
     @Override
@@ -70,6 +104,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(timeManager, this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
 
         new GoatHornsManager().enable(this);
 
@@ -113,6 +148,12 @@ public class NewMod extends JavaPlugin implements Listener {
                 }
             }
         });*/
+
+        try {
+            reflect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void attemptLoad(ModExtension extension) {
@@ -537,6 +578,10 @@ public class NewMod extends JavaPlugin implements Listener {
 
     public TimeManager getTimeManager() {
         return timeManager;
+    }
+
+    public CraftingChangesManager getCraftingChangesManager() {
+        return craftingChangesManager;
     }
 
     public static abstract class ModExtension extends JavaPlugin {
