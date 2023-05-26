@@ -23,6 +23,10 @@ public class VanillaReplacementListener implements Listener {
 
     private int count = 0;
 
+    public VanillaReplacementListener() {
+        System.out.println("created");
+    }
+
     @EventHandler
     @SuppressWarnings({"ConstantConditions", "PatternVariableCanBeUsed"})
     public void onPreCraftE(PrepareItemCraftEvent event) {
@@ -95,6 +99,16 @@ public class VanillaReplacementListener implements Listener {
 
     @EventHandler
     public void onGameEvent(GenericGameEvent event) {
+        if(event.getEvent().equals(GameEvent.HIT_GROUND) ||
+                event.getEvent().equals(GameEvent.STEP) ||
+                event.getEvent().equals(GameEvent.FLAP) ||
+                event.getEvent().equals(GameEvent.SWIM)) {
+            return;
+        }
+
+        System.out.println("game event");
+        System.out.println(event.getEvent().getKey());
+
         if(event.getEvent().equals(GameEvent.INSTRUMENT_PLAY)) {
             System.out.println(event.getEvent());
             System.out.println(event.getLocation());

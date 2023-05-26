@@ -356,6 +356,8 @@ public class BlockListener implements Listener {
         BlockManager bmanager = NewMod.get().getBlockManager();
         ItemManager imanager = NewMod.get().getItemManager();
 
+        System.out.println(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null);
+
         if(imanager.getType(event.getItem()) == null && bmanager.getType(event.getClickedBlock()) == null) {
             return;
         }

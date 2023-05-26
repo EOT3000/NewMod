@@ -3,7 +3,6 @@ package me.fly.newmod;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.fly.newmod.armor.listener.DamageListener;
 import me.fly.newmod.crafting.CraftingChangesManager;
-import me.fly.newmod.horns.GoatHornsManager;
 import me.fly.newmod.api.block.BlockManager;
 import me.fly.newmod.api.block.data.DefaultModBlockData;
 import me.fly.newmod.api.item.ModItemStack;
@@ -12,16 +11,10 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.listener.BlockListener;
 import me.fly.newmod.listener.CraftingListener;
+import me.fly.newmod.listener.HornListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.EnumHand;
-import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.item.Instrument;
-import net.minecraft.world.item.InstrumentItem;
-import net.minecraft.world.item.Instruments;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,9 +28,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -85,8 +75,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(timeManager, this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
-
-        new GoatHornsManager().enable(this);
+        Bukkit.getPluginManager().registerEvents(new HornListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
