@@ -1,7 +1,7 @@
 package me.fly.newmod.time;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
-import me.fly.newmod.time.behaviour.RestrictSunGoal;
+import me.fly.newmod.time.nms.NMSUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -41,7 +41,7 @@ public class TimeManager implements Listener {
         if(getSkyBrightness(event.getLocation()) >= 4810) {
             event.setCancelled(true);
         } else if(event.getEntity().getCategory().equals(EntityCategory.UNDEAD)) {
-            Bukkit.getMobGoals().addGoal((Mob) event.getEntity(), 1, new RestrictSunGoal((Mob) event.getEntity()));
+            NMSUtils.addUndeadGoals((Creature) event.getEntity());
         }
     }
 
