@@ -15,6 +15,7 @@ import me.fly.newmod.listener.HornListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
+import me.fly.newmod.time.TimeUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -330,6 +331,20 @@ public class NewMod extends JavaPlugin implements Listener {
         }
 
         if(sender.isOp()) {
+            if(args.length == 1 && args[0].equalsIgnoreCase("time")) {
+                Player player = (Player) sender;
+
+                int b = timeManager.getSkyBrightness(player.getLocation());
+
+                player.sendMessage("Brightness: " + b);
+                player.sendMessage("Sun Position: " + timeManager.coordinate);
+                player.sendMessage("Morning time: " + TimeUtils.timeMorning(b));
+                player.sendMessage("Night time: " + TimeUtils.timeNight(b));
+                player.sendMessage("Morning? " + timeManager.morning(player.getLocation()));
+
+                return true;
+            }
+
             /*if (args.length == 5) {
                 Location location = new Location(((Player) sender).getWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
                 Chest chest = ((Chest) location.getBlock().getState());

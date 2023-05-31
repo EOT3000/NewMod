@@ -77,6 +77,7 @@ public class CustomFleeSunGoal implements Goal<Creature> {
     @Override
     public void start() {
         this.a.G().a(this.x, this.y, this.z, speed);
+        System.out.println("flee started");
     }
 
     @Nullable

@@ -11,21 +11,36 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class TimeManager implements Listener {
-    private int coordinate = 0;
+    public double coordinate = 0;
 
     @EventHandler
     public void onTick(ServerTickStartEvent event) {
-        if(event.getTickNumber() % 7 == 0) {
-            coordinate += TimeValues.ALIGNMENT.direction;
-
-            if(TimeValues.ALIGNMENT.direction*coordinate > TimeValues.ALIGNMENT.direction*TimeValues.LOOP_BACK_COORDINATE) {
-                coordinate = TimeValues.LOOP_START_COORDINATE;
-            }
+        if(event.getTickNumber() % 5 == 0) {
+            advanceSun();
 
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.setPlayerTime(TimeUtils.time(getSkyBrightness(player.getLocation()), morning(player.getLocation())), true);
+                player.setPlayerTime(TimeUtils.time(getSkyBrightness(player.getLocation()), morning(player.getLocation())), false);
             }
         }
+    }
+
+    private void advanceSun() {
+        //System.out.println("Sun advance start");
+        //System.out.println("pre sun at: " + coordinate);
+
+        double inc = TimeValues.INCREMENT*((long) TimeValues.ALIGNMENT.direction);
+
+        coordinate+=inc;
+
+        //System.out.println("now sun at: " + coordinate);
+
+        if(coordinate*TimeValues.ALIGNMENT.direction > TimeValues.END_COORDINATE + (long) TimeValues.ALIGNMENT.direction * TimeValues.EFFECT_RADIUS) {
+            //System.out.println("reset");
+            coordinate = TimeValues.START_COORDINATE + (long) TimeValues.ALIGNMENT.direction * TimeValues.EFFECT_RADIUS;
+        }
+
+        //System.out.println("sun now at: " + coordinate);
+        //System.out.println();
     }
 
     @EventHandler
@@ -34,13 +49,13 @@ public class TimeManager implements Listener {
             return;
         }
 
-        if(!event.getLocation().getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
-            return;
+        if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL)) {
+            if (getSkyBrightness(event.getLocation()) >= 4810 && !event.getLocation().getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+                event.setCancelled(true);
+            }
         }
 
-        if(getSkyBrightness(event.getLocation()) >= 4810) {
-            event.setCancelled(true);
-        } else if(event.getEntity().getCategory().equals(EntityCategory.UNDEAD)) {
+        if(event.getEntity().getCategory().equals(EntityCategory.UNDEAD)) {
             NMSUtils.addUndeadGoals((Creature) event.getEntity());
         }
     }
@@ -52,13 +67,13 @@ public class TimeManager implements Listener {
 
         int brightness = 0;
 
-        int ds = Math.abs(coordinate-TimeValues.END_COORDINATE);
+        double ds = Math.abs(coordinate-TimeValues.END_COORDINATE);
 
         if(ds < TimeValues.EFFECT_RADIUS) {
             brightness = getBrightness0(location, TimeValues.START_COORDINATE + TimeValues.ALIGNMENT.direction*ds*-1);
         }
 
-        int de = Math.abs(coordinate-TimeValues.START_COORDINATE);
+        double de = Math.abs(coordinate-TimeValues.START_COORDINATE);
 
         if(de < TimeValues.EFFECT_RADIUS) {
             brightness = getBrightness0(location, TimeValues.END_COORDINATE + TimeValues.ALIGNMENT.direction*de);
@@ -68,11 +83,11 @@ public class TimeManager implements Listener {
         return Math.max(getBrightness0(location, coordinate), brightness);
     }
 
-    private int getBrightness0(Location location, int coordinate) {
-        int locX = coordinate;
-        int locZ = TimeValues.AXIS_COORDINATE;
+    private int getBrightness0(Location location, double coordinate) {
+        double locX = coordinate;
+        double locZ = TimeValues.AXIS_COORDINATE;
 
-        int swap;
+        double swap;
 
         //If Z alignment, switch the coordinates
         if(TimeValues.ALIGNMENT.z) {
@@ -83,16 +98,16 @@ public class TimeManager implements Listener {
             locZ = swap;
         }
 
-        int dx = (locX-location.getBlockX());
-        int dz = (locZ-location.getBlockZ());
+        double dx = (locX-location.getBlockX());
+        double dz = (locZ-location.getBlockZ());
 
-        int distance = (int) Math.sqrt(dx*dx + dz*dz);
+        double distance = Math.sqrt(dx*dx + dz*dz);
 
         if(distance <= TimeValues.SUN_RADIUS) {
             return 12000;
         }
 
-        double mult = 1-Math.min(Math.max(0.0, (distance-TimeValues.SUN_RADIUS)/(TimeValues.FADE_RADIUS*1.0)), 1.0);
+        double mult = 1-Math.min(Math.max(0.0, (distance-TimeValues.SUN_RADIUS)/(TimeValues.EFFECT_RADIUS*1.0)), 1.0);
 
         int r = (int) (mult*12000);
 

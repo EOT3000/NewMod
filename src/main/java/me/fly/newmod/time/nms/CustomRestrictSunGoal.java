@@ -39,6 +39,7 @@ public class CustomRestrictSunGoal implements Goal<Creature> {
     @Override
     public void start() {
         ((Navigation) a.G()).d(true);
+        System.out.println("restrict started");
     }
 
     @Override

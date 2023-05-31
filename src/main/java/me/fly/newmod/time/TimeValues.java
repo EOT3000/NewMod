@@ -1,18 +1,20 @@
 package me.fly.newmod.time;
 
 public final class TimeValues {
-    public static final int SUN_RADIUS = 80;
-    public static final int FADE_RADIUS = 320;
+    public static final int SUN_RADIUS = 2400;
+    public static final int FADE_RADIUS = 4800;
     public static final int EFFECT_RADIUS = SUN_RADIUS+FADE_RADIUS;
 
     public static final int AXIS_COORDINATE = 0;
-    public static final int START_COORDINATE = -640;
-    public static final int END_COORDINATE = 640;
+    public static final int START_COORDINATE = -24000;
+    public static final int END_COORDINATE = 24000;
 
     public static final SunAlignment ALIGNMENT = SunAlignment.WEST_TO_EAST;
 
     public static final int LOOP_BACK_COORDINATE = ALIGNMENT.direction*EFFECT_RADIUS+END_COORDINATE;
     public static final int LOOP_START_COORDINATE = -ALIGNMENT.direction*EFFECT_RADIUS+START_COORDINATE;
+
+    public static final double INCREMENT = 1;
 
 
     public enum SunAlignment {
