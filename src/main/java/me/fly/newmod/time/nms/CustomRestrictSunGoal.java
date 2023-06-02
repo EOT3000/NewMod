@@ -31,6 +31,7 @@ public class CustomRestrictSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldActivate() {
+        System.out.println("CRSG sa");
         return NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) >= 5460
                 && a.c(EnumItemSlot.f).b()
                 && PathfinderGoalUtil.a(a);
@@ -39,11 +40,12 @@ public class CustomRestrictSunGoal implements Goal<Creature> {
     @Override
     public void start() {
         ((Navigation) a.G()).d(true);
-        System.out.println("restrict started");
+        System.out.println("CRSG start");
     }
 
     @Override
     public void stop() {
+        System.out.println("CRSG stop");
         if (PathfinderGoalUtil.a(a)) {
             ((Navigation) a.G()).d(false);
         }

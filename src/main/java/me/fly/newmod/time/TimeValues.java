@@ -14,7 +14,7 @@ public final class TimeValues {
     public static final int LOOP_BACK_COORDINATE = ALIGNMENT.direction*EFFECT_RADIUS+END_COORDINATE;
     public static final int LOOP_START_COORDINATE = -ALIGNMENT.direction*EFFECT_RADIUS+START_COORDINATE;
 
-    public static final double INCREMENT = 1;
+    public static final double INCREMENT = 0.5;
 
 
     public enum SunAlignment {

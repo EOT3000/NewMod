@@ -44,6 +44,7 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldActivate() {
+        System.out.println("CFSG sa");
         if (this.a.P_() != null) {
             return false;
         } else if (!(NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) >= 5460)) {
@@ -71,13 +72,14 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldStayActive() {
+        System.out.println("CFSG ssa");
         return !this.a.G().l();
     }
 
     @Override
     public void start() {
         this.a.G().a(this.x, this.y, this.z, speed);
-        System.out.println("flee started");
+        System.out.println("CFSG start");
     }
 
     @Nullable

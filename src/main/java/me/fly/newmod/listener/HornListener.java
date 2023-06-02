@@ -26,7 +26,7 @@ public class HornListener implements Listener {
         }
 
         if(event.getEvent().equals(GameEvent.INSTRUMENT_PLAY)) {
-            System.out.println("insturment played");
+            //System.out.println("insturment played");
 
             for(Player p : event.getLocation().getNearbyPlayers(2000)) {
                 if(event.getLocation().distance(event.getEntity().getLocation()) != 0) {

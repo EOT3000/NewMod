@@ -341,6 +341,7 @@ public class NewMod extends JavaPlugin implements Listener {
                 player.sendMessage("Morning time: " + TimeUtils.timeMorning(b));
                 player.sendMessage("Night time: " + TimeUtils.timeNight(b));
                 player.sendMessage("Morning? " + timeManager.morning(player.getLocation()));
+                player.sendMessage("-");
 
                 return true;
             }
