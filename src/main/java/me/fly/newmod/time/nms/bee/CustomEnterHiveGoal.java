@@ -62,7 +62,7 @@ public class CustomEnterHiveGoal implements Goal<Bee> {
 
     @Override
     public boolean shouldActivate() {
-        return this.d.a() || NewMod.get().getTimeManager().getSkyBrightness(bee.getLocation()) > 5458;
+        return this.d.a() || NewMod.get().getTimeManager().getSkyBrightness(bee.getLocation()) < 5458;
     }
 
     @Override

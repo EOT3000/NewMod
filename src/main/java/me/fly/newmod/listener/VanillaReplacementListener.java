@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
@@ -95,5 +96,11 @@ public class VanillaReplacementListener implements Listener {
     @EventHandler
     public void onPreSmeltE(FurnaceStartSmeltEvent event) {
 
+    }
+
+    @EventHandler
+    public void onAnvil(PrepareAnvilEvent event) {
+        event.getInventory().setMaximumRepairCost(1000);
+        event.getInventory().setRepairCost(900);
     }
 }

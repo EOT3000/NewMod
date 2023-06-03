@@ -46,6 +46,10 @@ public class TimeManager implements Listener {
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if(!(event.getEntity() instanceof Monster)) {
+            if(event.getEntity() instanceof Bee) {
+                NMSUtils.addBeeGoals((Bee) event.getEntity());
+            }
+
             return;
         }
 
