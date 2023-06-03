@@ -1,41 +1,33 @@
 package me.fly.newmod.time.nms.bee;
 
-import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
-import com.destroystokyo.paper.entity.ai.GoalType;
 import me.fly.newmod.NewMod;
-import me.fly.newmod.time.TimeManager;
-import me.fly.newmod.time.nms.NMSUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.tags.TagsBlock;
+import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.animal.EntityBee;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftBee;
 import org.bukkit.entity.Bee;
-import org.bukkit.entity.Creature;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
 
-public class CustomGoToHiveGoal implements Goal<Bee> {
+public class CustomGoToHiveGoal extends AbstractCustomBeeGoal {
     private static final GoalKey<Bee> KEY = GoalKey.of(Bee.class, new NamespacedKey(NewMod.get(), "bee_go_to_hive"));
 
-    private final EntityBee a;
-    private final Bee bee;
-    private final EntityBee.e e;
-
     public CustomGoToHiveGoal(Bee bee) {
-        this.bee = bee;
-        this.a = ((CraftBee) bee).getHandle();
+        super(bee, getHandle(((CraftBee) bee).getHandle()));
+    }
 
+    private static PathfinderGoal getHandle(EntityBee a) {
         try {
             Field field = EntityBee.class.getDeclaredField("cH");
 
             field.setAccessible(true);
 
-            this.e = (EntityBee.e) field.get(this.a);
+            return (EntityBee.e) field.get(a);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -45,36 +37,24 @@ public class CustomGoToHiveGoal implements Goal<Bee> {
 
     @Override
     public boolean shouldActivate() {
-        return this.e.h() || NMSUtils.wantsToEnter(bee.getLocation(), a, NMSUtils.isPollinating(e));
+        return a.cF != null && !a.fG() && wte() && !this.d(a.cF) && a.H.a_(a.cF).a(TagsBlock.aD);
     }
 
-    @Override
-    public boolean shouldStayActive() {
-        return this.e.i();
+    private boolean d(BlockPosition pos) {
+        if (b(pos, 2)) {
+            return true;
+        } else {
+            PathEntity pathentity = a.G().j();
+            return pathentity != null && pathentity.m().equals(pos) && pathentity.j() && pathentity.c();
+        }
     }
 
-    @Override
-    public void start() {
-        this.e.c();
-    }
-
-    @Override
-    public void stop() {
-        this.e.d();
-    }
-
-    @Override
-    public void tick() {
-        this.e.e();
+    boolean b(BlockPosition pos, int distance) {
+        return pos.a(a.dg(), distance);
     }
 
     @Override
     public @NotNull GoalKey<Bee> getKey() {
         return KEY;
-    }
-
-    @Override
-    public @NotNull EnumSet<GoalType> getTypes() {
-        return EnumSet.of(GoalType.MOVE);
     }
 }

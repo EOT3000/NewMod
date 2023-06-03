@@ -21,6 +21,7 @@ import org.bukkit.craftbukkit.v1_19_R3.entity.CraftMob;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Creature;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class NMSUtils {
@@ -42,6 +43,18 @@ public class NMSUtils {
             e.printStackTrace();
 
             throw new RuntimeException("Error when getting bee stuff: is pollinating");
+        }
+
+        try {
+            Field field = EntityBee.class.getDeclaredField("cB");
+
+            field.setAccessible(true);
+
+            NEW_HIVE_COOLDOWN = field;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            throw new RuntimeException("Error when getting bee stuff: new hive cooldown");
         }
     }
 
@@ -65,6 +78,7 @@ public class NMSUtils {
     public static final Class<?> BEE_POLLINATE_GOAL;
     public static final Class<?> BEE_LOCATE_HIVE_GOAL;
     public static final Method IS_POLLINATING;
+    public static final Field NEW_HIVE_COOLDOWN;
 
     public static boolean wantsToEnter(Location pos, EntityBee bee, boolean pollinating) {
         if (bee.cy <= 0 && !pollinating && !bee.gd() && bee.P_() == null) {
@@ -80,6 +94,14 @@ public class NMSUtils {
             return (boolean) IS_POLLINATING.invoke(goal);
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static int newHiveCooldown(EntityBee bee) {
+        try {
+            return (int) NEW_HIVE_COOLDOWN.get(bee);
+        } catch (Exception e) {
+            return 0;
         }
     }
 

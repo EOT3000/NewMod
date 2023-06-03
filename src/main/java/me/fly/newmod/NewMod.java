@@ -353,19 +353,19 @@ public class NewMod extends JavaPlugin implements Listener {
 
             //TODO: remove cb stuff from here
             if(args.length == 2 && args[0].equalsIgnoreCase("time") && args[1].equalsIgnoreCase("world")) {
-                sender.sendMessage("day in NIGHT? " + ((CraftWorld) TrickWorlds.NIGHT).getHandle().M());
-                sender.sendMessage("night in NIGHT? " + ((CraftWorld) TrickWorlds.NIGHT).getHandle().N());
+                sender.sendMessage("day in NIGHT? " + TrickWorlds.NIGHT.getHandle().M());
+                sender.sendMessage("night in NIGHT? " + TrickWorlds.NIGHT.getHandle().N());
 
                 sender.sendMessage("");
 
 
-                sender.sendMessage("day in DAY? " + ((CraftWorld) TrickWorlds.DAY).getHandle().M());
-                sender.sendMessage("night in DAY? " + ((CraftWorld) TrickWorlds.DAY).getHandle().N());
+                sender.sendMessage("day in DAY? " + TrickWorlds.DAY.getHandle().M());
+                sender.sendMessage("night in DAY? " + TrickWorlds.DAY.getHandle().N());
 
                 sender.sendMessage("");
 
-                sender.sendMessage("day in NONE? " + ((CraftWorld) TrickWorlds.NONE).getHandle().M());
-                sender.sendMessage("night in NONE? " + ((CraftWorld) TrickWorlds.NONE).getHandle().N());
+                sender.sendMessage("day in NONE? " + TrickWorlds.NONE.getHandle().M());
+                sender.sendMessage("night in NONE? " + TrickWorlds.NONE.getHandle().N());
 
                 sender.sendMessage("");
 
