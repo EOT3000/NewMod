@@ -14,19 +14,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
-public class CustomEnterHiveGoal implements Goal<Bee> {
-    private static final GoalKey<Bee> KEY = GoalKey.of(Bee.class, new NamespacedKey(NewMod.get(), "bee_enter_hive"));
+public class CustomLocateHiveGoal implements Goal<Bee> {
+    private static final GoalKey<Bee> KEY = GoalKey.of(Bee.class, new NamespacedKey(NewMod.get(), "bee_locate_hive"));
 
     private final EntityBee a;
     private final Bee bee;
-    private final PathfinderGoal d;
+    private final PathfinderGoal i;
 
-    public CustomEnterHiveGoal(Bee bee) {
+    public CustomLocateHiveGoal(Bee bee) {
         this.bee = bee;
         this.a = ((CraftBee) bee).getHandle();
 
         try {
-            this.d = NMSUtils.getGoal(NMSUtils.BEE_ENTER_HIVE_GOAL, a.bN);
+            this.i = NMSUtils.getGoal(NMSUtils.BEE_LOCATE_HIVE_GOAL, a.bN);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -36,27 +36,27 @@ public class CustomEnterHiveGoal implements Goal<Bee> {
 
     @Override
     public boolean shouldActivate() {
-        return a.cF != null && (this.d.a() || NMSUtils.wantsToEnter(bee.getLocation(), a, NMSUtils.isPollinating(d)));
+        return a.cF != null && (this.i.a() || NMSUtils.wantsToEnter(bee.getLocation(), a, NMSUtils.isPollinating(i)));
     }
 
     @Override
     public boolean shouldStayActive() {
-        return this.d.b();
+        return this.i.b();
     }
 
     @Override
     public void start() {
-        this.d.c();
+        this.i.c();
     }
 
     @Override
     public void stop() {
-        this.d.d();
+        this.i.d();
     }
 
     @Override
     public void tick() {
-        this.d.e();
+        this.i.e();
     }
 
     @Override

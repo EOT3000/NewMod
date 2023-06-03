@@ -5,6 +5,7 @@ import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.time.TimeManager;
+import me.fly.newmod.time.nms.NMSUtils;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.tags.TagsBlock;
 import net.minecraft.world.entity.animal.EntityBee;
@@ -44,7 +45,7 @@ public class CustomGoToHiveGoal implements Goal<Bee> {
 
     @Override
     public boolean shouldActivate() {
-        return this.e.h() || NewMod.get().getTimeManager().getSkyBrightness(bee.getLocation()) < 5458;
+        return this.e.h() || NMSUtils.wantsToEnter(bee.getLocation(), a, NMSUtils.isPollinating(e));
     }
 
     @Override

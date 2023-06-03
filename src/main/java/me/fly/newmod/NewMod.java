@@ -16,6 +16,7 @@ import me.fly.newmod.listener.VanillaReplacementListener;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
+import me.fly.newmod.time.TimeValues;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -342,6 +343,18 @@ public class NewMod extends JavaPlugin implements Listener {
                 player.sendMessage("Night time: " + TimeUtils.timeNight(b));
                 player.sendMessage("Morning? " + timeManager.morning(player.getLocation()));
                 player.sendMessage("-");
+
+                return true;
+            }
+
+            if(args.length == 2 && args[0].equalsIgnoreCase("time")) {
+                timeManager.coordinate = Double.parseDouble(args[1]);
+
+                return true;
+            }
+
+            if(args.length == 2 && args[0].equalsIgnoreCase("speed")) {
+                TimeValues.INCREMENT = Double.parseDouble(args[1]);
 
                 return true;
             }
