@@ -41,6 +41,7 @@ public class CustomEnterHiveGoal implements Goal<Bee> {
         Class<?> dc = null;
 
         for(Class<?> clazz : EntityBee.class.getDeclaredClasses()) {
+
             if(clazz.getName().equalsIgnoreCase("net.minecraft.world.entity.animal.EntityBee$d")) {
                 dc = clazz;
             }

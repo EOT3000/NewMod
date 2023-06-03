@@ -46,7 +46,6 @@ public class CustomFleeSunGoal implements Goal<Creature> {
     public boolean shouldActivate() {
         boolean sa = sa();
 
-        System.out.println("CFSG sa: "+ sa);
         return sa;
     }
 
@@ -78,14 +77,12 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldStayActive() {
-        System.out.println("CFSG ssa");
         return !this.a.G().l();
     }
 
     @Override
     public void start() {
         this.a.G().a(this.x, this.y, this.z, speed);
-        System.out.println("CFSG start");
     }
 
     @Nullable

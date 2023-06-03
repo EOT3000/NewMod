@@ -33,7 +33,6 @@ public class CustomFireInDayGoal implements Goal<Creature> {
 
     @Override
     public void start() {
-        System.out.println("CFIDG start");
         a.g(12*20);
 
         if(PathfinderGoalUtil.a(a)) {
@@ -43,13 +42,11 @@ public class CustomFireInDayGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldStayActive() {
-        System.out.println("CFIDG ssa");
         return false;
     }
 
     @Override
     public boolean shouldActivate() {
-        System.out.println("CFIDG sa");
         boolean sa = canBurn() &&
                 NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) > 5500 &&
                 a.au() <= 4*20;
@@ -60,7 +57,7 @@ public class CustomFireInDayGoal implements Goal<Creature> {
     public boolean canBurn() {
         boolean cb = !(a.aT() || ((Entity) a).j() || a.k() || a.az || a.aA || !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())) || !a.c(EnumItemSlot.f).b());
 
-        System.out.println("abcde?");
+        /*System.out.println("abcde?");
         System.out.println("in water? " + a.aT());
         System.out.println("in rain? " + ((Entity) a).j());
         System.out.println("in bubble? " + a.k());
@@ -69,7 +66,7 @@ public class CustomFireInDayGoal implements Goal<Creature> {
         System.out.println("cannot see sky? " + !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())));
         System.out.println("item on head? " + !a.c(EnumItemSlot.f).b());
         System.out.println("can burn? " + cb);
-        System.out.println("abcde!");
+        System.out.println("abcde!");*/
 
         return cb;
     }

@@ -32,6 +32,8 @@ public class CustomGoToHiveGoal implements Goal<Bee> {
         try {
             Field field = EntityBee.class.getDeclaredField("cH");
 
+            field.setAccessible(true);
+
             this.e = (EntityBee.e) field.get(this.a);
         } catch (Exception e) {
             e.printStackTrace();
