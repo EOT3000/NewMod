@@ -1,6 +1,8 @@
 package me.fly.newmod.time.nms;
 
 import com.destroystokyo.paper.entity.ai.VanillaGoal;
+import me.fly.newmod.time.nms.undead.CustomFireInDayGoal;
+import me.fly.newmod.time.nms.undead.CustomFleeSunGoal;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.monster.EntitySkeletonAbstract;
 import net.minecraft.world.entity.monster.EntityZombie;

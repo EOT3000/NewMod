@@ -1,9 +1,48 @@
 package me.fly.newmod.time;
 
+import net.minecraft.world.entity.animal.EntityBee;
+
 public class TimeUtils {
+    public class a {
+
+    }
+
+    class b {
+
+    }
+
+    protected class c {
+
+    }
+
+    private class d {
+
+    }
+
+    public static class e {
+
+    }
+
     public static void main(String[] args) {
-        for(int i = 0; i <= 12000; i+=240) {
-            System.out.println(i + "\t" + timeMorning(i) + "\t" + timeNight(i));
+
+        for(Class<?> clazz : TimeUtils.class.getDeclaredClasses()) {
+            System.out.println(clazz.getName());
+        }
+
+        System.exit(0);
+
+        for(int i = 0; i <= 12000; i+=1) {
+            if(time(i, false) == 12542) {
+                System.out.println(i);
+                System.out.println("n");
+                System.out.println();
+            }
+
+            if(time(i, true) == 23460) {
+                System.out.println(i);
+                System.out.println("m");
+                System.out.println();
+            }
         }
     }
 

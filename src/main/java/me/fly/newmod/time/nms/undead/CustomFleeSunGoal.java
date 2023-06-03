@@ -1,4 +1,4 @@
-package me.fly.newmod.time.nms;
+package me.fly.newmod.time.nms.undead;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
@@ -44,7 +44,13 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldActivate() {
-        System.out.println("CFSG sa");
+        boolean sa = sa();
+
+        System.out.println("CFSG sa: "+ sa);
+        return sa;
+    }
+
+    private boolean sa() {
         if (this.a.P_() != null) {
             return false;
         } else if (!(NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) >= 5460)) {

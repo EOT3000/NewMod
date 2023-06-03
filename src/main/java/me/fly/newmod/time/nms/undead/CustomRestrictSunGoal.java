@@ -1,4 +1,4 @@
-package me.fly.newmod.time.nms;
+package me.fly.newmod.time.nms.undead;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;

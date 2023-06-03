@@ -1,4 +1,4 @@
-package me.fly.newmod.time.nms;
+package me.fly.newmod.time.nms.undead;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
@@ -58,6 +58,8 @@ public class CustomFireInDayGoal implements Goal<Creature> {
     }
 
     public boolean canBurn() {
+        boolean cb = !(a.aT() || ((Entity) a).j() || a.k() || a.az || a.aA || !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())) || !a.c(EnumItemSlot.f).b());
+
         System.out.println("abcde?");
         System.out.println("in water? " + a.aT());
         System.out.println("in rain? " + ((Entity) a).j());
@@ -66,9 +68,10 @@ public class CustomFireInDayGoal implements Goal<Creature> {
         System.out.println("was in powder snow? " + a.aA);
         System.out.println("cannot see sky? " + !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())));
         System.out.println("item on head? " + !a.c(EnumItemSlot.f).b());
+        System.out.println("can burn? " + cb);
         System.out.println("abcde!");
 
-        return !(a.aT() || ((Entity) a).j() || a.k() || a.az || a.aA || !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())) || !a.c(EnumItemSlot.f).b());
+        return cb;
     }
 
     @Override
@@ -78,6 +81,6 @@ public class CustomFireInDayGoal implements Goal<Creature> {
 
     @Override
     public @NotNull EnumSet<GoalType> getTypes() {
-        return EnumSet.of(GoalType.MOVE);
+        return EnumSet.of(GoalType.LOOK);
     }
 }
