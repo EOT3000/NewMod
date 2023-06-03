@@ -28,17 +28,19 @@ public class NMSUtils {
         BEE_ENTER_HIVE_GOAL = clazz("entitybee$d", "enter hive goal");
         BEE_LOCATE_HIVE_GOAL = clazz("entitybee$i", "enter hive goal");
 
-        Class<?> bpg = clazz("entitybee$i", "locate hive goal");;
+        Class<?> bpg = clazz("entitybee$k", "locate hive goal");;
 
         BEE_POLLINATE_GOAL = bpg;
 
         try {
-            Method method = bpg.getMethod("l");
+            Method method = bpg.getDeclaredMethod("l");
 
             method.setAccessible(true);
 
             IS_POLLINATING = method;
         } catch (Exception e) {
+            e.printStackTrace();
+
             throw new RuntimeException("Error when getting bee stuff: is pollinating");
         }
     }

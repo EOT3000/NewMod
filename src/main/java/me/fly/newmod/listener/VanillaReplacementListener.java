@@ -100,7 +100,6 @@ public class VanillaReplacementListener implements Listener {
 
     @EventHandler
     public void onAnvil(PrepareAnvilEvent event) {
-        event.getInventory().setMaximumRepairCost(1000);
-        event.getInventory().setRepairCost(900);
+        event.getInventory().setRepairCost((int) Math.ceil(Math.tanh(event.getInventory().getRepairCost()*39)*39));
     }
 }

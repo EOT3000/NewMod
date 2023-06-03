@@ -17,12 +17,14 @@ import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
 import me.fly.newmod.time.TimeValues;
+import me.fly.newmod.time.nms.world.TrickWorlds;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -151,6 +153,8 @@ public class NewMod extends JavaPlugin implements Listener {
 
             extension.errored = true;
         }
+
+        TrickWorlds.init();
     }
 
     private void tick(int ticks) {
@@ -347,7 +351,32 @@ public class NewMod extends JavaPlugin implements Listener {
                 return true;
             }
 
-            if(args.length == 2 && args[0].equalsIgnoreCase("time")) {
+            //TODO: remove cb stuff from here
+            if(args.length == 2 && args[0].equalsIgnoreCase("time") && args[1].equalsIgnoreCase("world")) {
+                sender.sendMessage("day in NIGHT? " + ((CraftWorld) TrickWorlds.NIGHT).getHandle().M());
+                sender.sendMessage("night in NIGHT? " + ((CraftWorld) TrickWorlds.NIGHT).getHandle().N());
+
+                sender.sendMessage("");
+
+
+                sender.sendMessage("day in DAY? " + ((CraftWorld) TrickWorlds.DAY).getHandle().M());
+                sender.sendMessage("night in DAY? " + ((CraftWorld) TrickWorlds.DAY).getHandle().N());
+
+                sender.sendMessage("");
+
+                sender.sendMessage("day in NONE? " + ((CraftWorld) TrickWorlds.NONE).getHandle().M());
+                sender.sendMessage("night in NONE? " + ((CraftWorld) TrickWorlds.NONE).getHandle().N());
+
+                sender.sendMessage("");
+
+                sender.sendMessage("time in NIGHT: " + TrickWorlds.NIGHT.getTime());
+                sender.sendMessage("time in DAY: " + TrickWorlds.DAY.getTime());
+                sender.sendMessage("time in NONE: " + TrickWorlds.NONE.getTime());
+
+                player.sendMessage("---");
+
+                return true;
+            } else if(args.length == 2 && args[0].equalsIgnoreCase("time")) {
                 timeManager.coordinate = Double.parseDouble(args[1]);
 
                 return true;

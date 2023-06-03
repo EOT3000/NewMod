@@ -7,6 +7,7 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.time.nms.NMSUtils;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.animal.EntityBee;
+import net.minecraft.world.level.World;
 import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftBee;
 import org.bukkit.entity.Bee;
@@ -36,6 +37,8 @@ public class CustomEnterHiveGoal implements Goal<Bee> {
 
     @Override
     public boolean shouldActivate() {
+        World world = a.H;
+
         return a.cF != null && (this.d.a() || NMSUtils.wantsToEnter(bee.getLocation(), a, NMSUtils.isPollinating(d)));
     }
 
