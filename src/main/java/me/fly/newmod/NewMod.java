@@ -17,6 +17,7 @@ import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
 import me.fly.newmod.time.TimeValues;
+import me.fly.newmod.time.nms.bee.CustomBeeHive;
 import me.fly.newmod.time.nms.world.TrickWorlds;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -54,6 +55,11 @@ public class NewMod extends JavaPlugin implements Listener {
         blockManager = new BlockManager();
         itemManager = new ItemManager();
         craftingChangesManager = new CraftingChangesManager();
+    }
+
+    @Override
+    public void onLoad() {
+        //CustomBeeHive.
     }
 
     @Override
@@ -122,6 +128,7 @@ public class NewMod extends JavaPlugin implements Listener {
             }
         });*/
 
+        TrickWorlds.init();
     }
 
     private void attemptLoad(ModExtension extension) {
@@ -153,8 +160,6 @@ public class NewMod extends JavaPlugin implements Listener {
 
             extension.errored = true;
         }
-
-        TrickWorlds.init();
     }
 
     private void tick(int ticks) {
