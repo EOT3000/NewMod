@@ -3,7 +3,7 @@ package me.fly.newmod.time.nms.world;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 
 public class TrickWorlds {
     public static final CraftWorld DAY = (CraftWorld) new WorldCreator("always_day_trick_world_nm").createWorld();
