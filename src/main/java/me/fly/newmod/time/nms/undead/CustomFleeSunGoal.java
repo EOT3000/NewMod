@@ -7,16 +7,10 @@ import me.fly.newmod.NewMod;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityCreature;
-import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.entity.ai.goal.PathfinderGoal;
-import net.minecraft.world.entity.ai.navigation.Navigation;
-import net.minecraft.world.entity.ai.util.PathfinderGoalUtil;
-import net.minecraft.world.level.World;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftCreature;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftMob;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftCreature;
 import org.bukkit.entity.Creature;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,13 +44,13 @@ public class CustomFleeSunGoal implements Goal<Creature> {
     }
 
     private boolean sa() {
-        if (this.a.P_() != null) {
+        if (this.a.j() != null) {
             return false;
         } else if (!(NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) >= 5460)) {
             return false;
-        } else if (!this.a.bK()) {
+        } else if (!this.a.bL()) {
             return false;
-        } else if (!this.a.H.g(this.a.dg())) {
+        } else if (!this.a.dI().g(this.a.di())) {
             return false;
         } else {
             return this.a.c(EnumItemSlot.f).b() && this.h();
@@ -77,7 +71,7 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Override
     public boolean shouldStayActive() {
-        return !this.a.G().l();
+        return !this.a.G().b();
     }
 
     @Override
@@ -87,12 +81,12 @@ public class CustomFleeSunGoal implements Goal<Creature> {
 
     @Nullable
     protected Vec3D getRandomPosition() {
-        RandomSource randomSource = this.a.dZ();
-        BlockPosition blockPos = this.a.dg();
+        RandomSource randomSource = this.a.ec();
+        BlockPosition blockPos = this.a.di();
 
         for(int i = 0; i < 10; ++i) {
             BlockPosition blockPos2 = blockPos.b(randomSource.a(20) - 10, randomSource.a(6) - 3, randomSource.a(20) - 10);
-            if (!this.a.H.g(blockPos2) && this.a.f(blockPos2) < 0.0F) {
+            if (!this.a.dI().g(blockPos2) && this.a.h(blockPos2) < 0.0F) {
                 return Vec3D.c(blockPos2);
             }
         }

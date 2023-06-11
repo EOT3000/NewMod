@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.navigation.Navigation;
 import net.minecraft.world.entity.ai.util.PathfinderGoalUtil;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftMob;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftMob;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
@@ -38,13 +38,13 @@ public class CustomRestrictSunGoal implements Goal<Creature> {
 
     @Override
     public void start() {
-        ((Navigation) a.G()).d(true);
+        ((Navigation) a.J()).d(true);
     }
 
     @Override
     public void stop() {
         if (PathfinderGoalUtil.a(a)) {
-            ((Navigation) a.G()).d(false);
+            ((Navigation) a.J()).d(false);
         }
     }
 

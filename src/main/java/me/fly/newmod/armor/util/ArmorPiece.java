@@ -34,7 +34,7 @@ public class ArmorPiece {
 
         this.piece = piece;
 
-        if(piece.getMaterial() == VanillaArmorMaterial.NONE) {
+        if(piece == null) {
             defense = 0;
             toughness = 0;
 

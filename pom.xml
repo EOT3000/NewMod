@@ -39,11 +39,6 @@
         </repository>
 
         <repository>
-            <id>coreprotect-repo</id>
-            <url>http://maven.playpro.com/</url>
-        </repository>
-
-        <repository>
             <id>wolfyscript-public</id>
             <url>https://maven.wolfyscript.com/repository/public/</url>
         </repository>
@@ -65,7 +60,7 @@
         <dependency>
             <groupId>com.mojang.datafixerupper</groupId>
             <artifactId>datafixerupper</artifactId>
-            <version>6.0.6</version>
+            <version>6.0.8</version>
             <scope>provided</scope>
         </dependency>
 

@@ -31,9 +31,9 @@ import java.util.List;
 public class NMSUtils {
     static {
         BEE_ENTER_HIVE_GOAL = clazz("entitybee$d", "enter hive goal");
-        BEE_LOCATE_HIVE_GOAL = clazz("entitybee$i", "enter hive goal");
+        BEE_LOCATE_HIVE_GOAL = clazz("entitybee$i", "locate hive goal");
 
-        Class<?> bpg = clazz("entitybee$k", "locate hive goal");;
+        Class<?> bpg = clazz("entitybee$k", "pollinate goal");;
 
         BEE_POLLINATE_GOAL = bpg;
 
@@ -50,7 +50,7 @@ public class NMSUtils {
         }
 
         try {
-            Field field = EntityBee.class.getDeclaredField("cB");
+            Field field = EntityBee.class.getDeclaredField("cC");
 
             field.setAccessible(true);
 
@@ -82,12 +82,11 @@ public class NMSUtils {
     public static final Class<?> BEE_POLLINATE_GOAL;
     public static final Class<?> BEE_LOCATE_HIVE_GOAL;
     public static final Method IS_POLLINATING;
-    public static final Method RELEASE_BEE;
     public static final Field NEW_HIVE_COOLDOWN;
 
     public static boolean wantsToEnter(Location pos, EntityBee bee, boolean pollinating) {
-        if (bee.cy <= 0 && !pollinating && !bee.gd() && bee.P_() == null) {
-            boolean flag = (bee.cx > 3600) || bee.H.Y() || NewMod.get().getTimeManager().getSkyBrightness(pos) < 5458 || bee.gc();
+        if (bee.cz <= 0 && !pollinating && !bee.gj() && bee.j() == null) {
+            boolean flag = (bee.cy > 3600) || bee.dI().Z() || NewMod.get().getTimeManager().getSkyBrightness(pos) < 5458 || bee.gi();
             return flag && !hiveNearFire(bee);
         } else {
             return false;
@@ -113,10 +112,10 @@ public class NMSUtils {
     public static boolean hiveNearFire(EntityBee bee) {
         if (bee.cG == null) {
             return false;
-        } else if (!bee.H.isLoadedAndInBounds(bee.cG)) {
+        } else if (!bee.dI().isLoadedAndInBounds(bee.cG)) {
             return false;
         } else {
-            TileEntity tileentity = bee.H.c_(bee.cG);
+            TileEntity tileentity = bee.dI().c_(bee.cG);
             return tileentity instanceof TileEntityBeehive && ((TileEntityBeehive)tileentity).c();
         }
     }

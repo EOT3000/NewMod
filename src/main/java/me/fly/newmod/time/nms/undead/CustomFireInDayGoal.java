@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.navigation.Navigation;
 import net.minecraft.world.entity.ai.util.PathfinderGoalUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftCreature;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftCreature;
 import org.bukkit.entity.Creature;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +36,7 @@ public class CustomFireInDayGoal implements Goal<Creature> {
         a.g(12*20);
 
         if(PathfinderGoalUtil.a(a)) {
-            ((Navigation) a.G()).d(true);
+            ((Navigation) a.J()).d(true);
         }
     }
 
@@ -49,13 +49,13 @@ public class CustomFireInDayGoal implements Goal<Creature> {
     public boolean shouldActivate() {
         boolean sa = canBurn() &&
                 NewMod.get().getTimeManager().getSkyBrightness(mob.getLocation()) > 5500 &&
-                a.au() <= 4*20;
+                ((Entity) a).aN <= 4*20;
 
         return sa;
     }
 
     public boolean canBurn() {
-        boolean cb = !(a.aT() || ((Entity) a).j() || a.k() || a.az || a.aA || !a.H.g(BlockPosition.a(a.dl(), a.dp(), a.dr())) || !a.c(EnumItemSlot.f).b());
+        boolean cb = !(a.aX() || a.az || a.aA || !a.dI().g(BlockPosition.a(a.dn(), a.dr(), a.dt())) || !a.c(EnumItemSlot.f).b());
 
         /*System.out.println("abcde?");
         System.out.println("in water? " + a.aT());

@@ -5,7 +5,7 @@ import com.destroystokyo.paper.entity.ai.GoalType;
 import me.fly.newmod.time.nms.NMSUtils;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.animal.EntityBee;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftBee;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftBee;
 import org.bukkit.entity.Bee;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public abstract class AbstractCustomBeeGoal implements Goal<Bee> {
 
         this.handle = getHandle(clazz, this.a);
 
-        this.pollinating = NMSUtils.getGoal(NMSUtils.BEE_POLLINATE_GOAL, this.a.bN);
+        this.pollinating = NMSUtils.getGoal(NMSUtils.BEE_POLLINATE_GOAL, this.a.bO);
     }
 
     protected AbstractCustomBeeGoal(Bee bee, PathfinderGoal handle) {
@@ -33,13 +33,13 @@ public abstract class AbstractCustomBeeGoal implements Goal<Bee> {
 
         this.handle = handle;
 
-        this.pollinating = NMSUtils.getGoal(NMSUtils.BEE_POLLINATE_GOAL, this.a.bN);
+        this.pollinating = NMSUtils.getGoal(NMSUtils.BEE_POLLINATE_GOAL, this.a.bO);
     }
 
 
     private static PathfinderGoal getHandle(Class<?> clazz, EntityBee bee) {
         try {
-            return NMSUtils.getGoal(clazz, bee.bN);
+            return NMSUtils.getGoal(clazz, bee.bO);
         } catch (Exception e) {
             e.printStackTrace();
 

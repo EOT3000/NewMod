@@ -1,7 +1,8 @@
 package me.fly.newmod.api.util;
 
 import me.fly.newmod.NewMod;
-import net.coreprotect.CoreProtect;
+//TODO
+//import net.coreprotect.CoreProtect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -84,7 +85,8 @@ public class WorldUtils {
             Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
                 for (Block b : blocks) {
                     if(b.getType() != Material.AIR) {
-                        CoreProtect.getInstance().getAPI().logRemoval("#nmexplosion", b.getLocation(), b.getType(), ((byte) 0));
+                        //TODO: readd
+                        //CoreProtect.getInstance().getAPI().logRemoval("#nmexplosion", b.getLocation(), b.getType(), ((byte) 0));
                     }
                     if (random.nextBoolean()) {
                         b.breakNaturally();

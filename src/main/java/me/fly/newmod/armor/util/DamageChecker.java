@@ -96,7 +96,7 @@ public class DamageChecker {
                     Block block = world.getBlockAt(x,y,z);
 
                     if(block.getType().equals(Material.LAVA)) {
-                        Fluid base = ((CraftBlock) block).getNMS().r();
+                        Fluid base = ((CraftBlock) block).getNMS().u();
 
                         VoxelShape shape = base.d(((CraftBlock) block).getCraftWorld().getHandle(), new BlockPosition(x,y,z));
 

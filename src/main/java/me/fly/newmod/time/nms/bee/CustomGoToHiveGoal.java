@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.animal.EntityBee;
 import net.minecraft.world.level.pathfinder.PathEntity;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftBee;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftBee;
 import org.bukkit.entity.Bee;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class CustomGoToHiveGoal extends AbstractCustomBeeGoal {
 
     private static PathfinderGoal getHandle(EntityBee a) {
         try {
-            Field field = EntityBee.class.getDeclaredField("cH");
+            Field field = EntityBee.class.getDeclaredField("cI");
 
             field.setAccessible(true);
 
@@ -37,14 +37,14 @@ public class CustomGoToHiveGoal extends AbstractCustomBeeGoal {
 
     @Override
     public boolean shouldActivate() {
-        return a.cF != null && !a.fG() && wte() && !this.d(a.cF) && a.H.a_(a.cF).a(TagsBlock.aD);
+        return a.cG != null && !a.fG() && wte() && !this.d(a.cG) && a.dI().a_(a.cG).a(TagsBlock.aD);
     }
 
     private boolean d(BlockPosition pos) {
         if (b(pos, 2)) {
             return true;
         } else {
-            PathEntity pathentity = a.G().j();
+            PathEntity pathentity = a.J().j();
             return pathentity != null && pathentity.m().equals(pos) && pathentity.j() && pathentity.c();
         }
     }
