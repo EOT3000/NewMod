@@ -6,6 +6,7 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.armor.model.ArmorItemType;
 import me.fly.newmod.armor.model.ArmorMaterial;
 import me.fly.newmod.armor.model.VanillaArmorMaterial;
+import me.fly.newmod.armor.model.VanillaHelmet;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,6 +23,10 @@ public class ArmorManager {
         ModItemType type = manager.getType(stack);
 
         if(type == null) {
+            if(stack.getType().equals(VanillaHelmet.TURTLE_HELMET.get())) {
+                return VanillaHelmet.TURTLE_HELMET;
+            }
+
             for(VanillaArmorMaterial material : VanillaArmorMaterial.values()) {
                 if(material.boots().get().equals(stack.getType())) return material.boots();
                 if(material.legs().get().equals(stack.getType())) return material.legs();

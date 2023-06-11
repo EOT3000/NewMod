@@ -12,8 +12,6 @@ import java.util.Map;
 import static org.bukkit.Material.*;
 
 public enum VanillaArmorMaterial implements ArmorMaterial {
-    NONE(null, null, null, null, null),
-
     LEATHER(Material.LEATHER, LEATHER_BOOTS, LEATHER_LEGGINGS, LEATHER_CHESTPLATE, LEATHER_HELMET),
 
     GOLDEN(GOLD_INGOT, GOLDEN_BOOTS, GOLDEN_LEGGINGS, GOLDEN_CHESTPLATE, GOLDEN_HELMET),
@@ -37,6 +35,36 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
         GOLDEN.legs.setDefense(3);
         GOLDEN.boots.setDefense(1);
 
+        CHAINMAIL.head.setDefense(2);
+        CHAINMAIL.chest.setDefense(5);
+        CHAINMAIL.legs.setDefense(4);
+        CHAINMAIL.boots.setDefense(1);
+
+        IRON.head.setDefense(2);
+        IRON.chest.setDefense(6);
+        IRON.legs.setDefense(5);
+        IRON.boots.setDefense(2);
+
+        DIAMOND.head.setDefense(3);
+        DIAMOND.chest.setDefense(8);
+        DIAMOND.legs.setDefense(6);
+        DIAMOND.boots.setDefense(3);
+
+        NETHERITE.head.setDefense(3);
+        NETHERITE.chest.setDefense(8);
+        NETHERITE.legs.setDefense(6);
+        NETHERITE.boots.setDefense(3);
+
+        DIAMOND.head.setToughness(2);
+        DIAMOND.chest.setToughness(2);
+        DIAMOND.legs.setToughness(2);
+        DIAMOND.boots.setToughness(2);
+
+        NETHERITE.head.setToughness(3);
+        NETHERITE.chest.setToughness(3);
+        NETHERITE.legs.setToughness(3);
+        NETHERITE.boots.setToughness(3);
+
 
     }
 
@@ -48,8 +76,6 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
     private final VanillaArmorPiece head;
 
     VanillaArmorMaterial(Material crafting, Material boots, Material legs, Material chest, Material head) {
-
-
         this.crafting = crafting;
 
         if (head != null) {
@@ -129,6 +155,7 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
             return defense;
         }
 
+        //Durability does not do anything yet.
         @Override
         public int getDurability() {
             return durability;
@@ -141,6 +168,7 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
         public void setDefense(int defense) {
             this.defense = defense;
         }
+
 
         public void setDurability(int durability) {
             this.durability = durability;

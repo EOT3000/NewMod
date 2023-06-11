@@ -17,7 +17,6 @@ import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
 import me.fly.newmod.time.TimeValues;
-import me.fly.newmod.time.nms.bee.CustomBeeHive;
 import me.fly.newmod.time.nms.world.TrickWorlds;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -25,7 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,7 +57,7 @@ public class NewMod extends JavaPlugin implements Listener {
 
     @Override
     public void onLoad() {
-        //CustomBeeHive.
+        //CustomBeeHiveTicker.
     }
 
     @Override

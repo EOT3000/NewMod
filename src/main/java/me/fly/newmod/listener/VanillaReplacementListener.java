@@ -1,11 +1,14 @@
 package me.fly.newmod.listener;
 
+import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
-import org.bukkit.GameEvent;
-import org.bukkit.Material;
+import me.fly.newmod.time.nms.bee.CustomBeeHiveTicker;
+import org.bukkit.*;
+import org.bukkit.block.Beehive;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
@@ -100,6 +103,21 @@ public class VanillaReplacementListener implements Listener {
 
     @EventHandler
     public void onAnvil(PrepareAnvilEvent event) {
-        event.getInventory().setRepairCost((int) Math.ceil(Math.tanh(event.getInventory().getRepairCost()*39)*39));
+        event.getInventory().setRepairCost((int) Math.ceil(Math.tanh(event.getInventory().getRepairCost()/39.0)*39));
+    }
+
+    @EventHandler
+    public void onTick(ServerTickStartEvent event) {
+        for(World world : Bukkit.getWorlds()) {
+            for(Chunk chunk : world.getLoadedChunks()) {
+                for(BlockState state : chunk.getTileEntities()) {
+                    if ((event.getTickNumber() + state.getLocation().hashCode() + hashCode()) % 4 == 0) {
+                        if(state.getType().equals(Material.BEEHIVE) || state.getType().equals(Material.BEE_NEST)) {
+                            CustomBeeHiveTicker.tickBlock((Beehive) state);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

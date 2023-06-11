@@ -6,6 +6,7 @@ import me.fly.newmod.time.nms.bee.CustomEnterHiveGoal;
 import me.fly.newmod.time.nms.bee.CustomGoToHiveGoal;
 import me.fly.newmod.time.nms.undead.CustomFireInDayGoal;
 import me.fly.newmod.time.nms.undead.CustomFleeSunGoal;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.ai.goal.PathfinderGoal;
 import net.minecraft.world.entity.ai.goal.PathfinderGoalSelector;
@@ -13,16 +14,19 @@ import net.minecraft.world.entity.ai.goal.PathfinderGoalWrapped;
 import net.minecraft.world.entity.animal.EntityBee;
 import net.minecraft.world.entity.monster.EntitySkeletonAbstract;
 import net.minecraft.world.entity.monster.EntityZombie;
+import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.level.block.entity.TileEntityBeehive;
+import net.minecraft.world.level.block.state.IBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftMob;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftMob;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Creature;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class NMSUtils {
     static {
@@ -78,6 +82,7 @@ public class NMSUtils {
     public static final Class<?> BEE_POLLINATE_GOAL;
     public static final Class<?> BEE_LOCATE_HIVE_GOAL;
     public static final Method IS_POLLINATING;
+    public static final Method RELEASE_BEE;
     public static final Field NEW_HIVE_COOLDOWN;
 
     public static boolean wantsToEnter(Location pos, EntityBee bee, boolean pollinating) {
@@ -106,12 +111,12 @@ public class NMSUtils {
     }
 
     public static boolean hiveNearFire(EntityBee bee) {
-        if (bee.cF == null) {
+        if (bee.cG == null) {
             return false;
-        } else if (!bee.H.isLoadedAndInBounds(bee.cF)) {
+        } else if (!bee.H.isLoadedAndInBounds(bee.cG)) {
             return false;
         } else {
-            TileEntity tileentity = bee.H.c_(bee.cF);
+            TileEntity tileentity = bee.H.c_(bee.cG);
             return tileentity instanceof TileEntityBeehive && ((TileEntityBeehive)tileentity).c();
         }
     }

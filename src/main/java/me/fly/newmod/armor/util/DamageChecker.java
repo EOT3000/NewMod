@@ -8,7 +8,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
 
@@ -134,17 +134,11 @@ public class DamageChecker {
 
         if(boots.overlaps(projectile.getBoundingBox())) {
             sections.add(ArmorSection.BOOTS);
-        }
-
-        if(legs.overlaps(projectile.getBoundingBox())) {
+        } else if(legs.overlaps(projectile.getBoundingBox())) {
             sections.add(ArmorSection.LEGS);
-        }
-
-        if(chest.overlaps(projectile.getBoundingBox())) {
+        } else if(chest.overlaps(projectile.getBoundingBox())) {
             sections.add(ArmorSection.CHEST);
-        }
-
-        if(helm.overlaps(projectile.getBoundingBox())) {
+        } else if(helm.overlaps(projectile.getBoundingBox())) {
             sections.add(ArmorSection.HEAD);
         }
 
