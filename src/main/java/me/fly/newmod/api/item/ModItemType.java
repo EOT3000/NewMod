@@ -5,11 +5,13 @@ import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.texture.MetaModifier;
+import me.fly.newmod.api.util.Pair;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -17,6 +19,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.fly.newmod.api.item.texture.DefaultMetaFlags.ENCHANTMENT_MODIFIER;
 import static me.fly.newmod.api.item.texture.DefaultMetaFlags.NAME_MODIFIER;
 
 public class ModItemType {
@@ -46,6 +49,10 @@ public class ModItemType {
 
     public ModItemType(Material defaultMaterial, NamespacedKey id) {
         this(defaultMaterial, id, DefaultModItemMeta.class);
+    }
+
+    public ModItemType(Material defaultMaterial, NamespacedKey id, boolean craftable) {
+        this(defaultMaterial, id, DefaultModItemMeta.class, craftable);
     }
 
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta) {
@@ -135,6 +142,10 @@ public class ModItemType {
         customName = Component.text(string, color).color(color);
 
         return addModifier(new MetaModifier<>(customName, NAME_MODIFIER));
+    }
+
+    public ModItemType enchant(Enchantment enchantment, int lvl) {
+        return addModifier(new MetaModifier<>(new Pair<>(enchantment, lvl), ENCHANTMENT_MODIFIER));
     }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {

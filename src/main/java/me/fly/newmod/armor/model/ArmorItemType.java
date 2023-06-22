@@ -28,7 +28,7 @@ public interface ArmorItemType {
     default int getToughnessBoost(DamageType type) {
         if(type instanceof DefaultDamageType) {
             return switch ((DefaultDamageType) type) {
-                case SONIC_BOOM, MAGIC, STARVATION -> -getDefense();
+                case SONIC_BOOM, MAGIC, STARVATION -> -getToughness();
 
                 default -> 0;
             };

@@ -149,10 +149,10 @@ public class NMSUtils {
     }
 
     public static void addBeeGoals(Bee bee) {
-        Bukkit.getMobGoals().addGoal(bee, 1, new CustomEnterHiveGoal(bee));
+        /*Bukkit.getMobGoals().addGoal(bee, 1, new CustomEnterHiveGoal(bee));
         Bukkit.getMobGoals().addGoal(bee, 5, new CustomGoToHiveGoal(bee));
 
         Bukkit.getMobGoals().removeGoal(bee, VanillaGoal.BEE_ENTER_HIVE);
-        Bukkit.getMobGoals().removeGoal(bee, VanillaGoal.BEE_GO_TO_HIVE);
+        Bukkit.getMobGoals().removeGoal(bee, VanillaGoal.BEE_GO_TO_HIVE);*/
     }
 }

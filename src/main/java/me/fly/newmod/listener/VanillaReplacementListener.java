@@ -111,7 +111,7 @@ public class VanillaReplacementListener implements Listener {
         for(World world : Bukkit.getWorlds()) {
             for(Chunk chunk : world.getLoadedChunks()) {
                 for(BlockState state : chunk.getTileEntities()) {
-                    if ((event.getTickNumber() + state.getLocation().hashCode() + hashCode()) % 4 == 0) {
+                    if ((event.getTickNumber() + Long.hashCode(state.getLocation().hashCode() + hashCode())) % 4 == 0) {
                         if(state.getType().equals(Material.BEEHIVE) || state.getType().equals(Material.BEE_NEST)) {
                             CustomBeeHiveTicker.tickBlock((Beehive) state);
                         }

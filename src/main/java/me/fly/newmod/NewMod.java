@@ -13,6 +13,7 @@ import me.fly.newmod.listener.BlockListener;
 import me.fly.newmod.listener.CraftingListener;
 import me.fly.newmod.listener.HornListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
+import me.fly.newmod.save.DataSaver;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
@@ -43,7 +44,7 @@ public class NewMod extends JavaPlugin implements Listener {
     private final List<ModExtension> extensions = new ArrayList<>();
     private TimeManager timeManager;
 
-    private File saveFile;
+    private File saveDir;
 
     Player player;
 
@@ -66,7 +67,7 @@ public class NewMod extends JavaPlugin implements Listener {
         getLogger().info(ColorUtils.disclaimer);
         getLogger().info("[NewMod] NewMod is not affiliated with The University of Southampton, nor with the authors of any used code");
 
-        saveFile = new File("plugins\\NewMod\\save.yml");
+        saveDir = new File("plugins\\NewMod\\save");
 
         //System.out.println(saveFile.getAbsolutePath());
 
@@ -75,12 +76,12 @@ public class NewMod extends JavaPlugin implements Listener {
         new DefaultModItemMeta.DefaultModItemMetaSerializer();
         new DefaultModBlockData.DefaultModBlockDataSerializer();
 
-        timeManager = new TimeManager();
+        //timeManager = new TimeManager();
 
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(new VanillaReplacementListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
-        Bukkit.getPluginManager().registerEvents(timeManager, this);
+        //Bukkit.getPluginManager().registerEvents(timeManager, this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
         Bukkit.getPluginManager().registerEvents(new HornListener(), this);
@@ -92,7 +93,7 @@ public class NewMod extends JavaPlugin implements Listener {
         }
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
-            YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveFile);
+            YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveDir);
 
             for (String location : configuration.getKeys(false)) {
                 String[] split = location.split(",");
@@ -111,7 +112,7 @@ public class NewMod extends JavaPlugin implements Listener {
             }
         }, 1);
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::save, 500, 500);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager, saveDir), 500, 500);
 
         /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.VEHICLE_MOVE, PacketType.Play.Client.BOAT_MOVE) {
             @Override
@@ -166,30 +167,9 @@ public class NewMod extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        save();
+        //save();
     }
 
-    private void save() {
-        blockManager.printData();
-
-        YamlConfiguration configuration = new YamlConfiguration();
-
-        for(Location location : blockManager.getAllLocations()) {
-            Map<String, String> section = new HashMap<>();
-
-            for(String key : blockManager.getAllData(location)) {
-                section.put(key, blockManager.getData(location, key));
-            }
-
-            configuration.set(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "," + location.getWorld().getName(), section);
-        }
-
-        try {
-            configuration.save(saveFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @EventHandler
     public void onTick(ServerTickStartEvent event) {
