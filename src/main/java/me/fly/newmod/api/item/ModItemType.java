@@ -36,8 +36,10 @@ public class ModItemType {
 
     private ModBlockType block;
 
+    private Component customName;
+
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
-                       List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener) {
+                       List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener, Component customName) {
         this.defaultMaterial = defaultMaterial;
         this.id = id;
 
@@ -49,6 +51,8 @@ public class ModItemType {
         this.block = block;
 
         this.listener = listener;
+
+        this.customName = customName;
     }
 
     public final Material getDefaultMaterial() {
@@ -94,16 +98,6 @@ public class ModItemType {
     }
 
     // Type initiation
-
-    public ModItemType addModifier(MetaModifier<?> modifier) {
-        if(finished) {
-            throw new IllegalStateException("Cannot modify a final Item");
-        }
-
-        modifiers.add(modifier);
-
-        return this;
-    }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {
         ItemStack result = new ModItemStack(this).create();

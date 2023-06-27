@@ -1,13 +1,18 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.api.block.ModBlockType;
+import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DamageableModItemMeta;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+
+import java.util.List;
 
 public class ModArmorItemType extends ModItemType implements ArmorItemType {
     private ModArmorMaterial material;
@@ -18,50 +23,18 @@ public class ModArmorItemType extends ModItemType implements ArmorItemType {
 
     private final ArmorSection section;
 
-    public ModArmorItemType(ArmorSection section, Material defaultMaterial, NamespacedKey id) {
-        super(defaultMaterial, id);
+    public ModArmorItemType(ModArmorMaterial material, ArmorSection section, int dura, int defense, int toughness,
+                            Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable, List<MetaModifier<?>> modifiers,
+                            ModBlockType block, ItemEventsListener listener, Component customName) {
+        super(defaultMaterial, id, meta, craftable, modifiers, block, listener, customName);
 
-        this.section = section;
-    }
-
-    public ModArmorItemType(ArmorSection section, Material defaultMaterial, NamespacedKey id, boolean craftable) {
-        super(defaultMaterial, id, craftable);
-
-        this.section = section;
-    }
-
-    public ModArmorItemType(ArmorSection section, Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta) {
-        super(defaultMaterial, id, meta);
-
-        this.section = section;
-    }
-
-    public ModArmorItemType(ArmorSection section, Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable) {
-        super(defaultMaterial, id, meta, craftable);
-
-        this.section = section;
-    }
-
-    public ModArmorItemType data(int dura, int defense, int toughness) {
-        if(finished) {
-            throw new IllegalStateException("Cannot modify a final Item");
-        }
+        this.material = material;
 
         this.dura = dura;
         this.defense = defense;
         this.toughness = toughness;
 
-        if(dura < 0) {
-            addModifier(new MetaModifier<>(true, DefaultMetaFlags.UNBREAKABLE_MODIFIER));
-        }
-
-        return this;
-    }
-
-    public ModArmorItemType material(ModArmorMaterial material) {
-        this.material = material;
-
-        return this;
+        this.section = section;
     }
 
     @Override
