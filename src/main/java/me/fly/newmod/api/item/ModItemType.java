@@ -36,30 +36,8 @@ public class ModItemType {
 
     private ModBlockType block;
 
-    private Component customName = null;
-
-    public static ModItemType createAndRegister(Material material, Plugin plugin, String id, String name, int color) {
-        ItemManager manager = NewMod.get().getItemManager();
-        ModItemType item = new ModItemType(material, new NamespacedKey(plugin, id)).name(name, color);
-
-        manager.registerItem(item);
-
-        return item;
-    }
-
-    public ModItemType(Material defaultMaterial, NamespacedKey id) {
-        this(defaultMaterial, id, DefaultModItemMeta.class);
-    }
-
-    public ModItemType(Material defaultMaterial, NamespacedKey id, boolean craftable) {
-        this(defaultMaterial, id, DefaultModItemMeta.class, craftable);
-    }
-
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta) {
-        this(defaultMaterial, id, meta, false);
-    }
-
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable) {
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
+                       List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener) {
         this.defaultMaterial = defaultMaterial;
         this.id = id;
 
@@ -67,7 +45,10 @@ public class ModItemType {
 
         this.craftable = craftable;
 
-        this.listener = new ItemEventsListener() {};
+        this.modifiers.addAll(modifiers);
+        this.block = block;
+
+        this.listener = listener;
     }
 
     public final Material getDefaultMaterial() {
@@ -84,20 +65,6 @@ public class ModItemType {
 
     public ItemEventsListener getListener() {
         return listener;
-    }
-
-    public ModItemType setListener(ItemEventsListener listener) {
-        this.listener = listener;
-
-        return this;
-    }
-
-    public ModItemType setBlock(ModBlockType block) {
-        this.block = block;
-
-        block.setItem(this);
-
-        return this;
     }
 
     public ModBlockType getBlock() {
@@ -129,23 +96,13 @@ public class ModItemType {
     // Type initiation
 
     public ModItemType addModifier(MetaModifier<?> modifier) {
+        if(finished) {
+            throw new IllegalStateException("Cannot modify a final Item");
+        }
+
         modifiers.add(modifier);
 
         return this;
-    }
-
-    public ModItemType name(String string, int color) {
-        return name(string, TextColor.color(color));
-    }
-
-    public ModItemType name(String string, TextColor color) {
-        customName = Component.text(string, color).color(color);
-
-        return addModifier(new MetaModifier<>(customName, NAME_MODIFIER));
-    }
-
-    public ModItemType enchant(Enchantment enchantment, int lvl) {
-        return addModifier(new MetaModifier<>(new Pair<>(enchantment, lvl), ENCHANTMENT_MODIFIER));
     }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {

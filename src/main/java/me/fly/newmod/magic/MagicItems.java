@@ -1,6 +1,8 @@
 package me.fly.newmod.magic;
 
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.item.texture.DefaultMetaFlags;
+import me.fly.newmod.api.item.texture.MetaModifier;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
@@ -21,5 +23,6 @@ public class MagicItems {
     public static final ModItemType DRAGON_SCALE = ModItemType.createAndRegister(BLACK_DYE, MagicManager.get(), "ender_dragon_scale", "Dragon Scale", 0x282034)
             .enchant(Enchantment.KNOCKBACK, 1);
 
-
+    public static final ModItemType SHARP_SWORD = ModItemType.createAndRegister(IRON_SWORD, MagicManager.get(), "sharp_sword", "Sharp Sword", 0xC0C0C0)
+            .addModifier(new MetaModifier<>(true, DefaultMetaFlags.UNBREAKABLE_MODIFIER));
 }
