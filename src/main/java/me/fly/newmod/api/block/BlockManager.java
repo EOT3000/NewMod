@@ -56,6 +56,10 @@ public class BlockManager {
         return block == null ? null : getType(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
     }
 
+    public ModBlockType getType(Location block) {
+        return block == null ? null : getType(dataStorage.getOrDefault(block, new HashMap<>()));
+    }
+
     public ModBlockType getType(Map<String, String> container) {
         return getType(PersistentDataUtils.namespacedKeyFromPrimitive(container.getOrDefault("id", null)));
     }

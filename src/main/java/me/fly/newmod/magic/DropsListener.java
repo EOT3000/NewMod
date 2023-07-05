@@ -1,6 +1,5 @@
 package me.fly.newmod.magic;
 
-import io.papermc.paper.event.entity.EntityDamageItemEvent;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.util.Pair;
@@ -9,7 +8,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -31,7 +29,7 @@ public class DropsListener implements Listener {
     public void onMobDamage(EntityDamageEvent event) {
         if(event instanceof EntityDamageByEntityEvent eee && (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) || event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK))) {
             if(eee.getDamager() instanceof Player player) {
-                if(MagicItems.SHARP_SWORD.equals(NewMod.get().getItemManager().getType(player.getInventory().getItemInMainHand()))) {
+                if(MagicModuleTypes.SHARP_SWORD.equals(NewMod.get().getItemManager().getType(player.getInventory().getItemInMainHand()))) {
                     return;
                 }
             }

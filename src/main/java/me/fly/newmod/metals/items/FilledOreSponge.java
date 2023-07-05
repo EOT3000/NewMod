@@ -8,14 +8,13 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.metals.MetalTextures;
-import me.fly.newmod.metals.MetalsAddonSetup;
+import me.fly.newmod.metals.MetalsModuleTypes;
 import me.fly.newmod.metals.MetalsPlugin;
 import me.fly.newmod.metals.items.meta.FilledOreSpongeMeta;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Dropper;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,7 +65,7 @@ public class FilledOreSponge extends ModItemType {
 
         shapedRecipe.shape("AAA", "ABA", "AAA");
 
-        shapedRecipe.setIngredient('A', new ModItemStack(MetalsAddonSetup.ORE_SPONGE).create());
+        shapedRecipe.setIngredient('A', new ModItemStack(MetalsModuleTypes.ORE_SPONGE).create());
         shapedRecipe.setIngredient('B', new ItemStack(ore));
 
         Bukkit.addRecipe(shapedRecipe);
@@ -76,7 +75,7 @@ public class FilledOreSponge extends ModItemType {
 
         System.out.println(nk);
 
-        BlastingRecipe furnaceRecipe = new BlastingRecipe(nk, new ModItemStack(MetalsAddonSetup.HARD_CARBON_CHUNK).create(), new RecipeChoice.ExactChoice(modStack.create()), 2.0f, 600);
+        BlastingRecipe furnaceRecipe = new BlastingRecipe(nk, new ModItemStack(MetalsModuleTypes.HARD_CARBON_CHUNK).create(), new RecipeChoice.ExactChoice(modStack.create()), 2.0f, 600);
 
         Bukkit.addRecipe(furnaceRecipe);
     }
@@ -92,11 +91,11 @@ public class FilledOreSponge extends ModItemType {
             BlockManager bs = NewMod.get().getBlockManager();
             ItemManager is = NewMod.get().getItemManager();
 
-            if (is.getType(event.getResult()) == MetalsAddonSetup.HARD_CARBON_CHUNK && l.getBlock().getType().equals(HOPPER)) {
+            if (is.getType(event.getResult()) == MetalsModuleTypes.HARD_CARBON_CHUNK && l.getBlock().getType().equals(HOPPER)) {
                 ModItemStack stack = new ModItemStack(((RecipeChoice.ExactChoice) event.getRecipe().getInputChoice()).getItemStack());
                 FilledOreSpongeMeta sponge = (FilledOreSpongeMeta) stack.getMeta();
 
-                ItemStack item = MetalsAddonSetup.refine(sponge.getMaterial());
+                ItemStack item = MetalsModuleTypes.refine(sponge.getMaterial());
 
                 Hopper dropper = (Hopper) l.getBlock().getState();
 

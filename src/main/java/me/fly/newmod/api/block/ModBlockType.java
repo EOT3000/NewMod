@@ -40,6 +40,10 @@ public class ModBlockType {
         this.listener = listener;
     }
 
+    public void setListener(BlockEventsListener listener) {
+        this.listener = listener;
+    }
+
     public BlockEventsListener getListener() {
         return listener;
     }

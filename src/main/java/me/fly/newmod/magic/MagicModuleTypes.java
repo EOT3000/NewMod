@@ -7,12 +7,11 @@ import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.armor.model.ModArmorItemType;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 import static org.bukkit.Material.*;
 
-public class MagicItems {
+public class MagicModuleTypes {
     public static final ModItemType BLAZE_SCALE = new ModItemTypeBuilder(LEATHER, "blaze_scale", MagicManager.get()).customName("Blaze Scale", NamedTextColor.GOLD.value())
             .enchantment(Enchantment.FIRE_ASPECT, 1).build().register();
 

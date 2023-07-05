@@ -25,7 +25,7 @@ import java.util.Random;
 
 import static org.bukkit.Material.*;
 
-public class MetalsAddonSetup {
+public class MetalsModuleTypes {
     private static int bn;
     public static Map<Material, Map<ItemStack, BigDecimal>> oreMap = new LinkedHashMap<>();
     private static Map<ModItemType, Double> otherPercentages = new HashMap<>();
@@ -41,7 +41,7 @@ public class MetalsAddonSetup {
 
                 FileOutputStream outputStream = new FileOutputStream(file);
 
-                InputStream inputStream = MetalsAddonSetup.class.getClassLoader().getResourceAsStream("config.yml");
+                InputStream inputStream = MetalsModuleTypes.class.getClassLoader().getResourceAsStream("config.yml");
 
                 byte[] bytes = new byte[inputStream.available()];
 
