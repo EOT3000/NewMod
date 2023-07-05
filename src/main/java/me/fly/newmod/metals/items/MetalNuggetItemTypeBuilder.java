@@ -1,8 +1,11 @@
-package me.fly.newmod.api.item.builders;
+package me.fly.newmod.metals.items;
+
 
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.ItemEventsListener;
+import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.item.VanillaOrModItem;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
@@ -13,49 +16,59 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModItemTypeBuilder {
+public class MetalNuggetItemTypeBuilder {
     private final Material defaultMaterial;
     private final NamespacedKey id;
-
-    private ModBlockType block = null;
 
     private ItemEventsListener listener = new ItemEventsListener() {};
     private Class<? extends ModItemMeta> meta = DefaultModItemMeta.class;
     private boolean craftable = false;
 
+    private VanillaOrModItem metal;
+
     private Component customName;
 
     private final List<MetaModifier<?>> modifiers = new ArrayList<>();
 
-    public ModItemTypeBuilder(Material m, String id, JavaPlugin plugin) {
+    public MetalNuggetItemTypeBuilder(Material m, String id, JavaPlugin plugin, Material material) {
         this.defaultMaterial = m;
         this.id = new NamespacedKey(plugin, id);
+
+        this.metal = new VanillaOrModItem(material);
     }
 
-    public ModItemTypeBuilder customName(String s, TextColor c) {
+    public MetalNuggetItemTypeBuilder(Material m, String id, JavaPlugin plugin, ModItemType material) {
+        this.defaultMaterial = m;
+        this.id = new NamespacedKey(plugin, id);
+
+        this.metal = new VanillaOrModItem(material);
+    }
+
+    public MetalNuggetItemTypeBuilder customName(String s, TextColor c) {
         addModifier(new MetaModifier<>(Component.text(s, c), DefaultMetaFlags.NAME_MODIFIER));
 
         return this;
     }
 
-    public ModItemTypeBuilder customName(String s, int c) {
+    public MetalNuggetItemTypeBuilder customName(String s, int c) {
         addModifier(new MetaModifier<>(Component.text(s, TextColor.color(c)), DefaultMetaFlags.NAME_MODIFIER));
 
         return this;
     }
 
-    public ModItemTypeBuilder enchantment(Enchantment enchantment, int lvl) {
+    public MetalNuggetItemTypeBuilder enchantment(Enchantment enchantment, int lvl) {
         addModifier(new MetaModifier<>(new Pair<>(enchantment, lvl), DefaultMetaFlags.ENCHANTMENT_MODIFIER));
 
         return this;
     }
 
-    public ModItemTypeBuilder addModifier(MetaModifier<?> modifier) {
+    public MetalNuggetItemTypeBuilder addModifier(MetaModifier<?> modifier) {
         if(modifier.getFlag().equals(DefaultMetaFlags.NAME_MODIFIER)) {
             customName = (Component) modifier.getInformation();
         }
@@ -65,35 +78,30 @@ public class ModItemTypeBuilder {
         return this;
     }
 
-    public ModItemTypeBuilder craftable(boolean craftable) {
+    public MetalNuggetItemTypeBuilder craftable(boolean craftable) {
         this.craftable = craftable;
 
         return this;
     }
 
-    public ModItemTypeBuilder meta(Class<? extends ModItemMeta> meta) {
+    public MetalNuggetItemTypeBuilder meta(Class<? extends ModItemMeta> meta) {
         this.meta = meta;
 
         return this;
     }
 
-    public ModItemTypeBuilder listener(ItemEventsListener listener) {
+    public MetalNuggetItemTypeBuilder listener(ItemEventsListener listener) {
         this.listener = listener;
 
         return this;
     }
 
-    public ModItemTypeBuilder block(ModBlockType block) {
-        this.block = block;
-
-        return this;
+    public MetalNuggetItemType build() {
+        return new MetalNuggetItemType(defaultMaterial, id, meta, craftable, modifiers, listener, customName, metal);
     }
 
-    public ModItemType build() {
-        return new ModItemType(defaultMaterial, id, meta, craftable, modifiers, block, listener, customName);
-    }
-
-    public ModItemType buildAndRegister() {
-        return new ModItemType(defaultMaterial, id, meta, craftable, modifiers, block, listener, customName).register();
+    public MetalNuggetItemType buildAndRegister() {
+        return new MetalNuggetItemType(defaultMaterial, id, meta, craftable, modifiers, listener, customName, metal).register();
     }
 }
+

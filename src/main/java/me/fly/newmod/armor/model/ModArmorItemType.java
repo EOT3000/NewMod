@@ -1,5 +1,6 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
@@ -65,5 +66,11 @@ public class ModArmorItemType extends ModItemType implements ArmorItemType {
     @Override
     public int getDurability() {
         return dura;
+    }
+
+    public ModArmorItemType register() {
+        NewMod.get().getItemManager().registerItem(this);
+
+        return this;
     }
 }

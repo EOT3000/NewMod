@@ -12,6 +12,7 @@ import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.api.util.Pair;
 import me.fly.newmod.armor.model.ModArmorMaterial;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -49,14 +50,26 @@ public class ModArmorItemTypeBuilder {
         this.section = section;
     }
 
-    public ModArmorItemTypeBuilder customName(Component component) {
-        addModifier(new MetaModifier<>(component, DefaultMetaFlags.NAME_MODIFIER));
+    public ModArmorItemTypeBuilder customName(String s, TextColor c) {
+        addModifier(new MetaModifier<>(Component.text(s, c), DefaultMetaFlags.NAME_MODIFIER));
+
+        return this;
+    }
+
+    public ModArmorItemTypeBuilder customName(String s, int c) {
+        addModifier(new MetaModifier<>(Component.text(s, TextColor.color(c)), DefaultMetaFlags.NAME_MODIFIER));
 
         return this;
     }
 
     public ModArmorItemTypeBuilder enchantment(Enchantment enchantment, int lvl) {
         addModifier(new MetaModifier<>(new Pair<>(enchantment, lvl), DefaultMetaFlags.ENCHANTMENT_MODIFIER));
+
+        return this;
+    }
+
+    public ModArmorItemTypeBuilder unbreakable(boolean ub) {
+        addModifier(new MetaModifier<>(ub, DefaultMetaFlags.UNBREAKABLE_MODIFIER));
 
         return this;
     }

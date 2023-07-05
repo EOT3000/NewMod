@@ -1,8 +1,10 @@
 package me.fly.newmod.magic;
 
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
+import me.fly.newmod.armor.model.ModArmorItemType;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
@@ -11,18 +13,23 @@ import org.bukkit.enchantments.Enchantment;
 import static org.bukkit.Material.*;
 
 public class MagicItems {
-    public static final ModItemType BLAZE_SCALE = ModItemType.createAndRegister(LEATHER, MagicManager.get(), "blaze_scale", "Blaze Scale", NamedTextColor.GOLD.value())
-            .enchant(Enchantment.FIRE_ASPECT, 1);
+    public static final ModItemType BLAZE_SCALE = new ModItemTypeBuilder(LEATHER, "blaze_scale", MagicManager.get()).customName("Blaze Scale", NamedTextColor.GOLD.value())
+            .enchantment(Enchantment.FIRE_ASPECT, 1).build().register();
 
-    public static final ModItemType CORE_BLAZE_ROD = ModItemType.createAndRegister(BLAZE_ROD, MagicManager.get(), "core_blaze_rod", "Core Blaze Rod", TextColor.color(NamedTextColor.GOLD).value())
-            .enchant(Enchantment.FIRE_ASPECT, 2);
+    public static final ModItemType CORE_BLAZE_ROD = new ModItemTypeBuilder(BLAZE_ROD, "core_blaze_rod", MagicManager.get()).customName("Core Blaze Rod", TextColor.color(NamedTextColor.GOLD).value())
+            .enchantment(Enchantment.FIRE_ASPECT, 2).build().register();
 
-    public static final ModItemType GUARDIAN_SCALE = ModItemType.createAndRegister(PRISMARINE_SHARD, MagicManager.get(), "guardian_scale", "Guardian Scale", TextColor.color(NamedTextColor.AQUA).value())
-            .enchant(Enchantment.LOOT_BONUS_MOBS, 1);
+    public static final ModItemType GUARDIAN_SCALE = new ModItemTypeBuilder(PRISMARINE_SHARD, "guardian_scale", MagicManager.get()).customName("Guardian Scale", TextColor.color(NamedTextColor.AQUA).value())
+            .enchantment(Enchantment.LOOT_BONUS_MOBS, 1).build().register();
 
-    public static final ModItemType DRAGON_SCALE = ModItemType.createAndRegister(BLACK_DYE, MagicManager.get(), "ender_dragon_scale", "Dragon Scale", 0x282034)
-            .enchant(Enchantment.KNOCKBACK, 1);
+    public static final ModItemType DRAGON_SCALE = new ModItemTypeBuilder(BLACK_DYE, "ender_dragon_scale", MagicManager.get()).customName("Dragon Scale", 0x282034)
+            .enchantment(Enchantment.KNOCKBACK, 1).build().register();
 
-    public static final ModItemType SHARP_SWORD = ModItemType.createAndRegister(IRON_SWORD, MagicManager.get(), "sharp_sword", "Sharp Sword", 0xC0C0C0)
-            .addModifier(new MetaModifier<>(true, DefaultMetaFlags.UNBREAKABLE_MODIFIER));
+    public static final ModItemType SHARP_SWORD = new ModItemTypeBuilder(IRON_SWORD, "sharp_sword", MagicManager.get()).customName("Sharp Sword", 0xC0C0C0)
+            .addModifier(new MetaModifier<>(true, DefaultMetaFlags.UNBREAKABLE_MODIFIER)).build().register();
+
+    public static final ModArmorItemType BLAZE_BOOTS = MagicArmorSets.BLAZE.boots();
+    public static final ModArmorItemType BLAZE_LEGGINGS = MagicArmorSets.BLAZE.legs();
+    public static final ModArmorItemType BLAZE_CHESTPLATE = MagicArmorSets.BLAZE.chest();
+    public static final ModArmorItemType BLAZE_HELMET = MagicArmorSets.BLAZE.head();
 }

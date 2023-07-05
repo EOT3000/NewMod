@@ -4,8 +4,10 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.metals.items.FilledOreSponge;
-import me.fly.newmod.metals.items.MetalNugget;
+import me.fly.newmod.metals.items.MetalNuggetItemType;
+import me.fly.newmod.metals.items.MetalNuggetItemTypeBuilder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -92,7 +94,8 @@ public class MetalsAddonSetup {
                     String name = metalKey.split(":")[1];
 
                     if (namespace.equalsIgnoreCase("METALSMODULE")) {
-                        ModItemType type = manager.getType(new NamespacedKey(MetalsPlugin.get(), name));
+                        //TODO:
+                        ModItemType type = manager.getType(new NamespacedKey("", name));
 
                         if(type == null) {
                             System.err.println("Error on init of " + oreKey + ", no such metal name " + name + " (" + metalKey + ")");
@@ -138,64 +141,64 @@ public class MetalsAddonSetup {
 
     //TODO: translation and i18n
 
-    public static final ModItemType ZINC_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "zinc_ingot", "Zinc Ingot", 0x6F857E);
-    public static final ModItemType ALUMINUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "aluminum_ingot", "Aluminum Ingot", 0x8495B8);
-    public static final ModItemType TITANIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "titanium_ingot", "Titanium Ingot", 0xFAFAFA);
-    public static final ModItemType NEODYMIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "neodymium_ingot", "Neodymium Ingot", 0xC2CBFF);
-    public static final ModItemType EUROPIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "europium_ingot", "Europium Ingot", 0xFFC2C2);
-    public static final ModItemType SODIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "sodium_ingot", "Sodium Ingot", 0xFFFDEB);
-    public static final ModItemType ZIRCONIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "zirconium_ingot", "Zirconium Ingot", 0xF4EDFF);
-    public static final ModItemType POTASSIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "potassium_ingot", "Potassium Ingot", 0xFFF5ED);
-    public static final ModItemType LITHIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "lithium_ingot", "Lithium Ingot", 0xE8F2E6);
-    public static final ModItemType LEAD_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "lead_ingot", "Lead Ingot", 0x282D3B);
-    public static final ModItemType MAGNESIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "magnesium_ingot", "Magnesium Ingot", 0xE8E289);
-    public static final ModItemType OSMIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "osmium_ingot", "Osmium Ingot", 0x1A1F26);
+    public static final ModItemType ZINC_INGOT = new ModItemTypeBuilder(IRON_INGOT, "zinc_ingot", MetalsPlugin.get()).customName("Zinc Ingot", 0x6F857E).buildAndRegister();
+    public static final ModItemType ALUMINUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "aluminum_ingot",MetalsPlugin.get()).customName("Aluminum Ingot", 0x8495B8).buildAndRegister();
+    public static final ModItemType TITANIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "titanium_ingot", MetalsPlugin.get()).customName("Titanium Ingot", 0xFAFAFA).buildAndRegister();
+    public static final ModItemType NEODYMIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "neodymium_ingot", MetalsPlugin.get()).customName("Neodymium Ingot", 0xC2CBFF).buildAndRegister();
+    public static final ModItemType EUROPIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "europium_ingot", MetalsPlugin.get()).customName("Europium Ingot", 0xFFC2C2).buildAndRegister();
+    public static final ModItemType SODIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "sodium_ingot", MetalsPlugin.get()).customName("Sodium Ingot", 0xFFFDEB).buildAndRegister();
+    public static final ModItemType ZIRCONIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "zirconium_ingot", MetalsPlugin.get()).customName("Zirconium Ingot", 0xF4EDFF).buildAndRegister();
+    public static final ModItemType POTASSIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "potassium_ingot", MetalsPlugin.get()).customName("Potassium Ingot", 0xFFF5ED).buildAndRegister();
+    public static final ModItemType LITHIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "lithium_ingot", MetalsPlugin.get()).customName("Lithium Ingot", 0xE8F2E6).buildAndRegister();
+    public static final ModItemType LEAD_INGOT = new ModItemTypeBuilder(IRON_INGOT, "lead_ingot", MetalsPlugin.get()).customName("Lead Ingot", 0x282D3B).buildAndRegister();
+    public static final ModItemType MAGNESIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "magnesium_ingot", MetalsPlugin.get()).customName("Magnesium Ingot", 0xE8E289).buildAndRegister();
+    public static final ModItemType OSMIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "osmium_ingot", MetalsPlugin.get()).customName("Osmium Ingot", 0x1A1F26).buildAndRegister();
 
     //public static final ModItemType REDSTONE_INGOT = new ModItemType(NETHER_BRICK, "Redstone Ingot", "redstone_ingot");
-    public static final ModItemType SILICON_INGOT = ModItemType.createAndRegister(IRON_INGOT,MetalsPlugin.get(), "silicon_ingot", "Silicon Ingot", 0xEBFFFE);
+    public static final ModItemType SILICON_INGOT = new ModItemTypeBuilder(IRON_INGOT, "silicon_ingot",  MetalsPlugin.get()).customName("Silicon Ingot", 0xEBFFFE).buildAndRegister();
 
-    public static final MetalNugget ZINC_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "zinc_nugget", "Zinc Nugget", 0x6F857E, ZINC_INGOT);
-    public static final MetalNugget ALUMINUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "aluminum_nugget", "Aluminum Nugget", 0x8495B8, ALUMINUM_INGOT);
-    public static final MetalNugget TITANIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "titanium_nugget", "Titanium Nugget", 0xFAFAFA, TITANIUM_INGOT);
-    public static final MetalNugget NEODYMIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "neodymium_nugget", "Neodymium Nugget", 0xC2CBFF, NEODYMIUM_INGOT);
-    public static final MetalNugget EUROPIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "europium_nugget", "Europium Nugget", 0xFFC2C2, EUROPIUM_INGOT);
-    public static final MetalNugget SODIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "sodium_nugget", "Sodium Nugget", 0xFFFDEB, SODIUM_INGOT);
-    public static final MetalNugget ZIRCONIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "zirconium_nugget", "Zirconium Nugget", 0xF4EDFF, ZIRCONIUM_INGOT);
-    public static final MetalNugget POTASSIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "potassium_nugget", "Potassium Nugget", 0xFFF5ED, POTASSIUM_INGOT);
-    public static final MetalNugget LITHIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "lithium_nugget", "Lithium Nugget", 0xE8F2E6, LITHIUM_INGOT);
-    public static final MetalNugget LEAD_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "lead_nugget", "Lead Nugget", 0x282D3B, LEAD_INGOT);
-    public static final MetalNugget MAGNESIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "magnesium_nugget", "Magnesium Nugget", 0xE8E289, MAGNESIUM_INGOT);
-    public static final MetalNugget OSMIUM_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "osmium_nugget", "Osmium Nugget", 0x1A1F26, OSMIUM_INGOT);
+    public static final MetalNuggetItemType ZINC_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "zinc_nugget", MetalsPlugin.get(), ZINC_INGOT).customName("Zinc Nugget", 0x6F857E).buildAndRegister();
+    public static final MetalNuggetItemType ALUMINUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "aluminum_nugget", MetalsPlugin.get(), ALUMINUM_INGOT).customName("Aluminum Nugget", 0x8495B8).buildAndRegister();
+    public static final MetalNuggetItemType TITANIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "titanium_nugget", MetalsPlugin.get(), TITANIUM_INGOT).customName("Titanium Nugget", 0xFAFAFA).buildAndRegister();
+    public static final MetalNuggetItemType NEODYMIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "neodymium_nugget", MetalsPlugin.get(), NEODYMIUM_INGOT).customName("Neodymium Nugget", 0xC2CBFF).buildAndRegister();
+    public static final MetalNuggetItemType EUROPIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "europium_nugget", MetalsPlugin.get(), EUROPIUM_INGOT).customName("Europium Nugget", 0xFFC2C2).buildAndRegister();
+    public static final MetalNuggetItemType SODIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "sodium_nugget", MetalsPlugin.get(), SODIUM_INGOT).customName("Sodium Nugget", 0xFFFDEB).buildAndRegister();
+    public static final MetalNuggetItemType ZIRCONIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "zirconium_nugget", MetalsPlugin.get(), ZIRCONIUM_INGOT).customName("Zirconium Nugget", 0xF4EDFF).buildAndRegister();
+    public static final MetalNuggetItemType POTASSIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "potassium_nugget", MetalsPlugin.get(), POTASSIUM_INGOT).customName("Potassium Nugget", 0xFFF5ED).buildAndRegister();
+    public static final MetalNuggetItemType LITHIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "lithium_nugget", MetalsPlugin.get(), LITHIUM_INGOT).customName("Lithium Nugget", 0xE8F2E6).buildAndRegister();
+    public static final MetalNuggetItemType LEAD_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "lead_nugget", MetalsPlugin.get(), LEAD_INGOT).customName("Lead Nugget", 0x282D3B).buildAndRegister();
+    public static final MetalNuggetItemType MAGNESIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "magnesium_nugget", MetalsPlugin.get(), MAGNESIUM_INGOT).customName("Magnesium Nugget", 0xE8E289).buildAndRegister();
+    public static final MetalNuggetItemType OSMIUM_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "osmium_nugget", MetalsPlugin.get(), OSMIUM_INGOT).customName("Osmium Nugget", 0x1A1F26).buildAndRegister();
 
-    public static final MetalNugget SILICON_NUGGET = MetalNugget.createAndRegister(IRON_NUGGET, MetalsPlugin.get(), "silicon_nugget", "Silicon Nugget", 0xEBFFFE, SILICON_INGOT);
+    public static final MetalNuggetItemType SILICON_NUGGET = new MetalNuggetItemTypeBuilder(IRON_NUGGET, "silicon_nugget", MetalsPlugin.get(), SILICON_INGOT).customName("Silicon Nugget", 0xEBFFFE).buildAndRegister();
 
-    public static final ModItemType BORON_PIECE = MetalNugget.createAndRegister(FLINT, MetalsPlugin.get(), "boron_piece", "Boron Piece", 0x404050);
+    public static final ModItemType BORON_PIECE = new ModItemTypeBuilder(FLINT, "boron_piece", MetalsPlugin.get()).customName("Boron Piece", 0x404050).buildAndRegister();
 
-    public static final MetalNugget COPPER_NUGGET = MetalNugget.createAndRegister(GOLD_NUGGET, MetalsPlugin.get(), "copper_nugget", "Copper Nugget", 0xE8BF82, new ItemStack(COPPER_INGOT));
+    public static final MetalNuggetItemType COPPER_NUGGET = new MetalNuggetItemTypeBuilder(GOLD_NUGGET, "copper_nugget", MetalsPlugin.get(), COPPER_INGOT).customName("Copper Nugget", 0xE8BF82).buildAndRegister();
 
-    public static final ModItemType SULFUR_POWDER = ModItemType.createAndRegister(GLOWSTONE_DUST, MetalsPlugin.get(), "sulfur_powder", "Sulfur Powder", 0xFFF200);
-    public static final ModItemType CARBON_POWDER = ModItemType.createAndRegister(GUNPOWDER, MetalsPlugin.get(), "carbon_powder", "Carbon Powder", 0x202020);
-    public static final ModItemType PHOSPHORUS_POWDER = ModItemType.createAndRegister(REDSTONE, MetalsPlugin.get(), "phosphorus_powder", "Phosphorus Powder", 0xFF8A7D);
+    public static final ModItemType SULFUR_POWDER = new ModItemTypeBuilder(GLOWSTONE_DUST, "sulfur_powder", MetalsPlugin.get()).customName("Sulfur Powder", 0xFFF200).buildAndRegister();
+    public static final ModItemType CARBON_POWDER = new ModItemTypeBuilder(GUNPOWDER, "carbon_powder", MetalsPlugin.get()).customName( "Carbon Powder", 0x202020).buildAndRegister();
+    public static final ModItemType PHOSPHORUS_POWDER = new ModItemTypeBuilder(REDSTONE, "phosphorus_powder", MetalsPlugin.get()).customName( "Phosphorus Powder", 0xFF8A7D).buildAndRegister();
 
-    public static final ModItemType URANIUM_NUGGET = ModItemType.createAndRegister(SCUTE, MetalsPlugin.get(), "uranium_nugget", "Uranium Nugget", 0x00FF00);
-    public static final ModItemType PLUTONIUM_NUGGET = ModItemType.createAndRegister(SCUTE, MetalsPlugin.get(), "plutonium_nugget", "Plutonium Nugget", 0x00FF00);
+    public static final ModItemType URANIUM_NUGGET = new ModItemTypeBuilder(SCUTE, "uranium_nugget", MetalsPlugin.get()).customName( "Uranium Nugget", 0x00FF00).buildAndRegister();
+    public static final ModItemType PLUTONIUM_NUGGET = new ModItemTypeBuilder(SCUTE, "plutonium_nugget", MetalsPlugin.get()).customName( "Plutonium Nugget", 0x00FF00).buildAndRegister();
 
-    public static final ModItemType MAGNET = ModItemType.createAndRegister(STONE_BUTTON, MetalsPlugin.get(), "magnet", "Magnet", 0x00EAFF);
+    public static final ModItemType MAGNET = new ModItemTypeBuilder(STONE_BUTTON, "magnet", MetalsPlugin.get()).customName( "Magnet", 0x00EAFF).buildAndRegister();
 
-    public static final ModItemType HARD_CARBON_CHUNK = ModItemType.createAndRegister(FLINT, MetalsPlugin.get(), "hard_carbon_chunk", "Hard Carbon Chunk", 0x202020);
+    public static final ModItemType HARD_CARBON_CHUNK = new ModItemTypeBuilder(FLINT, "hard_carbon_chunk", MetalsPlugin.get()).customName( "Hard Carbon Chunk", 0x202020).buildAndRegister();
 
-    public static final ModItemType ORE_SPONGE = ModItemType.createAndRegister(GLASS, MetalsPlugin.get(), "ore_sponge", "Ore Sponge", 0xFFFEBF)
+    public static final ModItemType ORE_SPONGE = new ModItemTypeBuilder(GLASS, "ore_sponge", MetalsPlugin.get()).customName( "Ore Sponge", 0xFFFEBF).buildAndRegister()
             .shapelessRecipe(24, new ItemStack(COAL_BLOCK), new ItemStack(CLAY), new ItemStack(GLASS));
     public static final FilledOreSponge BASE_FILLED_ORE_SPONGE = new FilledOreSponge();
 
-    public static final ModItemType SALT = ModItemType.createAndRegister(SUGAR, MetalsPlugin.get(), "salt", "Salt", 0xCCCCCC)
+    public static final ModItemType SALT = new ModItemTypeBuilder(SUGAR, "salt", MetalsPlugin.get()).customName( "Salt", 0xCCCCCC).buildAndRegister()
             .shapelessRecipe(2, new ModItemStack(SODIUM_NUGGET).create(), new ModItemStack(SODIUM_NUGGET).create(), new ModItemStack(SODIUM_NUGGET).create(), new ItemStack(SUGAR));
 
 
-    public static final ModItemType BORRO_NEODYMIUM_POWDER = ModItemType.createAndRegister(GUNPOWDER, MetalsPlugin.get(), "borro_neodymium_powder", "Borro-Neodymium Powder", 0xE4E2CF)
+    public static final ModItemType BORRO_NEODYMIUM_POWDER = new ModItemTypeBuilder(GUNPOWDER, "borro_neodymium_powder", MetalsPlugin.get()).customName( "Borro-Neodymium Powder", 0xE4E2CF).buildAndRegister()
             .shapelessRecipe(7, TITANIUM_INGOT.create(), BORON_PIECE.create(), BORON_PIECE.create(), NEODYMIUM_INGOT.create(), SILICON_INGOT.create(), SILICON_INGOT.create(), SILICON_INGOT.create());
 
-    public static final ModItemType BORRO_NEODYMIUM_INGOT = ModItemType.createAndRegister(IRON_INGOT, MetalsPlugin.get(), "borro_neodymium_ingot", "Borro-Neodymium Ingot", 0xE4E2CF)
+    public static final ModItemType BORRO_NEODYMIUM_INGOT = new ModItemTypeBuilder(IRON_INGOT, "borro_neodymium_ingot", MetalsPlugin.get()).customName( "Borro-Neodymium Ingot", 0xE4E2CF).buildAndRegister()
             .furnaceRecipe(BORRO_NEODYMIUM_POWDER.create(), 2, 90)
             .blastingRecipe(BORRO_NEODYMIUM_POWDER.create(), 3, 45);
 }

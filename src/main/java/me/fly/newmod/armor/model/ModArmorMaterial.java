@@ -1,5 +1,6 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.api.item.builders.ModArmorItemTypeBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,17 +11,13 @@ public class ModArmorMaterial implements ArmorMaterial {
     private final ModArmorItemType chest;
     private final ModArmorItemType head;
 
-    public ModArmorMaterial(ItemStack material, ModArmorItemType boots, ModArmorItemType legs, ModArmorItemType chest, ModArmorItemType head) {
+    public ModArmorMaterial(ItemStack material, ModArmorItemTypeBuilder boots, ModArmorItemTypeBuilder legs, ModArmorItemTypeBuilder chest, ModArmorItemTypeBuilder head) {
         this.material = material;
-        this.boots = boots;
-        this.legs = legs;
-        this.chest = chest;
-        this.head = head;
 
-        boots.material(this).finishAndRegister();
-        legs.material(this).finishAndRegister();
-        chest.material(this).finishAndRegister();
-        head.material(this).finishAndRegister();
+        this.boots = boots.material(this).build().register();
+        this.legs = legs.material(this).build().register();
+        this.chest = chest.material(this).build().register();
+        this.head = head.material(this).build().register();
     }
 
     @Override
@@ -29,22 +26,22 @@ public class ModArmorMaterial implements ArmorMaterial {
     }
 
     @Override
-    public ArmorItemType boots() {
+    public ModArmorItemType boots() {
         return boots;
     }
 
     @Override
-    public ArmorItemType legs() {
+    public ModArmorItemType legs() {
         return legs;
     }
 
     @Override
-    public ArmorItemType chest() {
+    public ModArmorItemType chest() {
         return chest;
     }
 
     @Override
-    public ArmorItemType head() {
+    public ModArmorItemType head() {
         return head;
     }
 }

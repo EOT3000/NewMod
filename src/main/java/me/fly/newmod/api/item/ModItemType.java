@@ -1,9 +1,11 @@
 package me.fly.newmod.api.item;
 
+import com.google.common.collect.Lists;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
+import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.api.util.Pair;
 import net.kyori.adventure.text.Component;
@@ -53,6 +55,11 @@ public class ModItemType {
         this.listener = listener;
 
         this.customName = customName;
+    }
+
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
+                       ModBlockType block, ItemEventsListener listener, Component customName) {
+        this(defaultMaterial, id, meta, craftable, Lists.newArrayList(new MetaModifier<>(customName, NAME_MODIFIER)), block, listener, customName);
     }
 
     public final Material getDefaultMaterial() {
@@ -158,5 +165,11 @@ public class ModItemType {
 
     public boolean isCraftable() {
         return craftable;
+    }
+
+    public ModItemType register() {
+        NewMod.get().getItemManager().registerItem(this);
+
+        return this;
     }
 }

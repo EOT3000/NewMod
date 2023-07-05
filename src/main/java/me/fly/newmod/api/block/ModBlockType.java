@@ -31,17 +31,24 @@ public class ModBlockType {
         this.listener = new BlockEventsListener() {};
     }
 
+    public ModBlockType(Material defaultMaterial, NamespacedKey id, Class<? extends ModBlockData> data, BlockEventsListener listener) {
+        this.defaultMaterial = defaultMaterial;
+        this.id = id;
+
+        this.data = data;
+
+        this.listener = listener;
+    }
+
     public BlockEventsListener getListener() {
         return listener;
     }
 
-    public ModBlockType setListener(BlockEventsListener listener) {
-        this.listener = listener;
-
-        return this;
-    }
-
     public void setItem(ModItemType item) {
+        if(this.item != null) {
+            throw new IllegalStateException("Cannot set an item to a block if already set");
+        }
+
         this.item = item;
     }
 
