@@ -26,24 +26,20 @@ public class SolarGeneratorItemType extends ModItemType {
 
     public SolarGeneratorItemType(int baseMax, int randomAdd, int bonusForSide, int capacity, String id, String name, int color) {
         super(Material.DAYLIGHT_DETECTOR, new NamespacedKey("", id), DefaultModItemMeta.class, false,
-                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
 
         throw new NullPointerException();
     }
 
-    public SolarGeneratorItemType(int baseMax, int randomAdd, int bonusForSide, int capacity, String id, JavaPlugin plugin, String name, int color) {
+    public SolarGeneratorItemType(int baseMax, int randomAdd, int bonusForSide, int capacity, JavaPlugin plugin, String id, String name, int color) {
         super(Material.DAYLIGHT_DETECTOR, new NamespacedKey(plugin, id), DefaultModItemMeta.class, false,
-                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, id, plugin), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, plugin, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
     public static class SolarGeneratorBlockType extends ModBlockType implements EnergyComponent {
         private final int baseMax, randomAdd, bonusForSide, capacity;
 
-        public SolarGeneratorBlockType(int baseMax, int randomAdd, int bonusForSide, int capacity, String id) {
-            this(baseMax, randomAdd, bonusForSide, capacity, id, null);
-        }
-
-        public SolarGeneratorBlockType(int baseMax, int randomAdd, int bonusForSide, int capacity, String id, JavaPlugin plugin) {
+        public SolarGeneratorBlockType(int baseMax, int randomAdd, int bonusForSide, int capacity, JavaPlugin plugin, String id) {
             super(Material.DAYLIGHT_DETECTOR, new NamespacedKey(plugin, id), EnergyHolderBlockDataImpl.class);
 
             this.baseMax = baseMax;
