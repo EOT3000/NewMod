@@ -21,6 +21,12 @@ public final class ModBlock {
     private final ModBlockType type;
     private ModBlockData data;
 
+    public ModBlock(Location representation) {
+        this(representation.getBlock());
+    }
+
+    //TODO: null checks
+
     public ModBlock(Block representation) {
         BlockManager manager = NewMod.get().getBlockManager();
 

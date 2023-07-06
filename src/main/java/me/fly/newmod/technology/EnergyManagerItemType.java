@@ -1,22 +1,15 @@
 package me.fly.newmod.technology;
 
 import me.fly.newmod.api.block.ModBlockType;
-import me.fly.newmod.api.block.data.ModBlockData;
 import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
-import me.fly.newmod.api.item.meta.ModItemMeta;
-import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.technology.data.EnergyHolderBlockDataImpl;
-import me.fly.newmod.technology.producers.SolarGeneratorItemType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.List;
 
 public class EnergyManagerItemType extends ModItemType {
     public EnergyManagerItemType(Material material, int capacity, String id, String name, int color) {

@@ -1,6 +1,6 @@
 package me.fly.newmod.technology;
 
-import me.fly.newmod.technology.producers.SolarGeneratorItemType;
+import me.fly.newmod.technology.producer.SolarGeneratorItemType;
 
 public class TechnologyModuleTypes {
     static {

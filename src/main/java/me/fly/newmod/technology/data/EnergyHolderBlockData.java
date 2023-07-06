@@ -10,4 +10,6 @@ public interface EnergyHolderBlockData extends ModBlockData {
 
     int getCapacity();
     void setCapacity(int capacity);
+
+    void transferTo(EnergyHolderBlockData data);
 }

@@ -1,4 +1,4 @@
-package me.fly.newmod.technology.producers;
+package me.fly.newmod.technology.producer;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.BlockEventsListener;

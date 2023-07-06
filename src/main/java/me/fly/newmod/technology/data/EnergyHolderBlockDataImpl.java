@@ -65,6 +65,14 @@ public class EnergyHolderBlockDataImpl extends ModBlockData.AbstractModBlockData
     }
 
     @Override
+    public void transferTo(EnergyHolderBlockData data) {
+        int moveable = Math.min(data.getCapacity()-data.getCharge(), charge);
+
+        data.addCharge(moveable);
+        charge-=moveable;
+    }
+
+    @Override
     public String toString() {
         return "EnergyHolderBlockDataImpl{" +
                 "charge=" + charge +
