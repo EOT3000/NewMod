@@ -11,14 +11,14 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
 public class PressureChamberItemType extends ModItemType {
-    public PressureChamberItemType(Material material, int capacity, String id, String name, int color) {
-        super(material, new NamespacedKey("", id), DefaultModItemMeta.class, false,
-                new PressureChamberBlockType(), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+    public PressureChamberItemType() {
+        super(Material.IRON_BLOCK, new NamespacedKey("", "pressure_chamber"), DefaultModItemMeta.class, false,
+                new PressureChamberBlockType(), new ItemEventsListener() {}, Component.text("Pressure Chamber").color(TextColor.color(0xEFEFB8)));
     }
 
     public static class PressureChamberBlockType extends ModBlockType implements EnergyComponent {
         public PressureChamberBlockType() {
-            super(Material.IRON_BLOCK, new NamespacedKey("", "pressure_chamber"));
+            super(Material.IRON_BLOCK, new NamespacedKey("", "pressure_chamber"), PressureChamberBlockData.class);
         }
 
         @Override
@@ -28,7 +28,7 @@ public class PressureChamberItemType extends ModItemType {
 
         @Override
         public int getCapacity() {
-            return 0;
+            return 3400;
         }
     }
 }
