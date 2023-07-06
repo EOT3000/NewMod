@@ -2,6 +2,7 @@ package me.fly.newmod.technology;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.BlockManager;
+import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.events.block.ModBlockTickEvent;
 import me.fly.newmod.api.item.ItemEventsListener;
@@ -51,19 +52,57 @@ public class EnergyManagerItemType extends ModItemType {
         }
 
         public void tick(ModBlockTickEvent event) {
-            event.getModBlock();
-
             List<Location> list = new ArrayList<>();
-
             findAndAdd(event.getBlock().getLocation(), list, new ArrayList<>(), 4);
 
-            int total = 0;
+            List<ModBlock> hp = new ArrayList<>();
+            BlockManager bm = NewMod.get().getBlockManager();
+            EnergyHolderBlockData m = (EnergyHolderBlockData) event.getModBlock().getData();
+
+            int excess = 0;
+            int managerCap = Math.min(m.getCapacity()-m.getCharge(), excess);
 
             for(Location location : list) {
-                EnergyHolderBlockData data = (EnergyHolderBlockData) NewMod.get().getBlockManager().getType(location);
+                ModBlock b = new ModBlock(location);
+                EnergyHolderBlockData data = (EnergyHolderBlockData) b.getData();
 
-                total+=data.getCharge();
+                if(data.getCharge() > data.getCapacity()/2) {
+                    hp.add(b);
+                    excess+=data.getCharge()-(data.getCapacity()/2);
+                }
             }
+
+            for(ModBlock b : hp) {
+                EnergyHolderBlockData d = (EnergyHolderBlockData) b.getData();
+
+                int pe = d.getCharge()-(d.getCapacity()/2);
+                int trans = (int) (pe/(excess*1.0))*managerCap;
+
+                d.removeCharge(trans);
+                b.setData(d);
+                b.update();
+
+                m.addCharge(trans);
+            }
+
+            if(m.getCharge() == m.getCapacity()) {
+                event.getModBlock().setData(m);
+                event.getModBlock().update();
+
+                return;
+            }
+
+            managerCap = m.getCapacity()-m.getCharge();
+
+            for(Location location : list) {
+                EnergyHolderBlockData data = (EnergyHolderBlockData) bm.getType(location);
+
+                data.removeCharge(managerCap/list.size());
+                m.addCharge(managerCap/list.size());
+            }
+
+            event.getModBlock().setData(m);
+            event.getModBlock().update();
         }
 
         private void findAndAdd(Location location, List<Location> list, List<Location> checked, int deep) {
@@ -81,7 +120,7 @@ public class EnergyManagerItemType extends ModItemType {
             list.addAll(n);
 
             for(Location l : n) {
-                findAndAdd(location, list, checked, deep-1);
+                findAndAdd(l, list, checked, deep-1);
             }
         }
 

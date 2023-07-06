@@ -95,6 +95,7 @@ public class SolarGeneratorItemType extends ModItemType {
             data.addCharge((int) Math.round(power));
 
             event.getModBlock().setData(data);
+            event.getModBlock().update();
         }
 
         private boolean isSP(Location location, BlockFace face) {
