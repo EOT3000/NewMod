@@ -7,19 +7,33 @@ public class ShapedRecipeIdentifier {
     public boolean matches(CraftingInventory inventory) {
         ItemStack[] i = inventory.getMatrix();
 
-        ItemStack[] limited = restrictMatrix(new ItemStack[][] {
+        ItemStack[][] limited = restrictMatrix(new ItemStack[][] {
                 {i[0], i[1], i[2]},
                 {i[3], i[4], i[5]},
                 {i[6], i[7], i[8]}});
+
+        return false;
     }
 
-    private ItemStack[] restrictMatrix(ItemStack[][] old) {
+    private static ItemStack[][] restrictMatrix(ItemStack[][] old) {
+        old = restrict(old);
 
+        if(old == null) {
+            return null;
+        }
 
-        rotate(old);
+        old = rotate(old);
+
+        old = restrict(old);
+
+        if(old == null) {
+            return null;
+        }
+
+        return rotate(old);
     }
 
-    private ItemStack[][] restrict(ItemStack[][] old) {
+    private static ItemStack[][] restrict(ItemStack[][] old) {
         // Remove top 1 or 2 layers if empty
         old = ft(old);
         old = ft(old);
@@ -40,23 +54,26 @@ public class ShapedRecipeIdentifier {
         return old;
     }
 
-    private ItemStack[][] rotate(ItemStack[][] old) {
-        ItemStack[][] ret = new ItemStack[3][];
+    private static ItemStack[][] rotate(ItemStack[][] old) {
+        ItemStack[][] ret = new ItemStack[old[0].length][];
 
-        for(int x = 0; x < old.length; x++) {
+        for(int y = 0; y < old[0].length; y++) {
             ItemStack[] ins = new ItemStack[old.length];
 
-            for(int y = 0; y < 3; y++) {
+            for (int x = 0; x < old.length; x++) {
                 ins[x] = old[x][y];
             }
 
+            ret[y] = ins;
         }
+
+        return ret;
     }
 
-    private ItemStack[][] ft(ItemStack[][] a) {
+    private static ItemStack[][] ft(ItemStack[][] a) {
         ItemStack[] s = a[0];
 
-        boolean replace = e(s[0]) && e(s[1]) && e(s[2]);
+        boolean replace = allE(s);
 
         if(replace) {
             if(a.length == 3) {
@@ -69,16 +86,16 @@ public class ShapedRecipeIdentifier {
         return a;
     }
 
-    private ItemStack[][] fb(ItemStack[][] a) {
+    private static ItemStack[][] fb(ItemStack[][] a) {
         ItemStack[] s = a[a.length-1];
 
-        boolean replace = e(s[0]) && e(s[1]) && e(s[2]);
+        boolean replace = allE(s);
 
         if(replace) {
             if(a.length == 3) {
                 return new ItemStack[][] {a[0], a[1]};
             } else if(a.length == 2) {
-                return new ItemStack[][] {a[1]};
+                return new ItemStack[][] {a[0]};
             } else {
                 return new ItemStack[0][];
             }
@@ -87,7 +104,23 @@ public class ShapedRecipeIdentifier {
         return a;
     }
 
-    private boolean e/*mpty*/(ItemStack stack) {
+    private static boolean allE(ItemStack[] s) {
+        if(s.length == 3) {
+            return e(s[0]) && e(s[1]) && e(s[2]);
+        }
+
+        if(s.length == 2) {
+            return e(s[0]) && e(s[1]);
+        }
+
+        if(s.length == 1) {
+            return e(s[0]);
+        }
+
+        return true;
+    }
+
+    private static boolean e/*mpty*/(ItemStack stack) {
         return stack == null;
     }
 }

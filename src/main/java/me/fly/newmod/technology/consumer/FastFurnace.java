@@ -11,7 +11,7 @@ public class FastFurnace {
             return false;
         }
 
-        furnace.setCookSpeedMultiplier();
+        furnace.setCookSpeedMultiplier(1);
 
         furnace.update();
 
