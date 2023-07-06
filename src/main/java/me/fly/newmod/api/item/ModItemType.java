@@ -40,6 +40,8 @@ public class ModItemType {
 
     private Component customName;
 
+    private final List<NamespacedKey> allowedRecipeReplacement = new ArrayList<>();
+
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
                        List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener, Component customName) {
         this.defaultMaterial = defaultMaterial;
@@ -105,6 +107,16 @@ public class ModItemType {
     }
 
     // Type initiation
+
+    public ModItemType addReplaceableRecipe(NamespacedKey recipe) {
+        allowedRecipeReplacement.add(recipe);
+
+        return this;
+    }
+
+    public boolean isReplaceableRecipe(NamespacedKey key) {
+        return allowedRecipeReplacement.contains(key);
+    }
 
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {
         ItemStack result = new ModItemStack(this).create();

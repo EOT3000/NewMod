@@ -1,7 +1,8 @@
 package me.fly.newmod.crafting;
 
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
+import me.fly.newmod.NewMod;
+import me.fly.newmod.api.item.ModItemType;
+import org.bukkit.inventory.*;
 
 public class ShapedRecipeIdentifier {
     public boolean matches(CraftingInventory inventory) {
@@ -11,6 +12,41 @@ public class ShapedRecipeIdentifier {
                 {i[0], i[1], i[2]},
                 {i[3], i[4], i[5]},
                 {i[6], i[7], i[8]}});
+
+        if(limited == null) {
+            return false;
+        }
+
+        if(inventory.getRecipe() instanceof ShapedRecipe recipe) {
+            if(limited.length != recipe.getShape().length) {
+                return false;
+            }
+
+            if(limited[0].length != recipe.getShape()[0].length()) {
+                return false;
+            }
+
+            for(int x = 0; x < limited.length; x++) {
+                for(int y = 0; y < limited[0].length; y++) {
+                    if(!matches(limited[x][y], recipe.getShape()[x].charAt(y), recipe)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean matches(ItemStack check, char c, ShapedRecipe recipe) {
+        ModItemType type = NewMod.get().getItemManager().getType(check);
+        RecipeChoice choice = recipe.getChoiceMap().get(c);
+
+        if(choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
+            return choice.test(check);
+        }
 
         return false;
     }
