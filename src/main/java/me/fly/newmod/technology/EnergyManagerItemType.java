@@ -52,6 +52,10 @@ public class EnergyManagerItemType extends ModItemType {
         }
 
         public void tick(ModBlockTickEvent event) {
+            collectSolarLinks(event);
+        }
+
+        private void collectSolarLinks(ModBlockTickEvent event) {
             List<Location> list = new ArrayList<>();
             findAndAdd(event.getBlock().getLocation(), list, new ArrayList<>(), 4);
 
