@@ -1,6 +1,7 @@
 package me.fly.newmod.technology;
 
 import me.fly.newmod.NewMod;
+import me.fly.newmod.api.block.BlockEventsListener;
 import me.fly.newmod.api.block.BlockManager;
 import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.block.ModBlockType;
@@ -39,6 +40,13 @@ public class EnergyManagerItemType extends ModItemType {
             super(material, new NamespacedKey(plugin, id), EnergyHolderBlockDataImpl.class);
 
             this.capacity = capacity;
+
+            setListener(new BlockEventsListener() {
+                @Override
+                public void onBlockTick(ModBlockTickEvent event) {
+                    tick(event);
+                }
+            });
         }
 
         @Override
