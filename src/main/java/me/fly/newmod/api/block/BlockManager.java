@@ -5,6 +5,7 @@ import me.fly.newmod.api.block.data.ModBlockDataSerializer;
 import me.fly.newmod.api.util.PersistentDataUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class BlockManager {
     private final Map<Class<? extends ModBlockData>, ModBlockDataSerializer<?>> serializers = new HashMap<>();
     private final Map<NamespacedKey, ModBlockType> blocks = new HashMap<>();
 
-    private final Map<Location, Map<String, String>> dataStorage = new HashMap<>();
+    private final Map<World, WorldBlockStorage> worlds = new HashMap<>();
 
     public ModBlock deserializeModBlock(Block block) {
         if(getType(block) == null) {

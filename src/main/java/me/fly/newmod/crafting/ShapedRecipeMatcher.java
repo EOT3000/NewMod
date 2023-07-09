@@ -4,8 +4,8 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
 import org.bukkit.inventory.*;
 
-public class ShapedRecipeIdentifier {
-    public boolean matches(CraftingInventory inventory) {
+public class ShapedRecipeMatcher {
+    public static boolean matches(CraftingInventory inventory) {
         ItemStack[] i = inventory.getMatrix();
 
         ItemStack[][] limited = restrictMatrix(new ItemStack[][] {
@@ -40,7 +40,8 @@ public class ShapedRecipeIdentifier {
         return false;
     }
 
-    private boolean matches(ItemStack check, char c, ShapedRecipe recipe) {
+    //TODO: shared method
+    private static boolean matches(ItemStack check, char c, ShapedRecipe recipe) {
         ModItemType type = NewMod.get().getItemManager().getType(check);
         RecipeChoice choice = recipe.getChoiceMap().get(c);
 

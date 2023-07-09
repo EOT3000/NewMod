@@ -5,6 +5,9 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.crafting.FurnaceRecipeMatcher;
+import me.fly.newmod.crafting.ShapedRecipeMatcher;
+import me.fly.newmod.crafting.ShapelessRecipeMatcher;
 import me.fly.newmod.time.nms.bee.CustomBeeHiveTicker;
 import org.bukkit.*;
 import org.bukkit.block.Beehive;
@@ -18,6 +21,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 public class VanillaReplacementListener implements Listener {
     private final int[][] tableItems = new int[][]
@@ -31,7 +35,7 @@ public class VanillaReplacementListener implements Listener {
         System.out.println("created");
     }
 
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     @SuppressWarnings({"ConstantConditions", "PatternVariableCanBeUsed"})
     public void onPreCraftE(PrepareItemCraftEvent event) {
         try {
@@ -81,7 +85,7 @@ public class VanillaReplacementListener implements Listener {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     private void checkForAny(PrepareItemCraftEvent event) {
         ItemManager manager = NewMod.get().getItemManager();
@@ -97,8 +101,29 @@ public class VanillaReplacementListener implements Listener {
     }
 
     @EventHandler
-    public void onPreSmeltE(FurnaceStartSmeltEvent event) {
+    public void onPreCraft(PrepareItemCraftEvent event) {
+        if(event.getRecipe() instanceof ShapedRecipe) {
+            if(!ShapedRecipeMatcher.matches(event.getInventory())) {
+                event.setCancelled(true);
+            }
+        } else if(event.getRecipe() instanceof ShapelessRecipe recipe) {
+            if(!ShapelessRecipeMatcher.matches(recipe, event.getInventory().getMatrix())) {
+                event.setCancelled(true);
+            }
+        }
+    }
 
+    @EventHandler
+    public void onPreSmelt(FurnaceStartSmeltEvent event) {
+        ModItemType type = NewMod.get().getItemManager().getType(event.getSource());
+
+        if(type == null) {
+            return;
+        }
+
+        if(!FurnaceRecipeMatcher.matches(event.getRecipe(), event.getSource())) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -107,17 +132,7 @@ public class VanillaReplacementListener implements Listener {
     }
 
     @EventHandler
-    public void onTick(ServerTickStartEvent event) {
-        for(World world : Bukkit.getWorlds()) {
-            for(Chunk chunk : world.getLoadedChunks()) {
-                for(BlockState state : chunk.getTileEntities()) {
-                    if ((event.getTickNumber() + Long.hashCode(state.getLocation().hashCode() + hashCode())) % 4 == 0) {
-                        if(state.getType().equals(Material.BEEHIVE) || state.getType().equals(Material.BEE_NEST)) {
-                            CustomBeeHiveTicker.tickBlock((Beehive) state);
-                        }
-                    }
-                }
-            }
-        }
+    public void onSmith(PrepareSmithingEvent event) {
+
     }
 }
