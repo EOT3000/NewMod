@@ -2,22 +2,22 @@ package me.fly.newmod.listener;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.fly.newmod.NewMod;
+import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.crafting.FurnaceRecipeMatcher;
 import me.fly.newmod.crafting.ShapedRecipeMatcher;
 import me.fly.newmod.crafting.ShapelessRecipeMatcher;
+import me.fly.newmod.technology.consumer.ModFurnaceRecipe;
 import me.fly.newmod.time.nms.bee.CustomBeeHiveTicker;
 import org.bukkit.*;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Furnace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -104,17 +104,29 @@ public class VanillaReplacementListener implements Listener {
     public void onPreCraft(PrepareItemCraftEvent event) {
         if(event.getRecipe() instanceof ShapedRecipe) {
             if(!ShapedRecipeMatcher.matches(event.getInventory())) {
-                event.setCancelled(true);
+                event.getInventory().setResult(new ItemStack(Material.AIR));
             }
         } else if(event.getRecipe() instanceof ShapelessRecipe recipe) {
             if(!ShapelessRecipeMatcher.matches(recipe, event.getInventory().getMatrix())) {
-                event.setCancelled(true);
+                event.getInventory().setResult(new ItemStack(Material.AIR));
             }
         }
     }
 
     @EventHandler
     public void onPreSmelt(FurnaceStartSmeltEvent event) {
+        if(event.getRecipe() instanceof ModFurnaceRecipe recipe) {
+            if(!recipe.canBeUsed(new ModBlock(event.getBlock()).getType())) {
+                Furnace furnace = (Furnace) event.getBlock().getState();
+
+                furnace.setBurnTime((short) -1);
+
+                furnace.update();
+
+                return;
+            }
+        }
+
         ModItemType type = NewMod.get().getItemManager().getType(event.getSource());
 
         if(type == null) {
@@ -122,7 +134,11 @@ public class VanillaReplacementListener implements Listener {
         }
 
         if(!FurnaceRecipeMatcher.matches(event.getRecipe(), event.getSource())) {
-            event.setCancelled(true);
+            Furnace furnace = (Furnace) event.getBlock().getState();
+
+            furnace.setBurnTime((short) -1);
+
+            furnace.update();
         }
     }
 
@@ -133,6 +149,6 @@ public class VanillaReplacementListener implements Listener {
 
     @EventHandler
     public void onSmith(PrepareSmithingEvent event) {
-
+        event.getInventory().getRecipe();
     }
 }

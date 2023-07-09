@@ -1,8 +1,10 @@
 package me.fly.newmod.technology;
 
+import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.metals.MetalsModuleTypes;
+import me.fly.newmod.technology.consumer.PressureChamberItemType;
 import me.fly.newmod.technology.producer.SolarGeneratorItemType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -98,9 +100,23 @@ public class TechnologyModuleTypes {
     public static final ModItemType SOLAR_CELL_II = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_2", null)
             .customName("Solar Cell II", 0xFFA080).buildAndRegister();
 
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_I = new SolarGeneratorItemType(36, 4, 2, 768, "solar_generator_1", "Solar Generator I", 0x732929);
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_II = new SolarGeneratorItemType(48, 8, 4, 1152, "solar_generator_2", "Solar Generator II", 0x736129);
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_III = new SolarGeneratorItemType(60, 16, 6, 1600, "solar_generator_3", "Solar Generator III", 0x90b53a);
+    public static final SolarGeneratorItemType SOLAR_GENERATOR_I = register(new SolarGeneratorItemType(36, 4, 2, 768, "solar_generator_1", "Solar Generator I", 0x732929));
+    public static final SolarGeneratorItemType SOLAR_GENERATOR_II = register(new SolarGeneratorItemType(48, 8, 4, 1152, "solar_generator_2", "Solar Generator II", 0x736129));
+    public static final SolarGeneratorItemType SOLAR_GENERATOR_III = register(new SolarGeneratorItemType(60, 16, 6, 1600, "solar_generator_3", "Solar Generator III", 0x90b53a));
 
-    public static final EnergyManagerItemType ENERGY_MANAGER_I = new EnergyManagerItemType(Material.REDSTONE_LAMP, 1920, "energy_manager_1", "Energy Manager I", 0xA0A000);
+    public static final EnergyManagerItemType ENERGY_MANAGER_I = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 1920, "energy_manager_1", "Energy Manager I", 0xA0A000));
+    public static final EnergyManagerItemType ENERGY_MANAGER_II = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 2880, "energy_manager_2", "Energy Manager II", 0xA0A000));
+    public static final EnergyManagerItemType ENERGY_MANAGER_III = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 4000, "energy_manager_3", "Energy Manager III", 0xA0A000));
+
+    public static final PressureChamberItemType PRESSURE_CHAMBER_ITEM_TYPE = register(new PressureChamberItemType());
+
+    public static <T extends ModItemType> T register(T t) {
+        NewMod.get().getItemManager().registerItem(t);
+
+        if(t.getBlock() != null) {
+            NewMod.get().getBlockManager().registerBlock(t.getBlock());
+        }
+
+        return t;
+    }
 }

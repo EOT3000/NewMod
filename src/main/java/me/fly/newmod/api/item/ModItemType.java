@@ -182,6 +182,10 @@ public class ModItemType {
     public ModItemType register() {
         NewMod.get().getItemManager().registerItem(this);
 
+        if(block != null) {
+            NewMod.get().getBlockManager().registerBlock(block);
+        }
+
         return this;
     }
 }
