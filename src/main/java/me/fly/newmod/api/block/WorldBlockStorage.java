@@ -24,6 +24,10 @@ public class WorldBlockStorage {
         return regions.get(pair);
     }
 
+    public void putRegion(RegionBlockStorage storage) {
+        regions.put(new IntPair(storage.x, storage.z), storage);
+    }
+
     public Map<IntPair, RegionBlockStorage> getRegions() {
         return new HashMap<>(regions);
     }

@@ -42,4 +42,67 @@ public class DataSaver {
             }
         }
     }
+
+    //TODO: figure this out
+
+    public static void load(File dir) {
+        for(File w : dir.listFiles()) {
+            World world = Bukkit.getWorld(w.getName());
+
+            if(world != null) {
+                WorldBlockStorage storage = new WorldBlockStorage(world);
+
+                for (File r : w.listFiles()) {
+                    if(r.isFile() && r.getName().endsWith(".yml")) {
+                        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(r);
+
+                        if (configuration.contains("x") && configuration.contains("z")) {
+                            int x = configuration.getInt("x");
+                            int z = configuration.getInt("z");
+
+                            RegionBlockStorage regionBlockStorage = new RegionBlockStorage(x, z, world);
+
+                            regionBlockStorage.load(configuration, r.getPath());
+
+                            storage.putRegion(regionBlockStorage);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    public static void loadWorld(BlockManager manager, World world) {
+        if (manager.getWorlds().containsKey(world)) {
+            return;
+        }
+
+        File file = new File("/plugins/NewMod/save/" + world.getName());
+
+        if (file.exists()) {
+            return;
+        }
+
+        WorldBlockStorage storage = new WorldBlockStorage(world);
+
+        for (File r : file.listFiles()) {
+            if (r.isFile() && r.getName().endsWith(".yml")) {
+
+                YamlConfiguration configuration = YamlConfiguration.loadConfiguration(r);
+
+                if (configuration.contains("x") && configuration.contains("z")) {
+                    int x = configuration.getInt("x");
+                    int z = configuration.getInt("z");
+
+                    RegionBlockStorage regionBlockStorage = new RegionBlockStorage(x, z, world);
+
+                    regionBlockStorage.load(configuration, r.getPath());
+
+                    storage.putRegion(regionBlockStorage);
+                }
+
+            }
+        }
+    }
 }

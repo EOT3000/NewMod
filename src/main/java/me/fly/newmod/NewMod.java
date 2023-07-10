@@ -28,6 +28,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,6 +69,8 @@ public class NewMod extends JavaPlugin implements Listener {
         getLogger().info("[NewMod] NewMod is not affiliated with The University of Southampton, nor with the authors of any used code");
 
         saveDir = new File("plugins\\NewMod\\save");
+
+        saveDir.mkdirs();
 
         //System.out.println(saveFile.getAbsolutePath());
 
@@ -111,6 +114,8 @@ public class NewMod extends JavaPlugin implements Listener {
                 }
             }
         }, 1);
+
+        DataSaver.load(saveDir);
 
         //TODO: config save time
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager), 200, 200);
@@ -179,6 +184,11 @@ public class NewMod extends JavaPlugin implements Listener {
         for(ModExtension extension : extensions) {
             extension.tick(event.getTickNumber());
         }
+    }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        DataSaver.loadWorld(blockManager, event.getWorld());
     }
 
     /*@EventHandler

@@ -3,16 +3,14 @@ package me.fly.newmod.api.block;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import me.fly.newmod.api.util.IntTriple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -69,6 +67,31 @@ public class RegionBlockStorage {
         return data.keySet();
     }
 
+    public void load(YamlConfiguration configuration, String file) {
+        ConfigurationSection b = configuration.getConfigurationSection("blocks");
+
+        if(b == null) {
+            Bukkit.getLogger().severe("Error loading file " + file);
+            return;
+        }
+
+        for(String key : b.getKeys(false)) {
+            ConfigurationSection sec = b.getConfigurationSection(key);
+
+            int x = sec.getInt("x");
+            int y = sec.getInt("y");
+            int z = sec.getInt("z");
+
+            MarkingHashMapWrapper map = new MarkingHashMapWrapper();
+
+            for(String data : sec.getKeys(false)) {
+                map.put(data, sec.getString(data));
+            }
+
+            this.data.put(new IntTriple(x, y, z), map);
+        }
+    }
+
     public void saveIfDirty() {
         if(dirty) {
             save();
@@ -94,6 +117,8 @@ public class RegionBlockStorage {
         configuration.set("z", z);
         configuration.set("world", world.getName());
 
+        Map<String, Map<String, String>> blocks = new HashMap<>();
+
         for(Map.Entry<IntTriple,MarkingHashMapWrapper> map : data.entrySet()) {
             if(map.getKey() == null) {
                 Bukkit.getLogger().severe("Error saving null block in region " + x + "," + z + ":" + world.getName());
@@ -113,8 +138,10 @@ public class RegionBlockStorage {
             keys.put("y", Integer.toString(map.getKey().y));
             keys.put("z", Integer.toString(map.getKey().z));
 
-            configuration.set(key, keys);
+            blocks.put(key, keys);
         }
+
+        configuration.set("blocks", blocks);
 
         try {
             configuration.save(file);
