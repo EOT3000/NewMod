@@ -77,27 +77,27 @@ public class TechnologyModuleTypes {
         return new ShapedRecipe(type.getId(), type.create());
     }
 
-    public static final ModItemType CUBIC_ZIRCONIA = new ModItemTypeBuilder(Material.DIAMOND, "cubic_zirconia", null)
+    public static final ModItemType CUBIC_ZIRCONIA = new ModItemTypeBuilder(Material.DIAMOND, "cubic_zirconia", TechnologyPlugin.get())
             .customName("Cubic Zirconia", 0xF0F0F8).buildAndRegister();
 
     public static final ModItemType GAS_CANISTER = null;
 
-    public static final ModItemType PLASTIC_SHEET = new ModItemTypeBuilder(Material.PAPER, "plastic_sheet", null)
+    public static final ModItemType PLASTIC_SHEET = new ModItemTypeBuilder(Material.PAPER, "plastic_sheet", TechnologyPlugin.get())
             .customName("Plastic Sheet", 0xffffff).buildAndRegister();
 
     public static final ModItemType BATTERY_CASE = null;
 
     //TODO: battery heads
-    public static final ModItemType COPPER_ZINC_BATTERY = new ModItemTypeBuilder(Material.FLOWER_POT, "copper_zinc_battery", null) // 384
+    public static final ModItemType COPPER_ZINC_BATTERY = new ModItemTypeBuilder(Material.FLOWER_POT, "copper_zinc_battery", TechnologyPlugin.get()) // 384
             .customName("Copper Zinc Battery", 0x693f2a).buildAndRegister();
-    public static final ModItemType LEAD_BATTERY = new ModItemTypeBuilder(Material.PLAYER_HEAD, "lead_battery", null) // 576
+    public static final ModItemType LEAD_BATTERY = new ModItemTypeBuilder(Material.PLAYER_HEAD, "lead_battery", TechnologyPlugin.get()) // 576
             .customName("Lead Battery", 0x693f2a).buildAndRegister();
-    public static final ModItemType LITHIUM_BATTERY = new ModItemTypeBuilder(Material.PLAYER_HEAD, "lithium_battery", null) // 800
+    public static final ModItemType LITHIUM_BATTERY = new ModItemTypeBuilder(Material.PLAYER_HEAD, "lithium_battery", TechnologyPlugin.get()) // 800
             .customName("Lithium Battery", 0x693f2a).buildAndRegister();
 
-    public static final ModItemType SOLAR_CELL_I = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_1", null)
+    public static final ModItemType SOLAR_CELL_I = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_1", TechnologyPlugin.get())
             .customName("Solar Cell I", 0xFFA080).buildAndRegister();
-    public static final ModItemType SOLAR_CELL_II = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_2", null)
+    public static final ModItemType SOLAR_CELL_II = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_2", TechnologyPlugin.get())
             .customName("Solar Cell II", 0xFFA080).buildAndRegister();
 
     public static final SolarGeneratorItemType SOLAR_GENERATOR_I = register(new SolarGeneratorItemType(36, 4, 2, 768, "solar_generator_1", "Solar Generator I", 0x732929));

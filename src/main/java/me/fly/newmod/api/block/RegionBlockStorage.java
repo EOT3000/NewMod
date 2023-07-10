@@ -65,6 +65,10 @@ public class RegionBlockStorage {
         }
     }
 
+    public Set<IntTriple> getAllLocations() {
+        return data.keySet();
+    }
+
     public void saveIfDirty() {
         if(dirty) {
             save();

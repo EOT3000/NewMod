@@ -1,6 +1,10 @@
-/*package me.fly.newmod.metals.items.meta;
+package me.fly.newmod.metals.items.meta;
 
-import me.fly.newmod.NewMod;
+public class FilledOreSpongeMeta {
+
+}
+
+/*import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.ModItemMeta;

@@ -5,6 +5,8 @@ import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.technology.EnergyComponent;
+import me.fly.newmod.technology.TechnologyPlugin;
+import me.fly.newmod.technology.data.EnergyHolderBlockDataImpl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
@@ -12,18 +14,18 @@ import org.bukkit.NamespacedKey;
 
 public class PressureChamberItemType extends ModItemType {
     public PressureChamberItemType() {
-        super(Material.IRON_BLOCK, new NamespacedKey("", "pressure_chamber"), DefaultModItemMeta.class, false,
+        super(Material.BLAST_FURNACE, new NamespacedKey(TechnologyPlugin.get(), "pressure_chamber"), DefaultModItemMeta.class, false,
                 new PressureChamberBlockType(), new ItemEventsListener() {}, Component.text("Pressure Chamber").color(TextColor.color(0xEFEFB8)));
     }
 
     public static class PressureChamberBlockType extends ModBlockType implements EnergyComponent {
         public PressureChamberBlockType() {
-            super(Material.IRON_BLOCK, new NamespacedKey("", "pressure_chamber"), PressureChamberBlockData.class);
+            super(Material.BLAST_FURNACE, new NamespacedKey(TechnologyPlugin.get(), "pressure_chamber"), EnergyHolderBlockDataImpl.class);
         }
 
         @Override
         public EnergyComponentType getType() {
-            return null;
+            return EnergyComponentType.CONSUMER;
         }
 
         @Override

@@ -21,20 +21,20 @@ public class MetalsPlugin extends NewMod.ModExtension {
         INSTANCE = this;
     }
 
-    public static MetalsPlugin get() {
-        return INSTANCE;
+    public static NewMod get() {
+        return NewMod.get();
     }
 
     @Override
     public void load() {
-        new FilledOreSpongeMeta.FilledOreSpongeMetaSerializer();
+        //new FilledOreSpongeMeta.FilledOreSpongeMetaSerializer();
 
         MetalsModuleTypes.init();
     }
 
     @Override
     public void onEnable() {
-        Bukkit.getPluginManager().registerEvents(new FilledOreSponge.SpongeListener(), this);
+        //Bukkit.getPluginManager().registerEvents(new FilledOreSponge.SpongeListener(), this);
     }
 
     /*@EventHandler

@@ -8,6 +8,7 @@ import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.technology.EnergyComponent;
+import me.fly.newmod.technology.TechnologyPlugin;
 import me.fly.newmod.technology.data.EnergyHolderBlockData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class EnergySenderItemType extends ModItemType {
     public EnergySenderItemType() {
-        super(Material.TARGET, new NamespacedKey("", "energy_sender"), DefaultModItemMeta.class, false,
+        super(Material.TARGET, new NamespacedKey(TechnologyPlugin.get(), "energy_sender"), DefaultModItemMeta.class, false,
                 new EnergySenderBlockType(), new ItemEventsListener() {}, Component.text("Energy Sender").color(TextColor.color(0xFFF8FA)));
 
         throw new NullPointerException();
@@ -33,7 +34,7 @@ public class EnergySenderItemType extends ModItemType {
 
     public static class EnergySenderBlockType extends ModBlockType implements EnergyComponent {
         public EnergySenderBlockType() {
-            super(Material.TARGET, new NamespacedKey("", "energy_sender"));
+            super(Material.TARGET, new NamespacedKey(TechnologyPlugin.get(), "energy_sender"));
         }
 
         @Override

@@ -1,11 +1,11 @@
 package me.fly.newmod.api.block;
 
 import me.fly.newmod.api.util.IntPair;
+import me.fly.newmod.api.util.IntTriple;
+import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class WorldBlockStorage {
     public final World world;
@@ -26,5 +26,17 @@ public class WorldBlockStorage {
 
     public Map<IntPair, RegionBlockStorage> getRegions() {
         return new HashMap<>(regions);
+    }
+
+    public Set<Location> getAllLocations() {
+        Set<Location> ret = new HashSet<>();
+
+        for(RegionBlockStorage region : regions.values()) {
+            for(IntTriple location : region.getAllLocations()) {
+                ret.add(new Location(world, location.x, location.y, location.z));
+            }
+        }
+
+        return ret;
     }
 }

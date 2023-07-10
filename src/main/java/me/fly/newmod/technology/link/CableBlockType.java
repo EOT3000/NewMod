@@ -3,6 +3,7 @@ package me.fly.newmod.technology.link;
 import me.fly.newmod.api.block.BlockEventsListener;
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.events.block.ModBlockTickEvent;
+import me.fly.newmod.technology.TechnologyPlugin;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -20,7 +21,7 @@ public class CableBlockType extends ModBlockType {
     private final Random random = new Random();
 
     public CableBlockType(Material mat, boolean damage, String id) {
-        this(mat, damage, null, id);
+        this(mat, damage, TechnologyPlugin.get(), id);
     }
 
     public CableBlockType(Material mat, boolean damage, JavaPlugin plugin, String id) {

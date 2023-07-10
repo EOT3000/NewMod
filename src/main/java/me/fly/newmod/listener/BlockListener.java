@@ -5,6 +5,7 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.BlockManager;
 import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.block.ModBlockType;
+import me.fly.newmod.api.block.WorldBlockStorage;
 import me.fly.newmod.api.events.block.*;
 import me.fly.newmod.api.events.block.*;
 import me.fly.newmod.api.events.common.ModUseEvent;
@@ -12,6 +13,7 @@ import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,22 +32,24 @@ public class BlockListener implements Listener {
         // candidate for dumbest fly code mistake
         BlockManager manager = NewMod.get().getBlockManager();
 
-        for(Location location : manager.getAllLocations()) {
-            Block b = location.getBlock();
-            ModBlockType type = manager.getType(b);
+        for(WorldBlockStorage world : manager.getWorlds().values()) {
+            for (Location location : world.getAllLocations()) {
+                Block b = location.getBlock();
+                ModBlockType type = manager.getType(b);
 
-            if(type != null && type.isRightState(b, manager.deserializeModBlock(b))) {
-                try {
-                    type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
-                } catch (Exception e) {
-                    NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") error:");
+                if (type != null && type.isRightState(b, manager.deserializeModBlock(b))) {
+                    try {
+                        type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
+                    } catch (Exception e) {
+                        NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") error:");
 
-                    e.printStackTrace();
+                        e.printStackTrace();
+                    }
+                } else {
+                    manager.purgeData(location);
+
+                    NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") has been purged for block mismatch");
                 }
-            } else {
-                manager.purgeData(location);
-
-                NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") has been purged for block mismatch");
             }
         }
     }

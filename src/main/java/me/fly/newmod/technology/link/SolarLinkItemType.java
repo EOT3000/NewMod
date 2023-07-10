@@ -10,6 +10,7 @@ import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.technology.EnergyComponent;
+import me.fly.newmod.technology.TechnologyPlugin;
 import me.fly.newmod.technology.data.EnergyHolderBlockData;
 import me.fly.newmod.technology.data.EnergyHolderBlockDataImpl;
 import me.fly.newmod.technology.producer.SolarGeneratorItemType;
@@ -22,7 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SolarLinkItemType extends ModItemType {
     public SolarLinkItemType(Material material, int capacity, String id, String name, int color) {
-        super(material, new NamespacedKey("", id), DefaultModItemMeta.class, false,
+        super(material, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
                 new SolarLinkBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 

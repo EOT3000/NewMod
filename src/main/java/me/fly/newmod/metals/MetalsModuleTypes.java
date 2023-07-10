@@ -5,7 +5,6 @@ import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
-import me.fly.newmod.metals.items.FilledOreSponge;
 import me.fly.newmod.metals.items.MetalNuggetItemType;
 import me.fly.newmod.metals.items.MetalNuggetItemTypeBuilder;
 import org.bukkit.Material;
@@ -70,7 +69,7 @@ public class MetalsModuleTypes {
 
             for(String metalKey : oreData.getKeys(false)) {
                 if (metalKey.equals("ITEM")) {
-                    BASE_FILLED_ORE_SPONGE.addVariant(Material.valueOf(oreKey), oreData.getString("NAME"));
+                    //BASE_FILLED_ORE_SPONGE.addVariant(Material.valueOf(oreKey), oreData.getString("NAME"));
                     continue;
                 }
 
@@ -189,7 +188,7 @@ public class MetalsModuleTypes {
 
     public static final ModItemType ORE_SPONGE = new ModItemTypeBuilder(GLASS, "ore_sponge", MetalsPlugin.get()).customName( "Ore Sponge", 0xFFFEBF).buildAndRegister()
             .shapelessRecipe(24, new ItemStack(COAL_BLOCK), new ItemStack(CLAY), new ItemStack(GLASS));
-    public static final FilledOreSponge BASE_FILLED_ORE_SPONGE = new FilledOreSponge();
+    //public static final FilledOreSponge BASE_FILLED_ORE_SPONGE = new FilledOreSponge();
 
     public static final ModItemType SALT = new ModItemTypeBuilder(SUGAR, "salt", MetalsPlugin.get()).customName( "Salt", 0xCCCCCC).buildAndRegister()
             .shapelessRecipe(2, new ModItemStack(SODIUM_NUGGET).create(), new ModItemStack(SODIUM_NUGGET).create(), new ModItemStack(SODIUM_NUGGET).create(), new ItemStack(SUGAR));

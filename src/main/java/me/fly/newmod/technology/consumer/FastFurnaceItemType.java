@@ -8,6 +8,7 @@ import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.technology.EnergyComponent;
+import me.fly.newmod.technology.TechnologyPlugin;
 import me.fly.newmod.technology.link.SolarLinkItemType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class FastFurnaceItemType extends ModItemType {
     public FastFurnaceItemType(Material material, int maxSpeed, int maxUsage, int capacity, String id, String name, int color) {
-        super(material, new NamespacedKey("", id), DefaultModItemMeta.class, false,
+        super(material, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
                 new SolarLinkItemType.SolarLinkBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
