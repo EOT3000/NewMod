@@ -45,7 +45,7 @@ public class DataSaver {
 
     //TODO: figure this out
 
-    public static void load(File dir) {
+    public static void load(BlockManager manager, File dir) {
         for(File w : dir.listFiles()) {
             World world = Bukkit.getWorld(w.getName());
 
@@ -69,6 +69,8 @@ public class DataSaver {
 
                     }
                 }
+
+                manager.getWorlds().put(world, storage);
             }
         }
     }
@@ -80,11 +82,13 @@ public class DataSaver {
 
         File file = new File("/plugins/NewMod/save/" + world.getName());
 
-        if (file.exists()) {
+        WorldBlockStorage storage = new WorldBlockStorage(world);
+
+        manager.getWorlds().put(world, storage);
+
+        if (!file.exists()) {
             return;
         }
-
-        WorldBlockStorage storage = new WorldBlockStorage(world);
 
         for (File r : file.listFiles()) {
             if (r.isFile() && r.getName().endsWith(".yml")) {

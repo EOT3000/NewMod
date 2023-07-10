@@ -115,7 +115,7 @@ public class NewMod extends JavaPlugin implements Listener {
             }
         }, 1);
 
-        DataSaver.load(saveDir);
+        DataSaver.load(blockManager, saveDir);
 
         //TODO: config save time
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager), 200, 200);

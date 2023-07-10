@@ -30,7 +30,7 @@ public class BlockManager {
     }
 
     public Map<World, WorldBlockStorage> getWorlds() {
-        return new HashMap<>(worlds);
+        return worlds;
     }
 
     private RegionBlockStorage getRegion(Location location) {
