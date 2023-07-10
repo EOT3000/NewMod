@@ -112,7 +112,8 @@ public class NewMod extends JavaPlugin implements Listener {
             }
         }, 1);
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager, saveDir), 500, 500);
+        //TODO: config save time
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager), 200, 200);
 
         /*ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Play.Client.VEHICLE_MOVE, PacketType.Play.Client.BOAT_MOVE) {
             @Override
@@ -167,7 +168,7 @@ public class NewMod extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        //save();
+        DataSaver.saveFinally(blockManager);
     }
 
 

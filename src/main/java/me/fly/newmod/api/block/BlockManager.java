@@ -2,16 +2,14 @@ package me.fly.newmod.api.block;
 
 import me.fly.newmod.api.block.data.ModBlockData;
 import me.fly.newmod.api.block.data.ModBlockDataSerializer;
+import me.fly.newmod.api.util.IntTriple;
 import me.fly.newmod.api.util.PersistentDataUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlockManager {
     public void init() {
@@ -31,17 +29,28 @@ public class BlockManager {
         return new ModBlock(getType(block), deserializeData(block), block);
     }
 
+    public Map<World, WorldBlockStorage> getWorlds() {
+        return new HashMap<>(worlds);
+    }
+
+    private RegionBlockStorage getRegion(Location location) {
+        WorldBlockStorage storage = worlds.get(location.getWorld());
+
+        int x = location.getChunk().getX() >> 5;
+        int z = location.getChunk().getZ() >> 5;
+
+        return storage.getRegion(x, z);
+    }
+
     public ModBlockData deserializeData(Block block) {
         ModBlockType type = getType(block);
 
-        return serializers.get(type.getDataType()).getBlockData(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
+        return serializers.get(type.getDataType()).getBlockData(getRegion(block.getLocation()).getValues(IntTriple.fromLocation(block.getLocation())));
     }
 
     @SuppressWarnings("unchecked")
     public Block applyData(Block block, ModBlockData modStack) {
-        dataStorage.putIfAbsent(block.getLocation(), new HashMap<>());
-
-        ((ModBlockDataSerializer<ModBlockData>) serializers.get(modStack.getClass())).applyData(dataStorage.get(block.getLocation()), modStack);
+        ((ModBlockDataSerializer<ModBlockData>) serializers.get(modStack.getClass())).applyData(getRegion(block.getLocation()).getValues(IntTriple.fromLocation(block.getLocation())), modStack);
 
         return block;
     }
@@ -54,11 +63,11 @@ public class BlockManager {
     }
 
     public ModBlockType getType(Block block) {
-        return block == null ? null : getType(dataStorage.getOrDefault(block.getLocation(), new HashMap<>()));
+        return block == null ? null : getType(getRegion(block.getLocation()).getValues(IntTriple.fromLocation(block.getLocation())));
     }
 
     public ModBlockType getType(Location block) {
-        return block == null ? null : getType(dataStorage.getOrDefault(block, new HashMap<>()));
+        return block == null ? null : getType(getRegion(block).getValues(IntTriple.fromLocation(block)));
     }
 
     public ModBlockType getType(Map<String, String> container) {
@@ -82,29 +91,23 @@ public class BlockManager {
     }
 
     public void changeData(Location location, String key, String value) {
-        dataStorage.putIfAbsent(location, new HashMap<>());
-
-        dataStorage.get(location).put(key, value);
+        getRegion(location).modifyKey(IntTriple.fromLocation(location), key, value);
     }
 
     public void purgeData(Location location) {
-        dataStorage.remove(location);
+        getRegion(location).remove(IntTriple.fromLocation(location));
     }
 
-    public List<String> getAllData(Location location) {
-        dataStorage.putIfAbsent(location, new HashMap<>());
-
-        return new ArrayList<>(dataStorage.get(location).keySet());
+    public Set<String> getAllData(Location location) {
+        return getRegion(location).getKeys(IntTriple.fromLocation(location));
     }
 
 
     public String getData(Location location, String key) {
-        dataStorage.putIfAbsent(location, new HashMap<>());
-
-        return dataStorage.get(location).get(key);
+        return getRegion(location).getByKey(IntTriple.fromLocation(location), key);
     }
 
-    public List<Location> getAllBlocksOfType(String id) {
+    /*public List<Location> getAllBlocksOfType(String id) {
         List<Location> r = new ArrayList<>();
 
         for(Map.Entry<Location, Map<String, String>> entry : dataStorage.entrySet()) {
@@ -114,14 +117,10 @@ public class BlockManager {
         }
 
         return r;
-    }
+    }*/
 
     public List<ModBlockType> getBlocks() {
         return new ArrayList<>(blocks.values());
-    }
-
-    public List<Location> getAllLocations() {
-        return new ArrayList<>(dataStorage.keySet());
     }
 
     public void printData() {

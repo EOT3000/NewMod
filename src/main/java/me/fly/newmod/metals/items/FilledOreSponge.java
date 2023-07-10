@@ -1,4 +1,4 @@
-package me.fly.newmod.metals.items;
+/*package me.fly.newmod.metals.items;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.BlockManager;
@@ -104,3 +104,4 @@ public class FilledOreSponge extends ModItemType {
         }
     }
 }
+*/

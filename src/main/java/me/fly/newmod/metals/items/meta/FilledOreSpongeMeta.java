@@ -1,4 +1,4 @@
-package me.fly.newmod.metals.items.meta;
+/*package me.fly.newmod.metals.items.meta;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
@@ -96,4 +96,4 @@ public class FilledOreSpongeMeta extends ModItemMeta.AbstractModItemMeta {
             }
         }
     }
-}
+}*/

@@ -1,7 +1,11 @@
 package me.fly.newmod.save;
 
 import me.fly.newmod.api.block.BlockManager;
+import me.fly.newmod.api.block.RegionBlockStorage;
+import me.fly.newmod.api.block.WorldBlockStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -9,25 +13,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataSaver {
-    public static void save(BlockManager blockManager, File saveDir) {
-        blockManager.printData();
+    private static int count = 0;
 
-        YamlConfiguration configuration = new YamlConfiguration();
+    public static void saveFinally(BlockManager blockManager) {
+        for(World world : Bukkit.getWorlds()) {
+            WorldBlockStorage wbs = blockManager.getWorlds().get(world);
 
-        for(Location location : blockManager.getAllLocations()) {
-            Map<String, String> section = new HashMap<>();
+            if(wbs != null) {
+                for(RegionBlockStorage storage : wbs.getRegions().values()) {
+                    storage.save();
+                }
+            }
+        }
+    }
 
-            for(String key : blockManager.getAllData(location)) {
-                section.put(key, blockManager.getData(location, key));
+    public static void save(BlockManager blockManager) {
+        for(World world : Bukkit.getWorlds()) {
+            if(count++ + world.hashCode() % 3 != 0) {
+                return;
             }
 
-            configuration.set(location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "," + location.getWorld().getName(), section);
-        }
+            WorldBlockStorage wbs = blockManager.getWorlds().get(world);
 
-        try {
-            configuration.save(saveDir);
-        } catch (Exception e) {
-            e.printStackTrace();
+            if(wbs != null) {
+                for(RegionBlockStorage storage : wbs.getRegions().values()) {
+                    storage.saveIfDirty();
+                }
+            }
         }
     }
 }
