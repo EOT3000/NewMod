@@ -1,6 +1,7 @@
 package me.fly.newmod;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
+import me.fly.newmod.api.block.WorldBlockStorage;
 import me.fly.newmod.armor.listener.DamageListener;
 import me.fly.newmod.crafting.CraftingChangesManager;
 import me.fly.newmod.api.block.BlockManager;
@@ -13,7 +14,10 @@ import me.fly.newmod.listener.BlockListener;
 import me.fly.newmod.listener.CraftingListener;
 import me.fly.newmod.listener.HornListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
+import me.fly.newmod.magic.MagicModuleTypes;
+import me.fly.newmod.metals.MetalsModuleTypes;
 import me.fly.newmod.save.DataSaver;
+import me.fly.newmod.technology.TechnologyModuleTypes;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
@@ -95,7 +99,7 @@ public class NewMod extends JavaPlugin implements Listener {
             attemptLoad(extension);
         }
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
+        /*Bukkit.getScheduler().runTaskLater(this, () -> {
             YamlConfiguration configuration = YamlConfiguration.loadConfiguration(saveDir);
 
             for (String location : configuration.getKeys(false)) {
@@ -113,9 +117,15 @@ public class NewMod extends JavaPlugin implements Listener {
                     blockManager.changeData(new Location(world, x, y, z), key, section.getString(key));
                 }
             }
-        }, 1);
+        }, 1);*/
 
         DataSaver.load(blockManager, saveDir);
+
+        for(World world : Bukkit.getWorlds()) {
+            if(!blockManager.getWorlds().containsKey(world)) {
+                blockManager.getWorlds().put(world, new WorldBlockStorage(world));
+            }
+        }
 
         //TODO: config save time
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> DataSaver.save(blockManager), 200, 200);
@@ -132,6 +142,10 @@ public class NewMod extends JavaPlugin implements Listener {
                 }
             }
         });*/
+
+        MetalsModuleTypes.init();
+        MagicModuleTypes.init();
+        TechnologyModuleTypes.init();
 
         TrickWorlds.init();
     }

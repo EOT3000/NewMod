@@ -9,6 +9,7 @@ import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.technology.EnergyComponent;
+import me.fly.newmod.technology.TechnologyPlugin;
 import me.fly.newmod.technology.data.EnergyHolderBlockData;
 import me.fly.newmod.technology.data.EnergyHolderBlockDataImpl;
 import net.kyori.adventure.text.Component;
@@ -25,10 +26,8 @@ public class SolarGeneratorItemType extends ModItemType {
     private static final Random random = new Random();
 
     public SolarGeneratorItemType(int baseMax, int randomAdd, int bonusForSide, int capacity, String id, String name, int color) {
-        super(Material.DAYLIGHT_DETECTOR, new NamespacedKey("", id), DefaultModItemMeta.class, false,
-                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
-
-        throw new NullPointerException();
+        super(Material.DAYLIGHT_DETECTOR, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
+                new SolarGeneratorBlockType(baseMax, randomAdd, bonusForSide, capacity, TechnologyPlugin.get(), id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
     public SolarGeneratorItemType(int baseMax, int randomAdd, int bonusForSide, int capacity, JavaPlugin plugin, String id, String name, int color) {

@@ -5,13 +5,19 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.metals.MetalsModuleTypes;
 import me.fly.newmod.technology.consumer.PressureChamberItemType;
+import me.fly.newmod.technology.link.SolarLinkItemType;
 import me.fly.newmod.technology.producer.SolarGeneratorItemType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 public class TechnologyModuleTypes {
-    public void loadRecipes() {
+
+    public static void init() {
+        loadRecipes();
+    }
+
+    public static void loadRecipes() {
         ShapedRecipe batcase = shaped(BATTERY_CASE);
         ShapedRecipe czbattery = shaped(COPPER_ZINC_BATTERY);
         //TODO: lead
@@ -73,7 +79,7 @@ public class TechnologyModuleTypes {
         }
     }
 
-    private ShapedRecipe shaped(ModItemType type) {
+    private static ShapedRecipe shaped(ModItemType type) {
         return new ShapedRecipe(type.getId(), type.create());
     }
 
@@ -109,6 +115,8 @@ public class TechnologyModuleTypes {
     public static final EnergyManagerItemType ENERGY_MANAGER_III = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 4000, "energy_manager_3", "Energy Manager III", 0xA0A000));
 
     public static final PressureChamberItemType PRESSURE_CHAMBER_ITEM_TYPE = register(new PressureChamberItemType());
+
+    public static final SolarLinkItemType SPRUCE_SOLAR_LINK = register(new SolarLinkItemType(Material.SPRUCE_TRAPDOOR, 1000, "spruce_solar_link", "Spruce Solar Link", 0x8068040));
 
     public static <T extends ModItemType> T register(T t) {
         NewMod.get().getItemManager().registerItem(t);

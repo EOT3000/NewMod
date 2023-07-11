@@ -24,7 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SolarLinkItemType extends ModItemType {
     public SolarLinkItemType(Material material, int capacity, String id, String name, int color) {
         super(material, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
-                new SolarLinkBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+                new SolarLinkBlockType(material, capacity, TechnologyPlugin.get(), id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
     public SolarLinkItemType(Material material, int capacity, JavaPlugin plugin, String id, String name, int color) {

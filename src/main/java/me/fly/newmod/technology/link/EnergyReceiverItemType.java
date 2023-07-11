@@ -15,8 +15,6 @@ public class EnergyReceiverItemType extends ModItemType {
     public EnergyReceiverItemType() {
         super(Material.TARGET, new NamespacedKey(TechnologyPlugin.get(), "energy_receiver"), DefaultModItemMeta.class, false,
                 new EnergyReceiverBlockType(), new ItemEventsListener() {}, Component.text("Energy Receiver").color(TextColor.color(0xFFF8FA)));
-
-        throw new NullPointerException();
     }
 
     public static class EnergyReceiverBlockType extends ModBlockType implements EnergyComponent {

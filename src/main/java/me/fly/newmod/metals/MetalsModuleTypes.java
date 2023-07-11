@@ -32,7 +32,7 @@ public class MetalsModuleTypes {
     //private static Map<Material, ModItemType> dusts = new HashMap<>();
 
     public static void init() {
-        File file = new File("plugins\\NewMod\\config.yml");
+        /*File file = new File("plugins\\NewMod\\config.yml");
 
         try {
             if (!file.exists()) {
@@ -116,7 +116,7 @@ public class MetalsModuleTypes {
             if(!d.equals(new BigDecimal("1"))) {
                 System.err.println("Error on init of " + oreKey + ", values do not equal 1, equals " + d);
             }
-        }
+        }*/
     }
 
     public static ItemStack refine(Material material) {

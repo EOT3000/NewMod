@@ -24,7 +24,7 @@ import java.util.List;
 
 public class EnergyManagerItemType extends ModItemType {
     public EnergyManagerItemType(Material material, int capacity, String id, String name, int color) {
-        super(material, new NamespacedKey("", id), DefaultModItemMeta.class, false,
+        super(material, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
                 new EnergyManagerBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 

@@ -12,6 +12,10 @@ import org.bukkit.enchantments.Enchantment;
 import static org.bukkit.Material.*;
 
 public class MagicModuleTypes {
+    public static void init() {
+
+    }
+
     public static final ModItemType BLAZE_SCALE = new ModItemTypeBuilder(LEATHER, "blaze_scale", MagicManager.get()).customName("Blaze Scale", NamedTextColor.GOLD.value())
             .enchantment(Enchantment.FIRE_ASPECT, 1).build().register();
 

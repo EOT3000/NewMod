@@ -29,7 +29,6 @@ public class EnergySenderItemType extends ModItemType {
         super(Material.TARGET, new NamespacedKey(TechnologyPlugin.get(), "energy_sender"), DefaultModItemMeta.class, false,
                 new EnergySenderBlockType(), new ItemEventsListener() {}, Component.text("Energy Sender").color(TextColor.color(0xFFF8FA)));
 
-        throw new NullPointerException();
     }
 
     public static class EnergySenderBlockType extends ModBlockType implements EnergyComponent {
