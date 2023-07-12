@@ -1,5 +1,8 @@
 package me.fly.newmod.api.util;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.ComponentSerializer;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -52,6 +55,29 @@ public final class PersistentDataUtils {
             return NMSUtils.fromBase64List(s);
         }
     };
+
+    public static final PersistentDataType<String, Component> COMPONENT = new PersistentDataType<>() {
+        @Override
+        public @NotNull Class<String> getPrimitiveType() {
+            return String.class;
+        }
+
+        @Override
+        public @NotNull Class<Component> getComplexType() {
+            return Component.class;
+        }
+
+        @Override
+        public @NotNull String toPrimitive(@NotNull Component component, @NotNull PersistentDataAdapterContext persistentDataAdapterContext) {
+            return GsonComponentSerializer.gson().serialize(component);
+        }
+
+        @Override
+        public @NotNull Component fromPrimitive(@NotNull String s, @NotNull PersistentDataAdapterContext persistentDataAdapterContext) {
+            return GsonComponentSerializer.gson().deserialize(s);
+        }
+    };
+
 
     public static NamespacedKey namespacedKeyFromPrimitive(String s) {
         if(s == null) {

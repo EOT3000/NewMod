@@ -1,16 +1,20 @@
 package me.fly.newmod.listener;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
+import me.fly.newmod.BookTypes;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.util.PersistentDataUtils;
 import me.fly.newmod.crafting.FurnaceRecipeMatcher;
 import me.fly.newmod.crafting.ShapedRecipeMatcher;
 import me.fly.newmod.crafting.ShapelessRecipeMatcher;
 import me.fly.newmod.technology.consumer.ModFurnaceRecipe;
 import me.fly.newmod.time.nms.bee.CustomBeeHiveTicker;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.BlockState;
@@ -18,10 +22,16 @@ import org.bukkit.block.Furnace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 public class VanillaReplacementListener implements Listener {
     private final int[][] tableItems = new int[][]
@@ -30,6 +40,9 @@ public class VanillaReplacementListener implements Listener {
                     {2,0},{2,1},{2,2}};
 
     private int count = 0;
+
+    public static final NamespacedKey OFFHAND_ONLY = new NamespacedKey(NewMod.get(), "offhand_only");
+    public static final NamespacedKey PAGES = new NamespacedKey(NewMod.get(), "pages");
 
     public VanillaReplacementListener() {
         System.out.println("created");
@@ -150,5 +163,64 @@ public class VanillaReplacementListener implements Listener {
     @EventHandler
     public void onSmith(PrepareSmithingEvent event) {
         event.getInventory().getRecipe();
+    }
+
+    /**
+     * An event
+     * @param             event
+     */
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        //It's ok
+
+        if(event.getCurrentItem() == null) {
+            return;
+        }
+
+        if(event.getCurrentItem().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+            event.getCurrentItem().setType(Material.AIR);
+        }
+    }
+
+    @EventHandler
+    public void onHotbarSwitch(PlayerItemHeldEvent event) {
+        PlayerInventory inv = event.getPlayer().getInventory();
+
+        ItemStack stack = inv.getItemInMainHand();
+        ModItemType type = NewMod.get().getItemManager().getType(stack);
+
+        if (type.equals(BookTypes.BIRCH_BARK)) {
+            if (inv.getItemInOffHand().getType().equals(Material.AIR)) {
+                ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
+                BookMeta meta = (BookMeta) writableBook.getItemMeta();
+
+                meta.page(1, Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
+                meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
+
+                writableBook.setItemMeta(meta);
+            }
+        } else if (inv.getItemInOffHand().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+            inv.getItemInOffHand().setType(Material.AIR);
+        }
+    }
+
+    @EventHandler
+    public void onBookEdit(PlayerEditBookEvent event) {
+        if(event.getNewBookMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+            PlayerInventory inv = event.getPlayer().getInventory();
+            ItemManager manager = NewMod.get().getItemManager();
+
+            if(BookTypes.BIRCH_BARK.equals(manager.getType(inv.getItemInMainHand()))) {
+                inv.setItemInOffHand(new ItemStack(Material.AIR));
+
+                //TODO: store the hotbar index, in case it changes somehow while editing
+
+                ItemMeta meta = inv.getItemInMainHand().getItemMeta();
+
+                meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, event.getNewBookMeta().page(0));
+
+                inv.getItemInMainHand().setItemMeta(meta);
+            }
+        }
     }
 }
