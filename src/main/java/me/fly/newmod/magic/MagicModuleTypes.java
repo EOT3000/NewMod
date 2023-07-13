@@ -4,16 +4,18 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
+import me.fly.newmod.api.util.Pair;
 import me.fly.newmod.armor.model.ModArmorItemType;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 
 import static org.bukkit.Material.*;
 
 public class MagicModuleTypes {
     public static void init() {
-
+        DropsListener.addDrop(EntityType.BLAZE, CORE_BLAZE_ROD, 1);
     }
 
     public static final ModItemType BLAZE_SCALE = new ModItemTypeBuilder(LEATHER, "blaze_scale", MagicManager.get()).customName("Blaze Scale", NamedTextColor.GOLD.value())

@@ -18,7 +18,7 @@ public class TechnologyModuleTypes {
     }
 
     public static void loadRecipes() {
-        ShapedRecipe batcase = shaped(BATTERY_CASE);
+        //ShapedRecipe batcase = shaped(BATTERY_CASE);
         ShapedRecipe czbattery = shaped(COPPER_ZINC_BATTERY);
         //TODO: lead
         ShapedRecipe litbattery = shaped(LITHIUM_BATTERY);
@@ -27,13 +27,13 @@ public class TechnologyModuleTypes {
         ShapedRecipe solar3 = shaped(SOLAR_GENERATOR_III);
 
         {
-            batcase.shape(
-                    "R R",
-                    "P P",
-                    "PPP");
+            //batcase.shape(
+            //        "R R",
+            //        "P P",
+            //        "PPP");
 
-            batcase.setIngredient('R', new ItemStack(Material.REDSTONE));
-            batcase.setIngredient('P', PLASTIC_SHEET.create());
+            //batcase.setIngredient('R', new ItemStack(Material.REDSTONE));
+            //batcase.setIngredient('P', PLASTIC_SHEET.create());
         }
 
         {
@@ -59,7 +59,7 @@ public class TechnologyModuleTypes {
             litbattery.setIngredient('L', MetalsModuleTypes.LITHIUM_NUGGET.create());
             litbattery.setIngredient('C', MetalsModuleTypes.SULFUR_POWDER.create());
             litbattery.setIngredient('B', new ItemStack(Material.GREEN_DYE));
-            litbattery.setIngredient('A', BATTERY_CASE.create());
+            litbattery.setIngredient('A', new ItemStack(Material.DIAMOND));
         }
 
         {

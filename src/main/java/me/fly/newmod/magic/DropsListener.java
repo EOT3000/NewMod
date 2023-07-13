@@ -21,7 +21,7 @@ import java.util.Random;
 public class DropsListener implements Listener {
     public static final NamespacedKey SHATTERED = new NamespacedKey(MagicManager.get(), "shattered");
 
-    private Map<EntityType, Pair<ModItemType, Double>> drops = new HashMap<>();
+    private static Map<EntityType, Pair<ModItemType, Double>> drops = new HashMap<>();
 
     private Random random = new Random();
 
@@ -58,7 +58,7 @@ public class DropsListener implements Listener {
             event.getDrops().add(drops.get(event.getEntity().getType()).getKey().create());
     }
 
-    public void addDrop(EntityType type, ModItemType item, double d) {
+    public static void addDrop(EntityType type, ModItemType item, double d) {
         drops.put(type, new Pair<>(item, d));
     }
 }

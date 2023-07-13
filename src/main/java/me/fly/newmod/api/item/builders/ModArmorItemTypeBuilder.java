@@ -74,6 +74,12 @@ public class ModArmorItemTypeBuilder {
         return this;
     }
 
+    public ModArmorItemTypeBuilder color(int c) {
+        addModifier(new MetaModifier<>(c, DefaultMetaFlags.COLOR_MODIFIER));
+
+        return this;
+    }
+
     public ModArmorItemTypeBuilder addModifier(MetaModifier<?> modifier) {
         if(modifier.getFlag().equals(DefaultMetaFlags.NAME_MODIFIER)) {
             customName = (Component) modifier.getInformation();

@@ -14,10 +14,12 @@ import me.fly.newmod.listener.BlockListener;
 import me.fly.newmod.listener.CraftingListener;
 import me.fly.newmod.listener.HornListener;
 import me.fly.newmod.listener.VanillaReplacementListener;
+import me.fly.newmod.magic.DropsListener;
 import me.fly.newmod.magic.MagicModuleTypes;
 import me.fly.newmod.metals.MetalsModuleTypes;
 import me.fly.newmod.save.DataSaver;
 import me.fly.newmod.technology.TechnologyModuleTypes;
+import me.fly.newmod.technology.data.EnergyHolderBlockDataImpl;
 import me.fly.newmod.time.TimeManager;
 import me.fly.newmod.api.util.ColorUtils;
 import me.fly.newmod.time.TimeUtils;
@@ -83,6 +85,8 @@ public class NewMod extends JavaPlugin implements Listener {
         new DefaultModItemMeta.DefaultModItemMetaSerializer();
         new DefaultModBlockData.DefaultModBlockDataSerializer();
 
+        new EnergyHolderBlockDataImpl.EnergyHolderBlockDataSerializer();
+
         //timeManager = new TimeManager();
 
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -92,6 +96,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
         Bukkit.getPluginManager().registerEvents(new HornListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DropsListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
@@ -146,6 +151,7 @@ public class NewMod extends JavaPlugin implements Listener {
         MetalsModuleTypes.init();
         MagicModuleTypes.init();
         TechnologyModuleTypes.init();
+        BookTypes.init();
 
         TrickWorlds.init();
     }

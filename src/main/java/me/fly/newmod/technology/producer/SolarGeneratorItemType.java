@@ -65,7 +65,8 @@ public class SolarGeneratorItemType extends ModItemType {
         }
 
         private void tick(ModBlockTickEvent event) {
-            int brightness = NewMod.get().getTimeManager().getSkyBrightness(event.getBlock().getLocation());
+            //TODO: actual brightness
+            int brightness = 12000;
             double power = (brightness/12000.0)*baseMax+random.nextDouble()*randomAdd;
 
             int bonus = 0;
