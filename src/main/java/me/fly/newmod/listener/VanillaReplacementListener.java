@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -46,6 +47,8 @@ public class VanillaReplacementListener implements Listener {
 
     public static final NamespacedKey OFFHAND_ONLY = new NamespacedKey(NewMod.get(), "offhand_only");
     public static final NamespacedKey PAGES = new NamespacedKey(NewMod.get(), "pages");
+    public static final NamespacedKey ID = new NamespacedKey(NewMod.get(), "book_id");
+    public static final NamespacedKey SIGNED = new NamespacedKey(NewMod.get(), "signed");
 
     public VanillaReplacementListener() {
         System.out.println("created");
@@ -168,6 +171,20 @@ public class VanillaReplacementListener implements Listener {
         event.getInventory().getRecipe();
     }
 
+    private boolean getSigned(ItemStack stack) {
+        return stack.getItemMeta().getPersistentDataContainer().getOrDefault(SIGNED, PersistentDataType.BOOLEAN, false);
+    }
+
+    private long getId(ItemStack stack) {
+        return stack.getItemMeta().getPersistentDataContainer().get(ID, PersistentDataType.LONG);
+    }
+
+    private boolean isBark(ItemStack stack) {
+        ModItemType type = NewMod.get().getItemManager().getType(stack);
+
+        return BookTypes.BIRCH_BARK.equals(type);
+    }
+
     private boolean isBook(ItemStack stack) {
         if(stack == null || !stack.hasItemMeta()) {
             return false;
@@ -175,6 +192,33 @@ public class VanillaReplacementListener implements Listener {
 
         return stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
     }
+
+    private boolean bookBarkMismatch(PlayerInventory inventory) {
+        if(isBark(inventory.getItemInMainHand())) {
+            if(isBook(inventory.getItemInOffHand())) {
+                return getId(inventory.getItemInOffHand()) != getId(inventory.getItemInMainHand());
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void putBook(PlayerInventory inv) {
+        ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
+        BookMeta meta = (BookMeta) writableBook.getItemMeta();
+
+        meta.pages(Component.text(""),
+                Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
+        meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
+
+        writableBook.setItemMeta(meta);
+
+        inv.setItemInOffHand(writableBook);
+    }
+
+    //TODO: SIMPLIFY THIS AND NEW CLASS
 
     /**
      * An event
@@ -210,33 +254,29 @@ public class VanillaReplacementListener implements Listener {
                 }, 1);
             }
         }
+
+        if(isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
+            Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
+                if (bookBarkMismatch(event.getWhoClicked().getInventory())) {
+                    putBook(event.getWhoClicked().getInventory());
+                }
+            }, 1);
+        }
     }
 
     //TODO: seperate class and use clever packets
     @EventHandler
     public void onHotbarSwitch(PlayerItemHeldEvent event) {
-        System.out.println("prv: " + event.getPreviousSlot());
-        System.out.println("new: " + event.getNewSlot());
-
         PlayerInventory inv = event.getPlayer().getInventory();
 
         ItemStack stack = inv.getItem(event.getNewSlot());
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
-        if (BookTypes.BIRCH_BARK.equals(type)) {
-            if (inv.getItemInOffHand().getType().equals(Material.AIR)) {
-                ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
-                BookMeta meta = (BookMeta) writableBook.getItemMeta();
-
-                meta.pages(stack.getItemMeta().getPersistentDataContainer().getOrDefault(PAGES, PersistentDataUtils.COMPONENT, Component.text("")),
-                        Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
-                meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
-
-                writableBook.setItemMeta(meta);
-
-                inv.setItemInOffHand(writableBook);
+        if (BookTypes.BIRCH_BARK.equals(type) && !getSigned(stack)) {
+            if (inv.getItemInOffHand().getType().equals(Material.AIR) || isBook(inv.getItemInOffHand())) {
+                putBook(inv);
             }
-        } else if (inv.getItemInOffHand().hasItemMeta() && inv.getItemInOffHand().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+        } else if (isBook(inv.getItemInOffHand())) {
             inv.setItemInOffHand(null);
         }
     }
@@ -255,16 +295,22 @@ public class VanillaReplacementListener implements Listener {
             ItemManager manager = NewMod.get().getItemManager();
 
             if(BookTypes.BIRCH_BARK.equals(manager.getType(inv.getItemInMainHand()))) {
-                inv.setItemInOffHand(new ItemStack(Material.AIR));
-
-                //TODO: store the hotbar index, in case it changes somehow while editing
+                inv.setItemInOffHand(null);
 
                 ItemMeta meta = inv.getItemInMainHand().getItemMeta();
 
                 meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, event.getNewBookMeta().page(1));
+                meta.getPersistentDataContainer().set(SIGNED, PersistentDataType.BOOLEAN, true);
 
                 inv.getItemInMainHand().setItemMeta(meta);
             }
+        }
+    }
+    
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        if(isBook(event.getItemDrop().getItemStack())) {
+            event.setCancelled(true);
         }
     }
 }
