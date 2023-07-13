@@ -168,9 +168,13 @@ public class VanillaReplacementListener implements Listener {
     }
 
     private boolean isBook(ItemStack stack) {
+        System.out.println("stack is null? " + (stack == null));
+
         if(stack == null || !stack.hasItemMeta()) {
             return false;
         }
+
+        System.out.println("stack passes first check. What is offhand_only? " + stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false));
 
         return stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
     }
@@ -183,7 +187,13 @@ public class VanillaReplacementListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
     //It's ok
 
-        if(event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) {
+        //System.out.println(event.getCurrentItem());
+
+        if(isBook(event.getCurrentItem())) {
+            if(event.getSlot() == 40 && event.getClickedInventory() instanceof PlayerInventory) {
+                event.setCancelled(true);
+            }
+        } else {
             ItemStack placed = event.getCursor();
 
             if(isBook(placed)) {
@@ -197,22 +207,11 @@ public class VanillaReplacementListener implements Listener {
                     ItemStack stack = p.getOpenInventory().getItem(event.getRawSlot());
 
                     if(isBook(stack)) {
+                        System.out.println("it's a book. Replace");
                         p.getOpenInventory().setItem(event.getRawSlot(), null);
                     }
 
                 }, 1);
-            }
-
-            return;
-        }
-
-        //System.out.println(event.getCurrentItem());
-
-        if(isBook(event.getCurrentItem())) {
-            if(event.getSlot() == 40 && event.getClickedInventory() instanceof PlayerInventory) {
-                event.setCancelled(true);
-            } else {
-                event.getView().setItem(event.getRawSlot(), null);
             }
         }
     }
