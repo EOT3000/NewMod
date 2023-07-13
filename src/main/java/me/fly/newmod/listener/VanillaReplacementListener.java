@@ -173,20 +173,34 @@ public class VanillaReplacementListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         //It's ok
 
-        if(event.getCurrentItem() == null) {
+        /*System.out.println("slot: " + event.getSlot());
+        System.out.println("raw: " + event.getRawSlot());
+        System.out.println();*/
+
+        if(event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) {
             return;
         }
 
+        //System.out.println(event.getCurrentItem());
+
         if(event.getCurrentItem().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-            event.getCurrentItem().setType(Material.AIR);
+            if(event.getRawSlot() == 45 && event.getInventory() instanceof PlayerInventory) {
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
+    public void onInventoryPlace(InventoryMoveItemEvent event) {
+
+    }
+
+    //TODO: seperate class and use clever packets
+    @EventHandler
     public void onHotbarSwitch(PlayerItemHeldEvent event) {
         PlayerInventory inv = event.getPlayer().getInventory();
 
-        ItemStack stack = inv.getItemInMainHand();
+        ItemStack stack = inv.getItem(event.getNewSlot());
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
         if (BookTypes.BIRCH_BARK.equals(type)) {
@@ -194,13 +208,15 @@ public class VanillaReplacementListener implements Listener {
                 ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
                 BookMeta meta = (BookMeta) writableBook.getItemMeta();
 
-                meta.page(1, Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
+                meta.pages(Component.text(""), Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
                 meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
 
                 writableBook.setItemMeta(meta);
+
+                inv.setItemInOffHand(writableBook);
             }
-        } else if (inv.getItemInOffHand().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-            inv.getItemInOffHand().setType(Material.AIR);
+        } else if (inv.getItemInOffHand().hasItemMeta() && inv.getItemInOffHand().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+            inv.setItemInOffHand(null);
         }
     }
 
@@ -217,7 +233,7 @@ public class VanillaReplacementListener implements Listener {
 
                 ItemMeta meta = inv.getItemInMainHand().getItemMeta();
 
-                meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, event.getNewBookMeta().page(0));
+                meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, event.getNewBookMeta().page(1));
 
                 inv.getItemInMainHand().setItemMeta(meta);
             }

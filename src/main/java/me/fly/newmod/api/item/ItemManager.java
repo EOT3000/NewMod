@@ -39,7 +39,7 @@ public class ItemManager {
     }
 
     public ModItemType getType(ItemStack stack) {
-        return stack == null ? null : getType(stack.getItemMeta().getPersistentDataContainer());
+        return stack == null || !stack.hasItemMeta() ? null : getType(stack.getItemMeta().getPersistentDataContainer());
     }
 
     public ModItemType getType(PersistentDataContainer container) {
