@@ -31,7 +31,8 @@ public class RegionBlockStorage {
         this.world = world;
     }
 
-    private final Map<IntTriple, MarkingHashMapWrapper> data = new HashMap<>();
+    //TODO: private this
+    public final Map<IntTriple, MarkingHashMapWrapper> data = new HashMap<>();
 
     public void remove(IntTriple vector) {
         data.remove(vector);
@@ -153,7 +154,8 @@ public class RegionBlockStorage {
         }
     }
 
-    private class MarkingHashMapWrapper implements Map<String, String> {
+    //TODO: private this too
+    public class MarkingHashMapWrapper implements Map<String, String> {
         private final HashMap<String, String> wrapped = new HashMap<>();
 
         @Override

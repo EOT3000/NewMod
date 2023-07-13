@@ -37,9 +37,17 @@ public class BlockListener implements Listener {
                 Block b = location.getBlock();
                 ModBlockType type = manager.getType(b);
 
-                if (type != null && type.isRightState(b, manager.deserializeModBlock(b))) {
+                //System.out.println(location + ": " + type);
+
+                if(type == null) {
+                    continue;
+                }
+
+                ModBlock mb = manager.deserializeModBlock(b);
+
+                if (type.isRightState(b, mb)) {
                     try {
-                        type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), manager.deserializeModBlock(b), b));
+                        type.getListener().onBlockTick(new ModBlockTickEvent(event.getTickNumber(), mb, b));
                     } catch (Exception e) {
                         NewMod.get().getLogger().warning("Block " + " (" + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getWorld().getName() + ") error:");
 

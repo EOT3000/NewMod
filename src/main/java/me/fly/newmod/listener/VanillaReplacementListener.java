@@ -189,7 +189,7 @@ public class VanillaReplacementListener implements Listener {
         ItemStack stack = inv.getItemInMainHand();
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
-        if (type.equals(BookTypes.BIRCH_BARK)) {
+        if (BookTypes.BIRCH_BARK.equals(type)) {
             if (inv.getItemInOffHand().getType().equals(Material.AIR)) {
                 ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
                 BookMeta meta = (BookMeta) writableBook.getItemMeta();

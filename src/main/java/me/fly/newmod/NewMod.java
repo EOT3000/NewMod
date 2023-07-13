@@ -1,7 +1,9 @@
 package me.fly.newmod;
 
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
+import me.fly.newmod.api.block.RegionBlockStorage;
 import me.fly.newmod.api.block.WorldBlockStorage;
+import me.fly.newmod.api.util.IntTriple;
 import me.fly.newmod.armor.listener.DamageListener;
 import me.fly.newmod.crafting.CraftingChangesManager;
 import me.fly.newmod.api.block.BlockManager;
@@ -477,6 +479,25 @@ public class NewMod extends JavaPlugin implements Listener {
                         //    player.getInventory().addItem(stack);
                         //}, 1);
                     });
+
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("dump")) {
+                    for(WorldBlockStorage world : blockManager.getWorlds().values()) {
+                        System.out.println("World: " + world.world.getName());
+
+                        for(RegionBlockStorage storage : world.getRegions().values()) {
+                            System.out.println("\tRegion: " + storage.x + "," + storage.z);
+
+                            for(Map.Entry<IntTriple, RegionBlockStorage.MarkingHashMapWrapper> data : storage.data.entrySet()) {
+                                System.out.println("\t\tPosition: " + data.getKey().toString());
+
+                                for(Map.Entry<String, String> d : data.getValue().entrySet()) {
+                                    System.out.println("\t\t" + d.getKey() + ": " + d.getValue());
+                                }
+                            }
+                        }
+                    }
 
                     return true;
                 }
