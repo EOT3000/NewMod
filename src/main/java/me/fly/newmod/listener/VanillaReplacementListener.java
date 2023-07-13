@@ -178,21 +178,25 @@ public class VanillaReplacementListener implements Listener {
         System.out.println();*/
 
         if(event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) {
-            return;
+            ItemStack placed = event.getView().getItem(event.getRawSlot());
+
+            if (placed == null || !placed.hasItemMeta()) {
+                return;
+            }
+
+            if(placed.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
+                event.getView().setItem(event.getRawSlot(), null);
+            }
         }
+
 
         //System.out.println(event.getCurrentItem());
 
         if(event.getCurrentItem().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-            if(event.getRawSlot() == 45 && event.getInventory() instanceof PlayerInventory) {
+            if(event.getSlot() == 40 && event.getInventory() instanceof PlayerInventory) {
                 event.setCancelled(true);
             }
         }
-    }
-
-    @EventHandler
-    public void onInventoryPlace(InventoryMoveItemEvent event) {
-
     }
 
     //TODO: seperate class and use clever packets
@@ -208,7 +212,8 @@ public class VanillaReplacementListener implements Listener {
                 ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
                 BookMeta meta = (BookMeta) writableBook.getItemMeta();
 
-                meta.pages(Component.text(""), Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
+                meta.pages(stack.getItemMeta().getPersistentDataContainer().getOrDefault(PAGES, PersistentDataUtils.COMPONENT, Component.text("")),
+                        Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
                 meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
 
                 writableBook.setItemMeta(meta);
