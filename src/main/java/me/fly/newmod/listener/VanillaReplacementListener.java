@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -168,13 +169,9 @@ public class VanillaReplacementListener implements Listener {
     }
 
     private boolean isBook(ItemStack stack) {
-        System.out.println("stack is null? " + (stack == null));
-
         if(stack == null || !stack.hasItemMeta()) {
             return false;
         }
-
-        System.out.println("stack passes first check. What is offhand_only? " + stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false));
 
         return stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
     }
@@ -207,7 +204,6 @@ public class VanillaReplacementListener implements Listener {
                     ItemStack stack = p.getOpenInventory().getItem(event.getRawSlot());
 
                     if(isBook(stack)) {
-                        System.out.println("it's a book. Replace");
                         p.getOpenInventory().setItem(event.getRawSlot(), null);
                     }
 
@@ -219,6 +215,9 @@ public class VanillaReplacementListener implements Listener {
     //TODO: seperate class and use clever packets
     @EventHandler
     public void onHotbarSwitch(PlayerItemHeldEvent event) {
+        System.out.println("prv: " + event.getPreviousSlot());
+        System.out.println("new: " + event.getNewSlot());
+
         PlayerInventory inv = event.getPlayer().getInventory();
 
         ItemStack stack = inv.getItem(event.getNewSlot());
@@ -239,6 +238,13 @@ public class VanillaReplacementListener implements Listener {
             }
         } else if (inv.getItemInOffHand().hasItemMeta() && inv.getItemInOffHand().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
             inv.setItemInOffHand(null);
+        }
+    }
+
+    @EventHandler
+    public void onSwitchHand(PlayerSwapHandItemsEvent event) {
+        if(isBook(event.getMainHandItem()) || isBook(event.getOffHandItem())) {
+            event.setCancelled(true);
         }
     }
 
