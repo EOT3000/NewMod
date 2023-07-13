@@ -19,6 +19,8 @@ import org.bukkit.*;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
@@ -165,36 +167,52 @@ public class VanillaReplacementListener implements Listener {
         event.getInventory().getRecipe();
     }
 
+    private boolean isBook(ItemStack stack) {
+        if(stack == null || !stack.hasItemMeta()) {
+            return false;
+        }
+
+        return stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
+    }
+
     /**
      * An event
      * @param             event
      */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        //It's ok
-
-        /*System.out.println("slot: " + event.getSlot());
-        System.out.println("raw: " + event.getRawSlot());
-        System.out.println();*/
+    //It's ok
 
         if(event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) {
-            ItemStack placed = event.getView().getItem(event.getRawSlot());
+            ItemStack placed = event.getCursor();
 
-            if (placed == null || !placed.hasItemMeta()) {
-                return;
+            if(isBook(placed)) {
+                if(event.getClickedInventory() == null) {
+                    return;
+                }
+
+                Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
+                    HumanEntity p = event.getWhoClicked();
+
+                    ItemStack stack = p.getOpenInventory().getItem(event.getRawSlot());
+
+                    if(isBook(stack)) {
+                        p.getOpenInventory().setItem(event.getRawSlot(), null);
+                    }
+
+                }, 1);
             }
 
-            if(placed.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-                event.getView().setItem(event.getRawSlot(), null);
-            }
+            return;
         }
-
 
         //System.out.println(event.getCurrentItem());
 
-        if(event.getCurrentItem().getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-            if(event.getSlot() == 40 && event.getInventory() instanceof PlayerInventory) {
+        if(isBook(event.getCurrentItem())) {
+            if(event.getSlot() == 40 && event.getClickedInventory() instanceof PlayerInventory) {
                 event.setCancelled(true);
+            } else {
+                event.getView().setItem(event.getRawSlot(), null);
             }
         }
     }
