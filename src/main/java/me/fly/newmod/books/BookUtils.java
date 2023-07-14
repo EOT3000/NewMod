@@ -72,7 +72,7 @@ public class BookUtils {
             return false;
         }
 
-        return stack.getType().equals(Material.WRITABLE_BOOK) &&
+        return (stack.getType().equals(Material.WRITABLE_BOOK) || stack.getType().equals(Material.WRITTEN_BOOK)) &&
                 stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
     }
 

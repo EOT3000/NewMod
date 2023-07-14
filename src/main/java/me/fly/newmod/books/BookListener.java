@@ -83,6 +83,13 @@ public class BookListener implements Listener {
         if(BookUtils.isBook(event.getCurrentItem())) {
             if(event.getSlot() == 40 && event.getClickedInventory() instanceof PlayerInventory) {
                 event.setCancelled(true);
+
+                Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
+                    if (!BookUtils.writableBark(event.getWhoClicked().getInventory().getItemInMainHand())
+                            && BookUtils.isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
+                        event.getWhoClicked().getInventory().setItemInOffHand(null);
+                    }
+                }, 1);
             }
         } else {
             ItemStack placed = event.getCursor();
@@ -108,7 +115,7 @@ public class BookListener implements Listener {
         if(BookUtils.isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
             Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
                 if (!BookUtils.writableBark(event.getWhoClicked().getInventory().getItemInMainHand())) {
-                    event.getWhoClicked().getInventory().setItemInMainHand(null);
+                    event.getWhoClicked().getInventory().setItemInOffHand(null);
                 }
             }, 1);
         }
