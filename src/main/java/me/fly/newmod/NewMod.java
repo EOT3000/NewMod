@@ -5,6 +5,7 @@ import me.fly.newmod.api.block.RegionBlockStorage;
 import me.fly.newmod.api.block.WorldBlockStorage;
 import me.fly.newmod.api.util.IntTriple;
 import me.fly.newmod.armor.listener.DamageListener;
+import me.fly.newmod.books.BookListener;
 import me.fly.newmod.crafting.CraftingChangesManager;
 import me.fly.newmod.api.block.BlockManager;
 import me.fly.newmod.api.block.data.DefaultModBlockData;
@@ -99,7 +100,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
         Bukkit.getPluginManager().registerEvents(new HornListener(), this);
         Bukkit.getPluginManager().registerEvents(new DropsListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BookListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
