@@ -8,6 +8,7 @@ import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.util.PersistentDataUtils;
+import me.fly.newmod.books.BookUtils;
 import me.fly.newmod.crafting.FurnaceRecipeMatcher;
 import me.fly.newmod.crafting.ShapedRecipeMatcher;
 import me.fly.newmod.crafting.ShapelessRecipeMatcher;
@@ -36,6 +37,9 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.Collection;
+import java.util.List;
 
 public class VanillaReplacementListener implements Listener {
     private final int[][] tableItems = new int[][]
@@ -206,16 +210,25 @@ public class VanillaReplacementListener implements Listener {
     }
 
     private void putBook(PlayerInventory inv) {
+        long id = System.currentTimeMillis()+inv.getHolder().getUniqueId().hashCode();
+
         ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
         BookMeta meta = (BookMeta) writableBook.getItemMeta();
 
         meta.pages(Component.text(""),
                 Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
         meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(ID, PersistentDataType.LONG, id);
 
         writableBook.setItemMeta(meta);
 
         inv.setItemInOffHand(writableBook);
+
+        ItemMeta bark = inv.getItemInMainHand().getItemMeta();
+
+        bark.getPersistentDataContainer().set(ID, PersistentDataType.LONG, id);
+
+        inv.getItemInMainHand().setItemMeta(bark);
     }
 
     //TODO: SIMPLIFY THIS AND NEW CLASS
@@ -224,7 +237,7 @@ public class VanillaReplacementListener implements Listener {
      * An event
      * @param             event
      */
-    @EventHandler
+    /*@EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
     //It's ok
 
@@ -272,7 +285,7 @@ public class VanillaReplacementListener implements Listener {
         ItemStack stack = inv.getItem(event.getNewSlot());
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
-        if (BookTypes.BIRCH_BARK.equals(type) && !getSigned(stack)) {
+        if (BookTypes.BIRCH_BARK.equals(type) && !getSigned(stack) && stack.getAmount() == 1) {
             if (inv.getItemInOffHand().getType().equals(Material.AIR) || isBook(inv.getItemInOffHand())) {
                 putBook(inv);
             }
@@ -292,17 +305,23 @@ public class VanillaReplacementListener implements Listener {
     public void onBookEdit(PlayerEditBookEvent event) {
         if(event.getNewBookMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
             PlayerInventory inv = event.getPlayer().getInventory();
-            ItemManager manager = NewMod.get().getItemManager();
 
-            if(BookTypes.BIRCH_BARK.equals(manager.getType(inv.getItemInMainHand()))) {
-                inv.setItemInOffHand(null);
+            if(!BookUtils.writableBark(inv.getItemInMainHand())) {
+                return;
+            }
 
-                ItemMeta meta = inv.getItemInMainHand().getItemMeta();
+            if(inv.getItemInMainHand().getAmount() == 1) {
+                BookUtils.finishWrite(inv, event.getNewBookMeta());
+            } else {
+                ItemStack add = BookUtils.finishWriteAdd(inv, event.getNewBookMeta());
 
-                meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, event.getNewBookMeta().page(1));
-                meta.getPersistentDataContainer().set(SIGNED, PersistentDataType.BOOLEAN, true);
+                inv.getItemInMainHand().setAmount(inv.getItemInOffHand().getAmount()-1);
 
-                inv.getItemInMainHand().setItemMeta(meta);
+                Collection<ItemStack> drop = inv.addItem(add).values();
+
+                if(!drop.isEmpty()) {
+                    event.getPlayer().getWorld().dropItem(event.getPlayer().getLocation(), drop.);
+                }
             }
         }
     }
@@ -312,5 +331,5 @@ public class VanillaReplacementListener implements Listener {
         if(isBook(event.getItemDrop().getItemStack())) {
             event.setCancelled(true);
         }
-    }
+    }*/
 }

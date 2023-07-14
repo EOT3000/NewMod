@@ -99,6 +99,7 @@ public class NewMod extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(new CraftingListener(), this);
         Bukkit.getPluginManager().registerEvents(new HornListener(), this);
         Bukkit.getPluginManager().registerEvents(new DropsListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
 
         List<ModExtension> toLoad = new ArrayList<>(extensions);
 
