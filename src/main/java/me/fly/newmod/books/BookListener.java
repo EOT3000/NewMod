@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
@@ -41,6 +42,11 @@ public class BookListener implements Listener {
             PlayerInventory inv = event.getPlayer().getInventory();
 
             if(!BookUtils.writableBark(inv.getItemInMainHand())) {
+                Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
+                    if(BookUtils.isBook(inv.getItemInOffHand())) {
+                        inv.setItemInOffHand(null);
+                    }
+                }, 1);
                 return;
             }
 
@@ -49,7 +55,7 @@ public class BookListener implements Listener {
             } else {
                 ItemStack add = BookUtils.finishWriteAdd(inv, event.getNewBookMeta());
 
-                inv.getItemInMainHand().setAmount(inv.getItemInOffHand().getAmount()-1);
+                inv.getItemInMainHand().setAmount(inv.getItemInMainHand().getAmount()-1);
 
                 Collection<ItemStack> drop = inv.addItem(add).values();
 
@@ -121,4 +127,9 @@ public class BookListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDeath(EntityDeathEvent event) {
+        //Thank you intellij idea for this beautiful code
+        event.getDrops().removeIf(BookUtils::isBook);
+    }
 }

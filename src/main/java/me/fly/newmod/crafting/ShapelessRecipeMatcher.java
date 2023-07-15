@@ -2,6 +2,7 @@ package me.fly.newmod.crafting;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -14,23 +15,39 @@ public class ShapelessRecipeMatcher {
     public static boolean matches(ShapelessRecipe recipe, ItemStack[] stacks) {
         //TODO: make it smarter
         //ShapelessRecipe ro = recipe.getChoiceList();
-        List<ItemStack> so = new ArrayList<>(List.of(stacks));
+        //System.out.println();
+        List<ItemStack> so = fromArray(stacks);
 
-        if(recipe.getChoiceList().size() != stacks.length) {
+        System.out.println("start");
+        System.out.println("list: " + so);
+        System.out.println("list size: " + so.size());
+        System.out.println("choices: " + recipe.getChoiceList());
+        System.out.println("choices size: " + recipe.getChoiceList().size());
+
+        if(recipe.getChoiceList().size() != so.size()) {
             return false;
         }
 
         a: for(RecipeChoice choice : recipe.getChoiceList()) {
-            for(ItemStack stack : stacks) {
+            //System.out.println("choice: " + choice);
+
+            for(ItemStack stack : new ArrayList<>(so)) {
+                //System.out.println("option: " + stack);
                 if(matches(choice, stack, recipe)) {
+                    //System.out.println("matches");
                     so.remove(stack);
+                    //System.out.println("");
 
                     continue a;
                 }
             }
 
+            //System.out.println("left: " + so);
+
             return false;
         }
+
+        //System.out.println("final left: " + so);
 
         return true;
     }
@@ -38,10 +55,26 @@ public class ShapelessRecipeMatcher {
     private static boolean matches(RecipeChoice choice, ItemStack stack, ShapelessRecipe recipe) {
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
-        if(choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
+        if(type == null) {
             return choice.test(stack);
+        } else {
+            if (choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
+                return choice.test(stack);
+            }
         }
 
         return false;
+    }
+
+    private static List<ItemStack> fromArray(ItemStack[] stacks) {
+        List<ItemStack> ret = new ArrayList<>();
+
+        for(ItemStack stack : stacks) {
+            if(stack != null) {
+                ret.add(stack);
+            }
+        }
+
+        return ret;
     }
 }

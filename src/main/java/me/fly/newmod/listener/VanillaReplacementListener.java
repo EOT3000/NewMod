@@ -19,21 +19,20 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.world.GenericGameEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -137,8 +136,8 @@ public class VanillaReplacementListener implements Listener {
     }
 
     @EventHandler
-    public void onPreSmelt(FurnaceStartSmeltEvent event) {
-        if(event.getRecipe() instanceof ModFurnaceRecipe recipe) {
+    public void onPreSmelt(FurnaceBurnEvent event) {
+        /*if(event.getRecipe() instanceof ModFurnaceRecipe recipe) {
             if(!recipe.canBeUsed(new ModBlock(event.getBlock()).getType())) {
                 Furnace furnace = (Furnace) event.getBlock().getState();
 
@@ -148,20 +147,18 @@ public class VanillaReplacementListener implements Listener {
 
                 return;
             }
-        }
+        }*/
 
-        ModItemType type = NewMod.get().getItemManager().getType(event.getSource());
+        FurnaceInventory inventory = ((Furnace) event.getBlock().getState()).getInventory();
+
+        ModItemType type = NewMod.get().getItemManager().getType(inventory.getSmelting());
 
         if(type == null) {
             return;
         }
 
-        if(!FurnaceRecipeMatcher.matches(event.getRecipe(), event.getSource())) {
-            Furnace furnace = (Furnace) event.getBlock().getState();
-
-            furnace.setBurnTime((short) -1);
-
-            furnace.update();
+        if(!type.isCraftable()) {
+            event.setCancelled(true);
         }
     }
 
@@ -170,166 +167,56 @@ public class VanillaReplacementListener implements Listener {
         event.getInventory().setRepairCost((int) Math.ceil(Math.tanh(event.getInventory().getRepairCost()/39.0)*39));
     }
 
+    //TODO: smithing and brewing namespace stored somewhere
+
     @EventHandler
     public void onSmith(PrepareSmithingEvent event) {
-        event.getInventory().getRecipe();
-    }
+        ModItemType type = NewMod.get().getItemManager().getType(event.getInventory().getInputMineral());
 
-    private boolean getSigned(ItemStack stack) {
-        return stack.getItemMeta().getPersistentDataContainer().getOrDefault(SIGNED, PersistentDataType.BOOLEAN, false);
-    }
-
-    private long getId(ItemStack stack) {
-        return stack.getItemMeta().getPersistentDataContainer().get(ID, PersistentDataType.LONG);
-    }
-
-    private boolean isBark(ItemStack stack) {
-        ModItemType type = NewMod.get().getItemManager().getType(stack);
-
-        return BookTypes.BIRCH_BARK.equals(type);
-    }
-
-    private boolean isBook(ItemStack stack) {
-        if(stack == null || !stack.hasItemMeta()) {
-            return false;
+        if(type != null && !(type.isCraftable() || type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "smithing")))) {
+            event.setResult(null);
         }
-
-        return stack.getItemMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false);
     }
 
-    private boolean bookBarkMismatch(PlayerInventory inventory) {
-        if(isBark(inventory.getItemInMainHand())) {
-            if(isBook(inventory.getItemInOffHand())) {
-                return getId(inventory.getItemInOffHand()) != getId(inventory.getItemInMainHand());
-            } else {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void putBook(PlayerInventory inv) {
-        long id = System.currentTimeMillis()+inv.getHolder().getUniqueId().hashCode();
-
-        ItemStack writableBook = new ItemStack(Material.WRITABLE_BOOK);
-        BookMeta meta = (BookMeta) writableBook.getItemMeta();
-
-        meta.pages(Component.text(""),
-                Component.text("Writing on this or subsequent pages will not be saved. Only write on page 1.").color(TextColor.color(0xFF0000)));
-        meta.getPersistentDataContainer().set(OFFHAND_ONLY, PersistentDataType.BOOLEAN, true);
-        meta.getPersistentDataContainer().set(ID, PersistentDataType.LONG, id);
-
-        writableBook.setItemMeta(meta);
-
-        inv.setItemInOffHand(writableBook);
-
-        ItemMeta bark = inv.getItemInMainHand().getItemMeta();
-
-        bark.getPersistentDataContainer().set(ID, PersistentDataType.LONG, id);
-
-        inv.getItemInMainHand().setItemMeta(bark);
-    }
-
-    //TODO: SIMPLIFY THIS AND NEW CLASS
-
-    /**
-     * An event
-     * @param             event
-     */
-    /*@EventHandler
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-    //It's ok
+        if(event.getClick().isShiftClick() && event.getInventory() instanceof BrewerInventory) {
+            ModItemType type = NewMod.get().getItemManager().getType(event.getCurrentItem());
 
-        //System.out.println(event.getCurrentItem());
-
-        if(isBook(event.getCurrentItem())) {
-            if(event.getSlot() == 40 && event.getClickedInventory() instanceof PlayerInventory) {
-                event.setCancelled(true);
-            }
-        } else {
-            ItemStack placed = event.getCursor();
-
-            if(isBook(placed)) {
-                if(event.getClickedInventory() == null) {
-                    return;
-                }
-
-                Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
-                    HumanEntity p = event.getWhoClicked();
-
-                    ItemStack stack = p.getOpenInventory().getItem(event.getRawSlot());
-
-                    if(isBook(stack)) {
-                        p.getOpenInventory().setItem(event.getRawSlot(), null);
-                    }
-
-                }, 1);
-            }
-        }
-
-        if(isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
-            Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
-                if (bookBarkMismatch(event.getWhoClicked().getInventory())) {
-                    putBook(event.getWhoClicked().getInventory());
-                }
-            }, 1);
-        }
-    }
-
-    //TODO: seperate class and use clever packets
-    @EventHandler
-    public void onHotbarSwitch(PlayerItemHeldEvent event) {
-        PlayerInventory inv = event.getPlayer().getInventory();
-
-        ItemStack stack = inv.getItem(event.getNewSlot());
-        ModItemType type = NewMod.get().getItemManager().getType(stack);
-
-        if (BookTypes.BIRCH_BARK.equals(type) && !getSigned(stack) && stack.getAmount() == 1) {
-            if (inv.getItemInOffHand().getType().equals(Material.AIR) || isBook(inv.getItemInOffHand())) {
-                putBook(inv);
-            }
-        } else if (isBook(inv.getItemInOffHand())) {
-            inv.setItemInOffHand(null);
-        }
-    }
-
-    @EventHandler
-    public void onSwitchHand(PlayerSwapHandItemsEvent event) {
-        if(isBook(event.getMainHandItem()) || isBook(event.getOffHandItem())) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onBookEdit(PlayerEditBookEvent event) {
-        if(event.getNewBookMeta().getPersistentDataContainer().getOrDefault(OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
-            PlayerInventory inv = event.getPlayer().getInventory();
-
-            if(!BookUtils.writableBark(inv.getItemInMainHand())) {
+            if(type == null) {
                 return;
             }
 
-            if(inv.getItemInMainHand().getAmount() == 1) {
-                BookUtils.finishWrite(inv, event.getNewBookMeta());
-            } else {
-                ItemStack add = BookUtils.finishWriteAdd(inv, event.getNewBookMeta());
+            //if(!type.isCraftable() && !type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "brewing"))) {
+                event.setCancelled(true);
+            //}
+        } else if(event.getClickedInventory() instanceof BrewerInventory) {
+            ModItemType type = NewMod.get().getItemManager().getType(event.getCursor());
 
-                inv.getItemInMainHand().setAmount(inv.getItemInOffHand().getAmount()-1);
-
-                Collection<ItemStack> drop = inv.addItem(add).values();
-
-                if(!drop.isEmpty()) {
-                    event.getPlayer().getWorld().dropItem(event.getPlayer().getLocation(), drop.);
-                }
+            if(type == null) {
+                return;
             }
+
+            //if(!type.isCraftable() && !type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "brewing"))) {
+                event.setCancelled(true);
+            //}
         }
     }
-    
+
     @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
-        if(isBook(event.getItemDrop().getItemStack())) {
-            event.setCancelled(true);
+    public void onBrewStart(BrewingStartEvent event) {
+        ModItemType type = NewMod.get().getItemManager().getType(event.getSource());
+
+        if (type == null) {
+            return;
         }
-    }*/
+
+        //if (!type.isCraftable() && !type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "brewing"))) {
+            BrewingStand stand = (BrewingStand) event.getBlock().getBlockData();
+
+            stand.getInventory().setIngredient(null);
+
+            stand.update();
+        //}
+    }
 }
