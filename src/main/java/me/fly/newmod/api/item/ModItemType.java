@@ -5,6 +5,8 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
+import me.fly.newmod.api.item.properties.DefaultModItemProperties;
+import me.fly.newmod.api.item.properties.ModItemProperties;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.api.util.Pair;
@@ -34,22 +36,20 @@ public class ModItemType {
 
     protected final Class<? extends ModItemMeta> meta;
 
-    protected final boolean craftable;
-
     private ModBlockType block;
 
     private Component customName;
 
-    private final List<NamespacedKey> allowedRecipeReplacement = new ArrayList<>();
+    private ModItemProperties properties;
 
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, ModItemProperties properties,
                        List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener, Component customName) {
         this.defaultMaterial = defaultMaterial;
         this.id = id;
 
         this.meta = meta;
 
-        this.craftable = craftable;
+        this.properties = properties;
 
         this.modifiers.addAll(modifiers);
         this.block = block;
@@ -59,9 +59,9 @@ public class ModItemType {
         this.customName = customName;
     }
 
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, boolean craftable,
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, ModItemProperties properties,
                        ModBlockType block, ItemEventsListener listener, Component customName) {
-        this(defaultMaterial, id, meta, craftable, Lists.newArrayList(new MetaModifier<>(customName, NAME_MODIFIER)), block, listener, customName);
+        this(defaultMaterial, id, meta, properties, Lists.newArrayList(new MetaModifier<>(customName, NAME_MODIFIER)), block, listener, customName);
     }
 
     public final Material getDefaultMaterial() {
@@ -108,39 +108,19 @@ public class ModItemType {
 
     // Type initiation
 
-    public ModItemType addReplaceableRecipe(NamespacedKey recipe) {
-        allowedRecipeReplacement.add(recipe);
-
-        return this;
-    }
-
-    public boolean isReplaceableRecipe(NamespacedKey key) {
-        return allowedRecipeReplacement.contains(key);
-    }
-
     public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {
         ItemStack result = new ModItemStack(this).create();
 
         result.setAmount(count);
 
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_furnace"), result);
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_shapeless"), result);
 
         if(ingredients.length > 9) {
             System.err.println("Error on adding recipe, more than 9 items defined " + getId());
         }
 
-        StringBuilder shape = new StringBuilder("         ");
-
-        for(int i = 0; i < ingredients.length; i++) {
-            shape.setCharAt(i, (char) (65+i));
-        }
-
-        recipe.shape(shape.substring(0,3), shape.substring(3,6), shape.substring(6,9));
-
-        for(int i = 0; i < ingredients.length; i++) {
-            System.out.println((char) (65+i));
-
-            recipe.setIngredient((char) (65+i), ingredients[i]);
+        for(ItemStack stack : ingredients) {
+            recipe.addIngredient(stack);
         }
 
         Bukkit.addRecipe(recipe);
@@ -173,11 +153,6 @@ public class ModItemType {
     }
 
     // Getter
-
-
-    public boolean isCraftable() {
-        return craftable;
-    }
 
     public ModItemType register() {
         NewMod.get().getItemManager().registerItem(this);

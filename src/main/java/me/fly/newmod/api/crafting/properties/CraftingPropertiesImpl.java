@@ -15,7 +15,7 @@ public class CraftingPropertiesImpl implements CraftingProperties {
     }
 
     @Override
-    public boolean allRecipes() {
+    public boolean isAllRecipes() {
         return all;
     }
 

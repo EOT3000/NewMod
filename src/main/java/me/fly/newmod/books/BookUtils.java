@@ -1,6 +1,5 @@
 package me.fly.newmod.books;
 
-import me.fly.newmod.BookTypes;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.util.PersistentDataUtils;

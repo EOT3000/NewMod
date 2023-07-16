@@ -5,7 +5,6 @@ import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.metals.MetalsModuleTypes;
 import me.fly.newmod.technology.consumer.PressureChamberBlockType;
-import me.fly.newmod.technology.consumer.PressureChamberItemType;
 import me.fly.newmod.technology.link.SolarLinkBlockType;
 import me.fly.newmod.technology.producer.SolarGeneratorBlockType;
 import org.bukkit.Material;

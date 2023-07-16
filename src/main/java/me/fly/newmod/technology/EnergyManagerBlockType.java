@@ -130,7 +130,7 @@ public class EnergyManagerBlockType extends ModBlockType implements EnergyCompon
         BlockManager manager = NewMod.get().getBlockManager();
         ModBlockType type = manager.getType(location);
 
-        if (type instanceof SolarLinkBlockType.SolarLinkBlockType) {
+        if (type instanceof SolarLinkBlockType) {
             n.add(location);
         }
     }

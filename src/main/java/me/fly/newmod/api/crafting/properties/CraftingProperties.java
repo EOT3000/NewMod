@@ -22,7 +22,7 @@ public interface CraftingProperties extends ModItemProperties {
     NamespacedKey BREWING = NamespacedKey.minecraft("brewing");
     NamespacedKey BREWING_FUEL = NamespacedKey.minecraft("brewing_fuel");
 
-    boolean allRecipes();
+    boolean isAllRecipes();
 
     Set<NamespacedKey> getRecipes();
 }

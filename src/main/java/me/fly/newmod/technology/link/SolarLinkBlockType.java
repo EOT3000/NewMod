@@ -51,7 +51,7 @@ public class SolarLinkBlockType extends ModBlockType implements EnergyComponent 
         Location location = event.getBlock().getLocation().clone().add(0, 1, 0);
         BlockManager bm = NewMod.get().getBlockManager();
 
-        if (bm.getType(location) instanceof SolarGeneratorBlockType.SolarGeneratorBlockType) {
+        if (bm.getType(location) instanceof SolarGeneratorBlockType) {
             ModBlock p = new ModBlock(location);
 
             EnergyHolderBlockData holder = (EnergyHolderBlockData) event.getModBlock().getData();

@@ -13,6 +13,7 @@ import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.ItemManager;
+import me.fly.newmod.books.BookTypes;
 import me.fly.newmod.listener.BlockListener;
 import me.fly.newmod.listener.CraftingListener;
 import me.fly.newmod.listener.HornListener;

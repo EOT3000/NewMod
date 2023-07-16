@@ -1,10 +1,7 @@
 package me.fly.newmod.books;
 
-import me.fly.newmod.BookTypes;
 import me.fly.newmod.NewMod;
-import me.fly.newmod.api.item.ModItemType;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

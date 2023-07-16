@@ -5,6 +5,8 @@ import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
+import me.fly.newmod.api.item.properties.DefaultModItemProperties;
+import me.fly.newmod.api.item.properties.ModItemProperties;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.api.util.Pair;
@@ -26,7 +28,7 @@ public class ModItemTypeBuilder {
 
     private ItemEventsListener listener = new ItemEventsListener() {};
     private Class<? extends ModItemMeta> meta = DefaultModItemMeta.class;
-    private boolean craftable = false;
+    private ModItemProperties properties = new DefaultModItemProperties();
 
     private Component customName;
 
@@ -65,8 +67,8 @@ public class ModItemTypeBuilder {
         return this;
     }
 
-    public ModItemTypeBuilder craftable(boolean craftable) {
-        this.craftable = craftable;
+    public ModItemTypeBuilder properties(ModItemProperties properties) {
+        this.properties = properties;
 
         return this;
     }
@@ -90,10 +92,10 @@ public class ModItemTypeBuilder {
     }
 
     public ModItemType build() {
-        return new ModItemType(defaultMaterial, id, meta, craftable, modifiers, block, listener, customName);
+        return new ModItemType(defaultMaterial, id, meta, properties, modifiers, block, listener, customName);
     }
 
     public ModItemType buildAndRegister() {
-        return new ModItemType(defaultMaterial, id, meta, craftable, modifiers, block, listener, customName).register();
+        return new ModItemType(defaultMaterial, id, meta, properties, modifiers, block, listener, customName).register();
     }
 }
