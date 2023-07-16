@@ -1,10 +1,8 @@
-package me.fly.newmod.crafting;
+package me.fly.newmod.api.crafting;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapelessRecipe;
 

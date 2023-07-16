@@ -1,4 +1,4 @@
-package me.fly.newmod.crafting;
+package me.fly.newmod.api.crafting;
 
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;

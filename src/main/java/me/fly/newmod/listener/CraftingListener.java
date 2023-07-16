@@ -1,7 +1,7 @@
 package me.fly.newmod.listener;
 
 import me.fly.newmod.NewMod;
-import me.fly.newmod.crafting.CraftingChangesManager;
+import me.fly.newmod.api.crafting.CraftingChangesManager;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

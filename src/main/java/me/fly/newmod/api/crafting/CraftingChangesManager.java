@@ -1,4 +1,4 @@
-package me.fly.newmod.crafting;
+package me.fly.newmod.api.crafting;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;

@@ -12,12 +12,5 @@ public class BookTypes {
     public static void init() {}
 
     public static final ModItemType BIRCH_BARK = new ModItemTypeBuilder(Material.PAPER, "birch_bark", NewMod.get())
-            .customName("Birch Bark", 0xFFFFEF).listener(new ItemEventsListener() {
-                @Override
-                public void onItemUseHighest(ModUseEvent event) {
-                    if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-                        //event.getHand()
-                    }
-                }
-            }).buildAndRegister();
+            .customName("Birch Bark", 0xFFFFEF).buildAndRegister();
 }

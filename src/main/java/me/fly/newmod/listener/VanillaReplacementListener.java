@@ -1,44 +1,18 @@
 package me.fly.newmod.listener;
 
-import com.destroystokyo.paper.event.server.ServerTickStartEvent;
-import me.fly.newmod.BookTypes;
 import me.fly.newmod.NewMod;
-import me.fly.newmod.api.block.ModBlock;
 import me.fly.newmod.api.item.ItemManager;
-import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
-import me.fly.newmod.api.util.PersistentDataUtils;
-import me.fly.newmod.books.BookUtils;
-import me.fly.newmod.crafting.FurnaceRecipeMatcher;
-import me.fly.newmod.crafting.ShapedRecipeMatcher;
-import me.fly.newmod.crafting.ShapelessRecipeMatcher;
-import me.fly.newmod.technology.consumer.ModFurnaceRecipe;
-import me.fly.newmod.time.nms.bee.CustomBeeHiveTicker;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
+import me.fly.newmod.api.crafting.ShapedRecipeMatcher;
+import me.fly.newmod.api.crafting.ShapelessRecipeMatcher;
 import org.bukkit.*;
-import org.bukkit.block.Beehive;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Furnace;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BrewingStartEvent;
 import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEditBookEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.world.GenericGameEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Collection;
-import java.util.List;
 
 public class VanillaReplacementListener implements Listener {
     private final int[][] tableItems = new int[][]
@@ -180,6 +154,15 @@ public class VanillaReplacementListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        System.out.println("sl: "+ event.getSlot());
+        System.out.println("rs: " + event.getRawSlot());
+        System.out.println("cl: " + event.getClick());
+        System.out.println("ci: " + event.getClickedInventory());
+        System.out.println("i: " + event.getInventory());
+        System.out.println("itemcurse: " + event.getCursor());
+        System.out.println("itemcur: " + event.getCurrentItem());
+        System.out.println();
+
         if(event.getClick().isShiftClick() && event.getInventory() instanceof BrewerInventory) {
             ModItemType type = NewMod.get().getItemManager().getType(event.getCurrentItem());
 
@@ -212,11 +195,13 @@ public class VanillaReplacementListener implements Listener {
         }
 
         //if (!type.isCraftable() && !type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "brewing"))) {
-            BrewingStand stand = (BrewingStand) event.getBlock().getBlockData();
+        Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
+                    BrewingStand stand = (BrewingStand) event.getBlock().getState();
 
-            stand.getInventory().setIngredient(null);
+                    stand.getInventory().setIngredient(null);
 
-            stand.update();
+                    stand.update();
+                }, 1);
         //}
     }
 }

@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * Represents an item stack with mod properties.
  *
- * Instances of this class should not be stored; instead a new ModItemStack should be created when the need arises
+ * Instances of this class should not be stored; instead a new ModItemStack should be created needed
  *
  * @see ItemManager#deserializeModItemStack
  */
