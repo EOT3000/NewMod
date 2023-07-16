@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Collection;
 
 public class BookListener implements Listener {
-    // The base behaviours - add a book when the bark is in your hand, remove it when it's not, and apply data when it's finished
+    // The base behaviours - add a book when the paper or bark is in your hand, remove it when it's not, and apply data when it's finished
 
     @EventHandler
     public void onHotbarSwitch(PlayerItemHeldEvent event) {
@@ -26,7 +26,7 @@ public class BookListener implements Listener {
 
         ItemStack stack = inv.getItem(event.getNewSlot());
 
-        if (BookUtils.writableBark(stack)) {
+        if (BookUtils.writable(stack)) {
             BookUtils.putBook(inv);
         } else if (BookUtils.isBook(inv.getItemInOffHand())) {
             inv.setItemInOffHand(null);
@@ -38,7 +38,7 @@ public class BookListener implements Listener {
         if(event.getNewBookMeta().getPersistentDataContainer().getOrDefault(BookUtils.OFFHAND_ONLY, PersistentDataType.BOOLEAN, false)) {
             PlayerInventory inv = event.getPlayer().getInventory();
 
-            if(!BookUtils.writableBark(inv.getItemInMainHand())) {
+            if(!BookUtils.writable(inv.getItemInMainHand())) {
                 Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
                     if(BookUtils.isBook(inv.getItemInOffHand())) {
                         inv.setItemInOffHand(null);
@@ -88,7 +88,7 @@ public class BookListener implements Listener {
                 event.setCancelled(true);
 
                 Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
-                    if (!BookUtils.writableBark(event.getWhoClicked().getInventory().getItemInMainHand())
+                    if (!BookUtils.writable(event.getWhoClicked().getInventory().getItemInMainHand())
                             && BookUtils.isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
                         event.getWhoClicked().getInventory().setItemInOffHand(null);
                     }
@@ -117,7 +117,7 @@ public class BookListener implements Listener {
 
         if(BookUtils.isBook(event.getWhoClicked().getInventory().getItemInOffHand())) {
             Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
-                if (!BookUtils.writableBark(event.getWhoClicked().getInventory().getItemInMainHand())) {
+                if (!BookUtils.writable(event.getWhoClicked().getInventory().getItemInMainHand())) {
                     event.getWhoClicked().getInventory().setItemInOffHand(null);
                 }
             }, 1);

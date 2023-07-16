@@ -36,11 +36,11 @@ public class ModItemType {
 
     protected final Class<? extends ModItemMeta> meta;
 
-    private ModBlockType block;
+    private final ModBlockType block;
 
-    private Component customName;
+    private final Component customName;
 
-    private ModItemProperties properties;
+    private final ModItemProperties properties;
 
     public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, ModItemProperties properties,
                        List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener, Component customName) {
@@ -86,6 +86,10 @@ public class ModItemType {
 
     public Component getCustomName() {
         return customName;
+    }
+
+    public ModItemProperties getProperties() {
+        return properties;
     }
 
     public ItemStack create() {

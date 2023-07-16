@@ -78,6 +78,28 @@ public final class PersistentDataUtils {
         }
     };
 
+    public static final PersistentDataType<String[], String[]> STRING_ARRAY = new PersistentDataType<String[], String[]>() {
+        @Override
+        public @NotNull Class<String[]> getPrimitiveType() {
+            return String[].class;
+        }
+
+        @Override
+        public @NotNull Class<String[]> getComplexType() {
+            return String[].class;
+        }
+
+        @Override
+        public String @NotNull [] toPrimitive(String @NotNull [] strings, @NotNull PersistentDataAdapterContext persistentDataAdapterContext) {
+            return strings;
+        }
+
+        @Override
+        public String @NotNull [] fromPrimitive(String @NotNull [] strings, @NotNull PersistentDataAdapterContext persistentDataAdapterContext) {
+            return strings;
+        }
+    };
+
 
     public static NamespacedKey namespacedKeyFromPrimitive(String s) {
         if(s == null) {

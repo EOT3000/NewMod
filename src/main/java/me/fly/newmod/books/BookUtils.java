@@ -1,9 +1,12 @@
 package me.fly.newmod.books;
 
 import me.fly.newmod.NewMod;
+import me.fly.newmod.api.item.ModItemStack;
 import me.fly.newmod.api.item.ModItemType;
+import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.util.PersistentDataUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,21 +19,20 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class BookUtils {
     public static final NamespacedKey OFFHAND_ONLY = new NamespacedKey(NewMod.get(), "offhand_only");
-    public static final NamespacedKey PAGES = new NamespacedKey(NewMod.get(), "pages");
-    public static final NamespacedKey ID = new NamespacedKey(NewMod.get(), "book_id");
-    public static final NamespacedKey SIGNED = new NamespacedKey(NewMod.get(), "signed");
 
     public static void finishWrite(PlayerInventory inventory, BookMeta newBook) {
         Bukkit.getScheduler().runTaskLater(NewMod.get(), () -> {
             inventory.setItemInOffHand(null);
         }, 1);
 
-        ItemMeta meta = inventory.getItemInMainHand().getItemMeta();
+        ModItemStack stack = new ModItemStack(inventory.getItemInMainHand());
+        WritableItemMeta meta = (WritableItemMeta) stack.getMeta();
 
-        meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, newBook.page(1));
-        meta.getPersistentDataContainer().set(SIGNED, PersistentDataType.BOOLEAN, true);
+        meta.setText(new String[] {((TextComponent) newBook.page(1)).content()});
+        meta.setSigned(true);
 
-        inventory.getItemInMainHand().setItemMeta(meta);
+        stack.setMeta(meta);
+        stack.update();
     }
 
     public static ItemStack finishWriteAdd(PlayerInventory inventory, BookMeta newBook) {
@@ -42,25 +44,27 @@ public class BookUtils {
 
         stack.setAmount(1);
 
-        ItemMeta meta = stack.getItemMeta();
+        ModItemStack mod = new ModItemStack(stack);
+        WritableItemMeta meta = (WritableItemMeta) mod.getMeta();
 
-        meta.getPersistentDataContainer().set(PAGES, PersistentDataUtils.COMPONENT, newBook.page(1));
-        meta.getPersistentDataContainer().set(SIGNED, PersistentDataType.BOOLEAN, true);
+        meta.setText(new String[] {((TextComponent) newBook.page(1)).content()});
+        meta.setSigned(true);
 
-        stack.setItemMeta(meta);
+        mod.setMeta(meta);
+        mod.update();
 
         return stack;
     }
 
-    public static boolean writableBark(ItemStack stack) {
+    public static boolean writable(ItemStack stack) {
         if(stack == null || !stack.hasItemMeta()) {
             return false;
         }
 
         ModItemType type = NewMod.get().getItemManager().getType(stack);
 
-        if(BookTypes.BIRCH_BARK.equals(type)) {
-            return !stack.getItemMeta().getPersistentDataContainer().getOrDefault(SIGNED, PersistentDataType.BOOLEAN, false);
+        if(type != null && type.getProperties() instanceof WritableProperties) {
+            return !((WritableItemMeta) new ModItemStack(stack).getMeta()).isSigned();
         }
 
         return false;

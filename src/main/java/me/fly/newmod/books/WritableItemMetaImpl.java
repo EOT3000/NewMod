@@ -5,33 +5,49 @@ import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMetaSerializer;
+import me.fly.newmod.api.util.PersistentDataUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WritableItemMetaImpl extends ModItemMeta.AbstractModItemMeta {
-    private List<String> text;
+public class WritableItemMetaImpl extends ModItemMeta.AbstractModItemMeta implements WritableItemMeta {
+    private String[] text;
+    private boolean signed;
 
-    protected WritableItemMetaImpl(ModItemType type, List<String> text) {
+    protected WritableItemMetaImpl(ModItemType type, String[] text, boolean signed) {
         super(type);
 
-        this.text = new ArrayList<>(text);
+        this.text = text.clone();
+        this.signed = signed;
     }
 
-    public List<String> getText() {
+    @Override
+    public String[] getText() {
         return text;
     }
 
-    public void setText(List<String> text) {
+    @Override
+    public void setText(String[] text) {
         this.text = text;
     }
 
     @Override
+    public boolean isSigned() {
+        return signed;
+    }
+
+    @Override
+    public void setSigned(boolean signed) {
+        this.signed = signed;
+    }
+
+    @Override
     public WritableItemMetaImpl cloneItem() {
-        return new WritableItemMetaImpl(getType(), text);
+        return new WritableItemMetaImpl(getType(), text, signed);
     }
 
     @Override
@@ -47,13 +63,14 @@ public class WritableItemMetaImpl extends ModItemMeta.AbstractModItemMeta {
         @Override
         public WritableItemMetaImpl getItemMeta(PersistentDataContainer container) {
             ItemManager manager = NewMod.get().getItemManager();
+            ModItemType type = manager.getType(container);
 
-            return new WritableItemMetaImpl(manager.getType(container), container.get());
+            return new WritableItemMetaImpl(type, container.getOrDefault(TEXT, PersistentDataUtils.STRING_ARRAY, new String[0]), container.getOrDefault(SIGNED, PersistentDataType.BOOLEAN, false));
         }
 
         @Override
         public WritableItemMetaImpl defaultMeta(ModItemType type) {
-            return new WritableItemMetaImpl(type, );
+            return new WritableItemMetaImpl(type, new String[0], false);
         }
 
         @Override
