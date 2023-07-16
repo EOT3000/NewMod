@@ -48,12 +48,12 @@ public class WritableItemMetaImpl extends ModItemMeta.AbstractModItemMeta {
         public WritableItemMetaImpl getItemMeta(PersistentDataContainer container) {
             ItemManager manager = NewMod.get().getItemManager();
 
-            return new WritableItemMetaImpl(manager.getType(container));
+            return new WritableItemMetaImpl(manager.getType(container), container.get());
         }
 
         @Override
         public WritableItemMetaImpl defaultMeta(ModItemType type) {
-            return new WritableItemMetaImpl(type);
+            return new WritableItemMetaImpl(type, );
         }
 
         @Override

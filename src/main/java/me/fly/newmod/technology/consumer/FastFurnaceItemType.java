@@ -5,11 +5,9 @@ import me.fly.newmod.api.events.block.ModBlockTickEvent;
 import me.fly.newmod.api.item.ItemEventsListener;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
-import me.fly.newmod.api.item.meta.ModItemMeta;
-import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.technology.EnergyComponent;
 import me.fly.newmod.technology.TechnologyPlugin;
-import me.fly.newmod.technology.link.SolarLinkItemType;
+import me.fly.newmod.technology.link.SolarLinkBlockType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
@@ -17,17 +15,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Furnace;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-
 public class FastFurnaceItemType extends ModItemType {
     public FastFurnaceItemType(Material material, int maxSpeed, int maxUsage, int capacity, String id, String name, int color) {
         super(material, new NamespacedKey(TechnologyPlugin.get(), id), DefaultModItemMeta.class, false,
-                new SolarLinkItemType.SolarLinkBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+                new SolarLinkBlockType.SolarLinkBlockType(material, capacity, null, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
     public FastFurnaceItemType(Material material, int maxSpeed, int maxUsage, int capacity, JavaPlugin plugin, String id, String name, int color) {
         super(material, new NamespacedKey(plugin, id), DefaultModItemMeta.class, false,
-                new SolarLinkItemType.SolarLinkBlockType(material, capacity, plugin, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
+                new SolarLinkBlockType.SolarLinkBlockType(material, capacity, plugin, id), new ItemEventsListener() {}, Component.text(name).color(TextColor.color(color)));
     }
 
     public static class FastFurnaceBlockType extends ModBlockType implements EnergyComponent {

@@ -17,11 +17,11 @@ public class PressureChamberRecipe extends CookingRecipe<PressureChamberRecipe> 
 
     @Override
     public boolean canBeUsed(ModBlockType type) {
-        return type instanceof PressureChamberItemType.PressureChamberBlockType;
+        return type instanceof PressureChamberBlockType;
     }
 
     @Override
     public ModItemType primaryBlock() {
-        return TechnologyModuleTypes.PRESSURE_CHAMBER_ITEM_TYPE;
+        return TechnologyModuleTypes.PRESSURE_CHAMBER;
     }
 }

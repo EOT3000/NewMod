@@ -4,9 +4,10 @@ import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.item.builders.ModItemTypeBuilder;
 import me.fly.newmod.metals.MetalsModuleTypes;
+import me.fly.newmod.technology.consumer.PressureChamberBlockType;
 import me.fly.newmod.technology.consumer.PressureChamberItemType;
-import me.fly.newmod.technology.link.SolarLinkItemType;
-import me.fly.newmod.technology.producer.SolarGeneratorItemType;
+import me.fly.newmod.technology.link.SolarLinkBlockType;
+import me.fly.newmod.technology.producer.SolarGeneratorBlockType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -106,17 +107,25 @@ public class TechnologyModuleTypes {
     public static final ModItemType SOLAR_CELL_II = new ModItemTypeBuilder(Material.FIREWORK_STAR, "solar_cell_2", TechnologyPlugin.get())
             .customName("Solar Cell II", 0xFFA080).buildAndRegister();
 
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_I = register(new SolarGeneratorItemType(36, 4, 2, 768, "solar_generator_1", "Solar Generator I", 0x732929));
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_II = register(new SolarGeneratorItemType(48, 8, 4, 1152, "solar_generator_2", "Solar Generator II", 0x736129));
-    public static final SolarGeneratorItemType SOLAR_GENERATOR_III = register(new SolarGeneratorItemType(60, 16, 6, 1600, "solar_generator_3", "Solar Generator III", 0x90b53a));
+    public static final ModItemType SOLAR_GENERATOR_I = new ModItemTypeBuilder(Material.DAYLIGHT_DETECTOR, "solar_generator_1", TechnologyPlugin.get()).block(new SolarGeneratorBlockType(36, 4, 2, 768, TechnologyPlugin.get(), "solar_generator_1"))
+            .customName("Solar Generator I", 0x732929).buildAndRegister();
+    public static final ModItemType SOLAR_GENERATOR_II = new ModItemTypeBuilder(Material.DAYLIGHT_DETECTOR, "solar_generator_2", TechnologyPlugin.get()).block(new SolarGeneratorBlockType(48, 8, 4, 1152, TechnologyPlugin.get(), "solar_generator_2"))
+            .customName("Solar Generator II", 0x736129).buildAndRegister();
+    public static final ModItemType SOLAR_GENERATOR_III = new ModItemTypeBuilder(Material.DAYLIGHT_DETECTOR, "solar_generator_3", TechnologyPlugin.get()).block(new SolarGeneratorBlockType(60, 16, 6, 1600, TechnologyPlugin.get(), "solar_generator_3"))
+            .customName("Solar Generator III", 0x90b53a).buildAndRegister();
 
-    public static final EnergyManagerItemType ENERGY_MANAGER_I = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 1920, "energy_manager_1", "Energy Manager I", 0xA0A000));
-    public static final EnergyManagerItemType ENERGY_MANAGER_II = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 2880, "energy_manager_2", "Energy Manager II", 0xA0A000));
-    public static final EnergyManagerItemType ENERGY_MANAGER_III = register(new EnergyManagerItemType(Material.REDSTONE_LAMP, 4000, "energy_manager_3", "Energy Manager III", 0xA0A000));
+    public static final ModItemType ENERGY_MANAGER_I = new ModItemTypeBuilder(Material.REDSTONE_LAMP, "energy_manager_1", TechnologyPlugin.get()).block(new EnergyManagerBlockType(Material.REDSTONE_LAMP, 1920, TechnologyPlugin.get(), "energy_manager_1"))
+            .customName("Energy Manager I", 0xA0A000).buildAndRegister();
+    public static final ModItemType ENERGY_MANAGER_II = new ModItemTypeBuilder(Material.REDSTONE_LAMP, "energy_manager_2", TechnologyPlugin.get()).block(new EnergyManagerBlockType(Material.REDSTONE_LAMP, 2880, TechnologyPlugin.get(), "energy_manager_2"))
+            .customName("Energy Manager II", 0xA0A000).buildAndRegister();
+    public static final ModItemType ENERGY_MANAGER_III = new ModItemTypeBuilder(Material.REDSTONE_LAMP, "energy_manager_3", TechnologyPlugin.get()).block(new EnergyManagerBlockType(Material.REDSTONE_LAMP, 4000, TechnologyPlugin.get(), "energy_manager_3"))
+            .customName("Energy Manager III", 0xA0A000).buildAndRegister();
 
-    public static final PressureChamberItemType PRESSURE_CHAMBER_ITEM_TYPE = register(new PressureChamberItemType());
+    public static final ModItemType PRESSURE_CHAMBER = new ModItemTypeBuilder(Material.IRON_BLOCK, "pressure_chamber", TechnologyPlugin.get()).block(new PressureChamberBlockType())
+            .customName("Pressure Chamber", 0xdbd4ba).buildAndRegister();
 
-    public static final SolarLinkItemType SPRUCE_SOLAR_LINK = register(new SolarLinkItemType(Material.SPRUCE_TRAPDOOR, 1000, "spruce_solar_link", "Spruce Solar Link", 0x8068040));
+    public static final ModItemType SPRUCE_SOLAR_LINK = new ModItemTypeBuilder(Material.SPRUCE_TRAPDOOR, "spruce_solar_link", TechnologyPlugin.get()).block(new SolarLinkBlockType(Material.SPRUCE_TRAPDOOR, 1000, TechnologyPlugin.get(), "spruce_solar_link"))
+            .customName("Spruce Solar Link", 0x6d9c7a).buildAndRegister();
 
     public static <T extends ModItemType> T register(T t) {
         NewMod.get().getItemManager().registerItem(t);
