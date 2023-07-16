@@ -5,16 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class VanillaOrModItem {
     private final Material vanilla;
-    private final ModItemType mod;
-
-    public VanillaOrModItem(ModItemType type) {
-        if(type == null) {
-            throw new NullPointerException("Type cannot be null");
-        }
-
-        this.vanilla = null;
-        this.mod = type;
-    }
+    private final ModItemType<?> mod;
 
     public VanillaOrModItem(Material type) {
         if(type == null) {
@@ -25,11 +16,20 @@ public class VanillaOrModItem {
         this.mod = null;
     }
 
+    VanillaOrModItem() {
+        if(this instanceof ModItemType<?> type) {
+            this.mod = type;
+            this.vanilla = null;
+        } else {
+            throw new IllegalCallerException();
+        }
+    }
+
     public Material getVanilla() {
         return vanilla;
     }
 
-    public ModItemType getMod() {
+    public ModItemType<?> getMod() {
         return mod;
     }
 

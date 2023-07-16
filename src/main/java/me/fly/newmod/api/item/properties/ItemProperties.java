@@ -1,4 +1,4 @@
 package me.fly.newmod.api.item.properties;
 
-public interface ModItemProperties {
+public interface ItemProperties {
 }

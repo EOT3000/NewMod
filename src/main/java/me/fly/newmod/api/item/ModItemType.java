@@ -6,7 +6,7 @@ import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.properties.DefaultModItemProperties;
-import me.fly.newmod.api.item.properties.ModItemProperties;
+import me.fly.newmod.api.item.properties.ItemProperties;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;
 import me.fly.newmod.api.item.texture.MetaModifier;
 import me.fly.newmod.api.util.Pair;
@@ -26,7 +26,7 @@ import java.util.List;
 import static me.fly.newmod.api.item.texture.DefaultMetaFlags.ENCHANTMENT_MODIFIER;
 import static me.fly.newmod.api.item.texture.DefaultMetaFlags.NAME_MODIFIER;
 
-public class ModItemType {
+public class ModItemType<T extends ItemProperties> extends VanillaOrModItem implements ItemWithProperties<T> {
     private ItemEventsListener listener;
 
     private final List<MetaModifier<?>> modifiers = new ArrayList<>();
@@ -40,9 +40,9 @@ public class ModItemType {
 
     private final Component customName;
 
-    private final ModItemProperties properties;
+    private final T properties;
 
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, ModItemProperties properties,
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, T properties,
                        List<MetaModifier<?>> modifiers, ModBlockType block, ItemEventsListener listener, Component customName) {
         this.defaultMaterial = defaultMaterial;
         this.id = id;
@@ -59,9 +59,14 @@ public class ModItemType {
         this.customName = customName;
     }
 
-    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, ModItemProperties properties,
+    public ModItemType(Material defaultMaterial, NamespacedKey id, Class<? extends ModItemMeta> meta, T properties,
                        ModBlockType block, ItemEventsListener listener, Component customName) {
         this(defaultMaterial, id, meta, properties, Lists.newArrayList(new MetaModifier<>(customName, NAME_MODIFIER)), block, listener, customName);
+    }
+
+    @Override
+    public VanillaOrModItem get() {
+        return this;
     }
 
     public final Material getDefaultMaterial() {
@@ -88,10 +93,12 @@ public class ModItemType {
         return customName;
     }
 
-    public ModItemProperties getProperties() {
+    @Override
+    public T getProperties() {
         return properties;
     }
 
+    @Override
     public ItemStack create() {
         return new ModItemStack(this).create();
     }

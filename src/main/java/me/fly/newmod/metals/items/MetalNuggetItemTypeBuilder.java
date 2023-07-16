@@ -43,11 +43,11 @@ public class MetalNuggetItemTypeBuilder {
         this.metal = new VanillaOrModItem(material);
     }
 
-    public MetalNuggetItemTypeBuilder(Material m, String id, JavaPlugin plugin, ModItemType material) {
+    public MetalNuggetItemTypeBuilder(Material m, String id, JavaPlugin plugin, ModItemType<?> material) {
         this.defaultMaterial = m;
         this.id = new NamespacedKey(plugin, id);
 
-        this.metal = new VanillaOrModItem(material);
+        this.metal = material;
     }
 
     public MetalNuggetItemTypeBuilder customName(String s, TextColor c) {

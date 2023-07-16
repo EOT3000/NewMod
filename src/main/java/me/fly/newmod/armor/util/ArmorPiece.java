@@ -1,11 +1,9 @@
 package me.fly.newmod.armor.util;
 
 import com.google.common.collect.ImmutableMap;
-import me.fly.newmod.api.NewModAPI;
 import me.fly.newmod.armor.ArmorManager;
-import me.fly.newmod.armor.model.ArmorItemType;
+import me.fly.newmod.armor.model.ArmorProperties;
 import me.fly.newmod.armor.model.ArmorSection;
-import me.fly.newmod.armor.model.VanillaArmorMaterial;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -24,13 +22,13 @@ public class ArmorPiece {
     //For easy potion effect access
     public final LivingEntity entity;
 
-    public final ArmorItemType piece;
+    public final ArmorProperties piece;
 
     public ArmorPiece(LivingEntity entity, ArmorSection section) {
         this.entity = entity;
         ItemStack stack = section.getItem(entity);
 
-        ArmorItemType piece = new ArmorManager().getArmorItem(stack);
+        ArmorProperties piece = new ArmorManager().getArmorItem(stack);
 
         this.piece = piece;
 

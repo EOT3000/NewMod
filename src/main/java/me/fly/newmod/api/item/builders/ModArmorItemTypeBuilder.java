@@ -2,9 +2,7 @@ package me.fly.newmod.api.item.builders;
 
 import me.fly.newmod.api.block.ModBlockType;
 import me.fly.newmod.api.item.ItemEventsListener;
-import me.fly.newmod.armor.model.ArmorMaterial;
 import me.fly.newmod.armor.model.ArmorSection;
-import me.fly.newmod.armor.model.ModArmorItemType;
 import me.fly.newmod.api.item.meta.DefaultModItemMeta;
 import me.fly.newmod.api.item.meta.ModItemMeta;
 import me.fly.newmod.api.item.texture.DefaultMetaFlags;

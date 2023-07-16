@@ -3,19 +3,14 @@ package me.fly.newmod.armor;
 import me.fly.newmod.NewMod;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemType;
-import me.fly.newmod.armor.model.ArmorItemType;
-import me.fly.newmod.armor.model.ArmorMaterial;
+import me.fly.newmod.armor.model.ArmorProperties;
 import me.fly.newmod.armor.model.VanillaArmorMaterial;
 import me.fly.newmod.armor.model.VanillaHelmet;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ArmorManager {
 
-    public ArmorItemType getArmorItem(ItemStack stack) {
+    public ArmorProperties getArmorItem(ItemStack stack) {
         if (stack == null) return null;
 
         ItemManager manager = NewMod.get().getItemManager();
@@ -34,8 +29,8 @@ public class ArmorManager {
                 if(material.head().get().equals(stack.getType())) return material.head();
             }
         } else {
-            if(type instanceof ArmorItemType) {
-                return (ArmorItemType) type;
+            if(type instanceof ArmorProperties) {
+                return (ArmorProperties) type;
             }
         }
 

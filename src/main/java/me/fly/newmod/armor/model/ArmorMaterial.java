@@ -5,15 +5,15 @@ import org.bukkit.inventory.ItemStack;
 public interface ArmorMaterial {
     ItemStack material();
 
-    ArmorItemType boots();
+    ArmorProperties boots();
 
-    ArmorItemType legs();
+    ArmorProperties legs();
 
-    ArmorItemType chest();
+    ArmorProperties chest();
 
-    ArmorItemType head();
+    ArmorProperties head();
 
-    default ArmorItemType item(ArmorSection section) {
+    default ArmorProperties item(ArmorSection section) {
         if (section == null) return null;
 
         return switch (section) {

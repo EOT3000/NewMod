@@ -7,13 +7,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
 public class FurnaceRecipeMatcher {
+
+    //TODO: do something with this
     public static boolean matches(CookingRecipe recipe, ItemStack stack) {
         ModItemType type = NewMod.get().getItemManager().getType(stack);
         RecipeChoice choice = recipe.getInputChoice();
 
-        if(choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
+        /*if(choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
             return choice.test(stack);
-        }
+        }*/
 
         return false;
     }

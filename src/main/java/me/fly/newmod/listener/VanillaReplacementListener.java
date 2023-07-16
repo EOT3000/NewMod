@@ -1,6 +1,7 @@
 package me.fly.newmod.listener;
 
 import me.fly.newmod.NewMod;
+import me.fly.newmod.api.crafting.properties.CraftingProperties;
 import me.fly.newmod.api.item.ItemManager;
 import me.fly.newmod.api.item.ModItemType;
 import me.fly.newmod.api.crafting.ShapedRecipeMatcher;
@@ -21,11 +22,6 @@ public class VanillaReplacementListener implements Listener {
                     {2,0},{2,1},{2,2}};
 
     private int count = 0;
-
-    public static final NamespacedKey OFFHAND_ONLY = new NamespacedKey(NewMod.get(), "offhand_only");
-    public static final NamespacedKey PAGES = new NamespacedKey(NewMod.get(), "pages");
-    public static final NamespacedKey ID = new NamespacedKey(NewMod.get(), "book_id");
-    public static final NamespacedKey SIGNED = new NamespacedKey(NewMod.get(), "signed");
 
     public VanillaReplacementListener() {
         System.out.println("created");
@@ -83,19 +79,6 @@ public class VanillaReplacementListener implements Listener {
         }
     }*/
 
-    private void checkForAny(PrepareItemCraftEvent event) {
-        ItemManager manager = NewMod.get().getItemManager();
-
-        for(ItemStack stack : event.getInventory().getMatrix()) {
-            ModItemType type = manager.getType(stack);
-
-            if(type != null && !type.isCraftable()) {
-                event.getInventory().setResult(new ItemStack(Material.AIR));
-                return;
-            }
-        }
-    }
-
     @EventHandler
     public void onPreCraft(PrepareItemCraftEvent event) {
         if(event.getRecipe() instanceof ShapedRecipe) {
@@ -131,7 +114,12 @@ public class VanillaReplacementListener implements Listener {
             return;
         }
 
-        if(!type.isCraftable()) {
+        if(type.getProperties() instanceof CraftingProperties properties) {
+            //TODO: other smelting types
+            if(!properties.isAllRecipes() && !properties.getRecipes().contains(CraftingProperties.SMELTING)) {
+                event.setCancelled(true);
+            }
+        } else {
             event.setCancelled(true);
         }
     }
@@ -147,21 +135,29 @@ public class VanillaReplacementListener implements Listener {
     public void onSmith(PrepareSmithingEvent event) {
         ModItemType type = NewMod.get().getItemManager().getType(event.getInventory().getInputMineral());
 
-        if(type != null && !(type.isCraftable() || type.isReplaceableRecipe(new NamespacedKey(NamespacedKey.MINECRAFT, "smithing")))) {
+        if (type == null) {
+            return;
+        }
+
+        if (type.getProperties() instanceof CraftingProperties properties) {
+            if (!properties.isAllRecipes() && !properties.getRecipes().contains(CraftingProperties.SMITHING_MINERAL)) {
+                event.setResult(null);
+            }
+        } else {
             event.setResult(null);
         }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        System.out.println("sl: "+ event.getSlot());
+        /*System.out.println("sl: "+ event.getSlot());
         System.out.println("rs: " + event.getRawSlot());
         System.out.println("cl: " + event.getClick());
         System.out.println("ci: " + event.getClickedInventory());
         System.out.println("i: " + event.getInventory());
         System.out.println("itemcurse: " + event.getCursor());
         System.out.println("itemcur: " + event.getCurrentItem());
-        System.out.println();
+        System.out.println();*/
 
         if(event.getClick().isShiftClick() && event.getInventory() instanceof BrewerInventory) {
             ModItemType type = NewMod.get().getItemManager().getType(event.getCurrentItem());

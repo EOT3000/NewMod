@@ -1,6 +1,7 @@
 package me.fly.newmod.api.crafting;
 
 import me.fly.newmod.NewMod;
+import me.fly.newmod.api.crafting.properties.CraftingProperties;
 import me.fly.newmod.api.item.ModItemType;
 import org.bukkit.inventory.*;
 
@@ -59,8 +60,13 @@ public class ShapedRecipeMatcher {
         if(type == null) {
             return choice.test(check);
         } else {
-            if (choice instanceof RecipeChoice.ExactChoice || type.isCraftable() || type.isReplaceableRecipe(recipe.getKey())) {
+            if(choice instanceof RecipeChoice.ExactChoice) {
                 return choice.test(check);
+            }
+            if(type.getProperties() instanceof CraftingProperties properties) {
+                if (properties.isAllRecipes() || properties.getRecipes().contains(recipe.getKey())) {
+                    return choice.test(check);
+                }
             }
         }
 

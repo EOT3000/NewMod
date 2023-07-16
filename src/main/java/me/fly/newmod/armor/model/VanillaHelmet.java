@@ -1,8 +1,9 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.api.item.VanillaOrModItem;
 import org.bukkit.Material;
 
-public enum VanillaHelmet implements ArmorItemType {
+public enum VanillaHelmet implements ArmorProperties {
     TURTLE_HELMET(Material.TURTLE_HELMET, 2);
 
     private final Material material;
@@ -17,8 +18,8 @@ public enum VanillaHelmet implements ArmorItemType {
 
 
     @Override
-    public Material get() {
-        return material;
+    public VanillaOrModItem get() {
+        return new VanillaOrModItem(material);
     }
 
     @Override

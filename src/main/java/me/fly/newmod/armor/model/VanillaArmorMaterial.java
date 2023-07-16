@@ -1,13 +1,8 @@
 package me.fly.newmod.armor.model;
 
-import me.fly.newmod.armor.damage.DamageType;
+import me.fly.newmod.api.item.VanillaOrModItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.bukkit.Material.*;
 
@@ -97,27 +92,27 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
     }
 
     @Override
-    public ArmorItemType boots() {
+    public ArmorProperties boots() {
         return boots;
     }
 
     @Override
-    public ArmorItemType legs() {
+    public ArmorProperties legs() {
         return legs;
     }
 
     @Override
-    public ArmorItemType chest() {
+    public ArmorProperties chest() {
         return chest;
     }
 
     @Override
-    public ArmorItemType head() {
+    public ArmorProperties head() {
         return head;
     }
 
 
-    public class VanillaArmorPiece implements ArmorItemType {
+    public class VanillaArmorPiece implements ArmorProperties {
         private int defense;
         private int toughness;
         private int durability;
@@ -131,8 +126,8 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
         }
 
         @Override
-        public Material get() {
-            return item;
+        public VanillaOrModItem get() {
+            return new VanillaOrModItem(item);
         }
 
         @Override
