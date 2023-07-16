@@ -26,7 +26,7 @@ import java.util.List;
 import static me.fly.newmod.api.item.texture.DefaultMetaFlags.ENCHANTMENT_MODIFIER;
 import static me.fly.newmod.api.item.texture.DefaultMetaFlags.NAME_MODIFIER;
 
-public class ModItemType<T extends ItemProperties> extends VanillaOrModItem implements ItemWithProperties<T> {
+public class ModItemType<T extends ItemProperties> implements ItemWithProperties<T>, VanillaOrModItem {
     private ItemEventsListener listener;
 
     private final List<MetaModifier<?>> modifiers = new ArrayList<>();
@@ -119,7 +119,7 @@ public class ModItemType<T extends ItemProperties> extends VanillaOrModItem impl
 
     // Type initiation
 
-    public ModItemType shapelessRecipe(int count, ItemStack... ingredients) {
+    public ModItemType<T> shapelessRecipe(int count, ItemStack... ingredients) {
         ItemStack result = new ModItemStack(this).create();
 
         result.setAmount(count);
@@ -139,7 +139,7 @@ public class ModItemType<T extends ItemProperties> extends VanillaOrModItem impl
         return this;
     }
 
-    public ModItemType furnaceRecipe(ItemStack source, float xp, int time) {
+    public ModItemType<T> furnaceRecipe(ItemStack source, float xp, int time) {
         FurnaceRecipe recipe = new FurnaceRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_furnace"), create(), new RecipeChoice.ExactChoice(source), xp, time);
 
         Bukkit.addRecipe(recipe);
@@ -147,7 +147,7 @@ public class ModItemType<T extends ItemProperties> extends VanillaOrModItem impl
         return this;
     }
 
-    public ModItemType smokerRecipe(ItemStack source, float xp, int time) {
+    public ModItemType<T> smokerRecipe(ItemStack source, float xp, int time) {
         SmokingRecipe recipe = new SmokingRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_smoking"), create(), new RecipeChoice.ExactChoice(source), xp, time);
 
         Bukkit.addRecipe(recipe);
@@ -155,7 +155,7 @@ public class ModItemType<T extends ItemProperties> extends VanillaOrModItem impl
         return this;
     }
 
-    public ModItemType blastingRecipe(ItemStack source, float xp, int time) {
+    public ModItemType<T> blastingRecipe(ItemStack source, float xp, int time) {
         BlastingRecipe recipe = new BlastingRecipe(new NamespacedKey(getId().getNamespace(), getId().getKey() + "_blasting"), create(), new RecipeChoice.ExactChoice(source), xp, time);
 
         Bukkit.addRecipe(recipe);
@@ -165,7 +165,7 @@ public class ModItemType<T extends ItemProperties> extends VanillaOrModItem impl
 
     // Getter
 
-    public ModItemType register() {
+    public ModItemType<T> register() {
         NewMod.get().getItemManager().registerItem(this);
 
         if(block != null) {

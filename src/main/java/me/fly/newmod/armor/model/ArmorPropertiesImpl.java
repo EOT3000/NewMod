@@ -4,7 +4,7 @@ import me.fly.newmod.api.item.VanillaOrModItem;
 import me.fly.newmod.api.item.properties.ItemProperties;
 
 public class ArmorPropertiesImpl implements ItemProperties, ArmorProperties {
-    private ModArmorMaterial material;
+    private ArmorMaterial material;
 
     private int dura;
     private int defense;
@@ -12,7 +12,7 @@ public class ArmorPropertiesImpl implements ItemProperties, ArmorProperties {
 
     private final ArmorSection section;
 
-    public ArmorPropertiesImpl(ModArmorMaterial material, ArmorSection section, int dura, int defense, int toughness) {
+    public ArmorPropertiesImpl(ArmorMaterial material, ArmorSection section, int dura, int defense, int toughness) {
         this.material = material;
 
         this.dura = dura;
@@ -45,5 +45,17 @@ public class ArmorPropertiesImpl implements ItemProperties, ArmorProperties {
     @Override
     public int getDurability() {
         return dura;
+    }
+
+    public void setDurability(int dura) {
+        this.dura = dura;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public void setToughness(int toughness) {
+        this.toughness = toughness;
     }
 }

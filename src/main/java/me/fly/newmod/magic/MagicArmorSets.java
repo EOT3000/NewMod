@@ -1,6 +1,5 @@
 package me.fly.newmod.magic;
 
-import me.fly.newmod.api.item.builders.ModArmorItemTypeBuilder;
 import me.fly.newmod.armor.model.ArmorSection;
 import me.fly.newmod.armor.model.ModArmorMaterial;
 import net.kyori.adventure.text.format.NamedTextColor;

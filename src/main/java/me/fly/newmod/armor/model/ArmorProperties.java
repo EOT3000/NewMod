@@ -1,12 +1,12 @@
 package me.fly.newmod.armor.model;
 
 import me.fly.newmod.api.item.VanillaOrModItem;
-import me.fly.newmod.api.item.properties.ModItemProperties;
+import me.fly.newmod.api.item.properties.ItemProperties;
 import me.fly.newmod.armor.damage.DamageType;
 import me.fly.newmod.armor.damage.DefaultDamageType;
 import org.bukkit.Material;
 
-public interface ArmorProperties extends ModItemProperties {
+public interface ArmorProperties extends ItemProperties {
     ArmorSection getSection();
     ArmorMaterial getMaterial();
 

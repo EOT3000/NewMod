@@ -1,11 +1,11 @@
 package me.fly.newmod.api.crafting.properties;
 
-import me.fly.newmod.api.item.properties.ModItemProperties;
+import me.fly.newmod.api.item.properties.ItemProperties;
 import org.bukkit.NamespacedKey;
 
 import java.util.Set;
 
-public interface CraftingProperties extends ModItemProperties {
+public interface CraftingProperties extends ItemProperties {
     NamespacedKey SMELTING = NamespacedKey.minecraft("smelting");
     NamespacedKey FURNACE = NamespacedKey.minecraft("furnace");
     NamespacedKey BLAST_FURNACE = NamespacedKey.minecraft("blast_furnace");

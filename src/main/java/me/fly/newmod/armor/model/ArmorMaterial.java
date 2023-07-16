@@ -1,19 +1,21 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.api.item.ItemWithProperties;
+import me.fly.newmod.api.item.ModItemType;
 import org.bukkit.inventory.ItemStack;
 
 public interface ArmorMaterial {
     ItemStack material();
 
-    ArmorProperties boots();
+    ItemWithProperties<ArmorProperties> boots();
 
-    ArmorProperties legs();
+    ItemWithProperties<ArmorProperties> legs();
 
-    ArmorProperties chest();
+    ItemWithProperties<ArmorProperties> chest();
 
-    ArmorProperties head();
+    ItemWithProperties<ArmorProperties> head();
 
-    default ArmorProperties item(ArmorSection section) {
+    default ItemWithProperties<ArmorProperties> item(ArmorSection section) {
         if (section == null) return null;
 
         return switch (section) {

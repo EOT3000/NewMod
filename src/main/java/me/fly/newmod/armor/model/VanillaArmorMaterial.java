@@ -1,5 +1,7 @@
 package me.fly.newmod.armor.model;
 
+import me.fly.newmod.api.item.ItemWithProperties;
+import me.fly.newmod.api.item.VanillaItemWithProperties;
 import me.fly.newmod.api.item.VanillaOrModItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -18,50 +20,6 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
     DIAMOND(Material.DIAMOND, DIAMOND_BOOTS, DIAMOND_LEGGINGS, DIAMOND_CHESTPLATE, DIAMOND_HELMET),
 
     NETHERITE(NETHERITE_INGOT, NETHERITE_BOOTS, NETHERITE_LEGGINGS, NETHERITE_CHESTPLATE, NETHERITE_HELMET);
-
-    static {
-        LEATHER.head.setDefense(1);
-        LEATHER.chest.setDefense(3);
-        LEATHER.legs.setDefense(2);
-        LEATHER.boots.setDefense(1);
-
-        GOLDEN.head.setDefense(2);
-        GOLDEN.chest.setDefense(5);
-        GOLDEN.legs.setDefense(3);
-        GOLDEN.boots.setDefense(1);
-
-        CHAINMAIL.head.setDefense(2);
-        CHAINMAIL.chest.setDefense(5);
-        CHAINMAIL.legs.setDefense(4);
-        CHAINMAIL.boots.setDefense(1);
-
-        IRON.head.setDefense(2);
-        IRON.chest.setDefense(6);
-        IRON.legs.setDefense(5);
-        IRON.boots.setDefense(2);
-
-        DIAMOND.head.setDefense(3);
-        DIAMOND.chest.setDefense(8);
-        DIAMOND.legs.setDefense(6);
-        DIAMOND.boots.setDefense(3);
-
-        NETHERITE.head.setDefense(3);
-        NETHERITE.chest.setDefense(8);
-        NETHERITE.legs.setDefense(6);
-        NETHERITE.boots.setDefense(3);
-
-        DIAMOND.head.setToughness(2);
-        DIAMOND.chest.setToughness(2);
-        DIAMOND.legs.setToughness(2);
-        DIAMOND.boots.setToughness(2);
-
-        NETHERITE.head.setToughness(3);
-        NETHERITE.chest.setToughness(3);
-        NETHERITE.legs.setToughness(3);
-        NETHERITE.boots.setToughness(3);
-
-
-    }
 
     private final Material crafting;
 
@@ -92,81 +50,36 @@ public enum VanillaArmorMaterial implements ArmorMaterial {
     }
 
     @Override
-    public ArmorProperties boots() {
+    public ItemWithProperties<ArmorProperties> boots() {
         return boots;
     }
 
     @Override
-    public ArmorProperties legs() {
+    public ItemWithProperties<ArmorProperties> legs() {
         return legs;
     }
 
     @Override
-    public ArmorProperties chest() {
+    public ItemWithProperties<ArmorProperties> chest() {
         return chest;
     }
 
     @Override
-    public ArmorProperties head() {
+    public ItemWithProperties<ArmorProperties> head() {
         return head;
     }
 
 
-    public class VanillaArmorPiece implements ArmorProperties {
-        private int defense;
-        private int toughness;
-        private int durability;
-
+    public class VanillaArmorPiece extends VanillaItemWithProperties<ArmorProperties> {
         private final ArmorSection section;
         public final Material item;
 
         public VanillaArmorPiece(ArmorSection section, Material item) {
+            //TODO: config this
+            super(item, new ArmorPropertiesImpl(VanillaArmorMaterial.this, section, 0, 0, 0));
+
             this.section = section;
             this.item = item;
-        }
-
-        @Override
-        public VanillaOrModItem get() {
-            return new VanillaOrModItem(item);
-        }
-
-        @Override
-        public ArmorSection getSection() {
-            return section;
-        }
-
-        @Override
-        public ArmorMaterial getMaterial() {
-            return VanillaArmorMaterial.this;
-        }
-
-        @Override
-        public int getToughness() {
-            return toughness;
-        }
-
-        @Override
-        public int getDefense() {
-            return defense;
-        }
-
-        //Durability does not do anything yet.
-        @Override
-        public int getDurability() {
-            return durability;
-        }
-
-        public void setToughness(int toughness) {
-            this.toughness = toughness;
-        }
-
-        public void setDefense(int defense) {
-            this.defense = defense;
-        }
-
-
-        public void setDurability(int durability) {
-            this.durability = durability;
         }
     }
 }
